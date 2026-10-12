@@ -1,10 +1,8 @@
-# Your own brand file stays yours. Copy the example, fill it in, it will not be committed.
-scorecard-brand.json
+# Your brand answers. Copy the example, fill it in, it stays yours.
+your-brand.json
 
-# Scorecards you build for real clients never belong in this repo.
-output/
-builds/
-*-scorecard.html
-!examples/*.html
+# Your clients and the scorecards you build for them never leave your computer.
+clients/*
+!clients/README.md
 
 .DS_Store

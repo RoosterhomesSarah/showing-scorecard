@@ -33,6 +33,7 @@ It does four things a paper checklist cannot:
 - `We're seeing homes with [client] on [date]`
 - `Build the scorecard for [address]`
 - `Add [address] to [client]'s tour`
+- `Set me up` (first run only, the brand questions)
 
 ---
 
@@ -162,7 +163,8 @@ Every agent should be working from their own state's current advisory, not this 
 
 ## First run only: seven questions
 
-Check for `scorecard-brand.json` next to this skill. If it is missing, ask these. If it
+Check for `your-brand.json` at the root of this project folder. The trigger is also
+**"set me up"**, which new people are told to say by `START-HERE.md`. If it is missing, ask these. If it
 exists but a required field is empty, ask only for the empty ones. Never write the file
 half-filled and never stop asking while a required field is blank, or the buyer's main
 button ends up reading "Copy for " forever.
@@ -218,6 +220,17 @@ linked logo will not render.
 
 The skill produces one HTML file. Nothing about it is finished until the buyer can open
 it, so pick one of these and tell the agent which you used.
+
+**First, save it where it belongs.** Every scorecard goes to
+`clients/<client-slug>/YYYY-MM-DD-scorecard.html` at the project root, and the criteria
+you worked from go beside it as `criteria.md`. The date in the filename means a second
+tour with the same buyer never overwrites the first, and a year later the agent can see
+how that buyer's list moved. Create the client folder if it is not there.
+
+When the buyer sends their results back, save those too, as
+`YYYY-MM-DD-results.md` in the same folder.
+
+Then get it onto the buyer's phone, one of these ways.
 
 **The file itself.** Email or text it as an attachment. Works everywhere, needs nothing,
 and is the right answer for an agent who is not going to set anything up. The buyer opens
@@ -341,9 +354,11 @@ described their day and what they said about homes they like.
 **Easy to forget. 2 points each, shared.** The factual checks nobody makes while standing
 in a staged room. Pick the library that matches the property type.
 
-A must-have is worth more than every nice-to-have combined, on purpose. If you change
-these weights, keep that true, or the page will tell the buyer one thing while the number
-tells them the opposite.
+A must-have is worth more than every nice-to-have combined, and the template keeps that
+true on its own: the must-have weight derives from the length of the nice-to-have list
+rather than being a fixed number. Add a tenth nice-to-have and the must-have weight rises
+with it. Do not replace that line with a constant, or a long consultation will quietly
+invert the thing the page tells the buyer.
 
 **Must-haves and nice-to-haves are tapped per person** because they carry judgment.
 Deal-breakers and the easy-to-forget list are facts about the house, so one tap covers
@@ -440,7 +455,7 @@ have a client believing their agent has the results while the agent has nothing.
 
 ## Building the page
 
-`assets/template.html` carries the whole page: scoring, two-person columns, deal-breaker
+`.claude/skills/showing-scorecard/assets/template.html` carries the whole page: scoring, two-person columns, deal-breaker
 logic, the disagreement panel, the condition section, and the copy handoff. Replace every
 `{{TOKEN}}`. The list below is in the template's own header comment.
 
@@ -469,7 +484,7 @@ the client. Two things in it are worth acting on the same day:
 
 ## A worked example
 
-`examples/example-scorecard.html` is a finished scorecard with every token filled, two
+`examples/example-scorecard.html`, at the project root, is a finished scorecard with every token filled, two
 buyers, three stops, and one home knocked out by a deal-breaker. Open it before you
 build your first one.
 

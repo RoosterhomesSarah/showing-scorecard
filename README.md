@@ -40,27 +40,22 @@ six weeks later during inspection, badly.
 
 ---
 
-## Install
+## Get it
 
-**Needs Node 22 or newer** for the one-line installer. Check with `node -v`. On Node 20
-the installer dies with a bare syntax error and no explanation, so use the clone method
-below instead.
+Clone it and open the folder. That is the install.
 
 ```bash
-npx skills add -g RoosterhomesSarah/showing-scorecard
+git clone https://github.com/RoosterhomesSarah/showing-scorecard.git
 ```
 
-The `-g` matters. Without it the skill installs into whatever project folder you happen
-to be in, which means a different copy, and a different set of setup questions, every
-time you change folders.
+Open that folder in Claude Code and say **set me up**. Seven questions, about three
+minutes, and it builds your first scorecard with you.
 
-Or clone it, which works on any Node version:
+Everything lives in the folder: the engine, your brand answers, and a folder per client
+with their scorecards in it. Nothing installs anywhere hidden and nothing of yours leaves
+your computer.
 
-```bash
-git clone https://github.com/RoosterhomesSarah/showing-scorecard.git ~/.claude/skills/showing-scorecard
-```
-
-Claude Code picks it up on the next session. Then say:
+Already set up? Open the folder and say who you are touring with:
 
 > build a tour scorecard for the Hendersons
 
@@ -121,20 +116,22 @@ material. The license is clear that this comes with no warranty and that part is
 
 ## It stands on its own
 
-It assumes no particular folder layout and no other skill being installed. It will read a
-brand file if you point it at one, and it writes its own if you do not have one.
+A self-contained project folder. No account, no server, no subscription, nothing to host,
+and no dependency on any other system. Your clients and your brand answers stay on your
+machine.
 
-If your setup has a vetting step for skills from outside it, run this through it first.
+If your setup has a vetting step for repos from outside it, run this through it first.
 That is the right habit with any repo you did not write, including this one.
 
 ---
 
 ## Updating
 
-Pull the repo again. Your `scorecard-brand.json` is yours and is not overwritten.
+Pull the repo again from inside the folder. Your brand answers and your clients are
+ignored by git, so neither is touched.
 
 ```bash
-cd ~/.claude/skills/showing-scorecard && git pull
+git pull
 ```
 
 The version is at the top of `SKILL.md`.

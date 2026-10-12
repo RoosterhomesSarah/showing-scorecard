@@ -422,7 +422,6 @@ tr.win td{background:var(--goodbg)}
 </div></div>
 
 <script>
-var MUST=25, NICE=4, CONS=2;
 var P={b:{key:"b",initial:"{{P1_INITIAL}}",name:"{{P1_NAME}}"}, l:{key:"l",initial:"{{P2_INITIAL}}",name:"{{P2_NAME}}"}};
 var SOLO = !P.l.name;
 if(SOLO) document.documentElement.setAttribute("data-solo","1");
@@ -509,6 +508,11 @@ function st(id){
   return s;
 }
 function esc(s){ var d=document.createElement("div"); d.textContent=s; return d.innerHTML; }
+
+var NICE=4, CONS=2;
+// A must-have must outweigh every nice-to-have combined. Deriving it from the list
+// keeps that true at any list length, instead of only up to six nice-to-haves.
+var MUST=Math.max(25, NICES.length*NICE + 1);
 
 var POSS = (MUSTS.length*MUST + NICES.length*NICE + CONSIDER.length*CONS) || 1;
 
