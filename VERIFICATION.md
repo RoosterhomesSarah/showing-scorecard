@@ -216,7 +216,59 @@ and 7.05. Playfair confirmed rendering as itself.
 4. **The word an agent would actually write.** The field was documented `"house"|"tower"`,
    and nobody types "tower". `condo`, `apartment`, `loft`, `high-rise`, `co-op`, `unit`,
    `townhouse`, `bungalow` and `duplex` now resolve, case and whitespace insensitive, and
-   an unrecognised word draws the house rather than nothing.
+   an unrecognized word draws the house rather than nothing.
 
 **Status: DONE** for this slice.
+
+---
+
+## Slice: Compare, v1.3
+
+**Working means:** a buyer sitting in the car after four houses can tell which one is
+still in it and why, without reading a table, and can then look at every line for every
+home if they want to.
+
+**Ran the real thing:** served over HTTP, driven in a real browser, both themes, phone and
+laptop, solo and two buyers, with deal-breakers tripped and disagreements created through
+the page's own controls.
+
+**Design:** the six column table was unreadable on a phone, so the cards replace it and
+the grid sits under them. The cards group rather than rank, because the buyer's question
+is which one, not what is the order: still in the running, short on something you needed,
+out, not scored yet. The grid's criterion column is pinned, verified by scrolling it and
+re-measuring the label's position.
+
+### Break attempts
+
+1. **A criterion pushed into a sentence.** "Riley has Plenty of natural light, A garage,
+   In Los Feliz." The criteria are noun phrases a buyer wrote and they will never sit
+   inside a sentence. They are listed now, under a line that carries the grammar.
+2. **Counts that disagree with their own sentence.** "You two scored 1 thing differently.
+   They are listed below." Numbers under eleven are words now and the verb agrees.
+3. **Solo mode.** No partner named anywhere in the cards, no split chips in the grid, a
+   single percentage per column, and the legend reads for one person.
+4. **A grid of one home**, which is not a comparison. Hidden under two scored homes, and
+   on an empty tour.
+5. **The group subhead spoke about the buyer in the third person** on a page that speaks
+   to them.
+6. **Print.** The grid's sticky columns and its sideways scroll both break on paper.
+   Position is static, overflow visible, rows do not split across pages, and the
+   deal-breaker mark becomes a ring so it survives greyscale.
+
+### The defect underneath the contrast work
+
+`--ink2` and `--ink3` were never defined. `--ink3` was in the shipped template before this
+slice; I then used `--ink2` six times, including for the tile's street suffix in v1.1,
+which I "verified" at 7.06:1. That number was real but accidental: an undefined custom
+property makes the declaration invalid at computed-value time, so the element silently
+inherited its parent's color. The measurement was true and meaningless, because it was not
+measuring the token I thought I had set.
+
+The tell was two different tokens probing to the identical value, which I saw in v1.1 and
+read past. Both now point at `--body`, which is defined in both themes, and a check for
+`var(--x)` with no matching `--x:` found nothing else. Measured after: every small label in
+the grid is 8.06:1 light and 8.49:1 dark, the row labels 15.34 and 14.74.
+
+**Status: DONE** for this slice. The grid is new surface and has not been seen by anyone
+but me.
 

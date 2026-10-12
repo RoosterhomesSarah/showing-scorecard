@@ -179,7 +179,7 @@ p{margin:0}
 .tile-num.s1{font-size:25px}
 .tile-num.s2{font-size:21px}
 .tile-num.s3{font-size:17px}
-.tile-st{font-size:7.5px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--ink2);text-align:center;line-height:1.2}
+.tile-st{font-size:7.5px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--body);text-align:center;line-height:1.2}
 /* tap the tile's corner to put a real photo there. optional, always. */
 .photobtn{position:absolute;left:7px;bottom:7px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--rule2);background:var(--surface);color:var(--muted);cursor:pointer;z-index:2;padding:0;opacity:.85}
 .photobtn:hover{color:var(--ink);border-color:var(--gold);opacity:1}
@@ -191,6 +191,7 @@ p{margin:0}
 .saddr{font-family:var(--display);font-size:25px;font-weight:700;color:var(--ink);letter-spacing:-.014em;line-height:1.16;margin-top:7px}
 .sfacts{font-size:12.5px;color:var(--gold-dk);margin-top:7px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 .sscore{display:flex;gap:13px;align-items:baseline;margin-top:16px;flex-wrap:wrap}
+.sbody>:last-child{padding-right:74px}
 .pct{font-family:var(--display);font-size:34px;font-weight:400;letter-spacing:-.035em;font-variant-numeric:lining-nums tabular-nums;line-height:1}
 .pl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-weight:700}
 .flag{font-size:10.5px;padding:4px 10px;border-radius:2px;background:var(--lowbg);color:var(--red-dk);font-weight:900;letter-spacing:.06em;text-transform:uppercase}
@@ -324,7 +325,71 @@ tr.win td{background:var(--goodbg)}
 .stbtn[aria-pressed="true"].n{background:var(--ink);border-color:var(--ink);color:#fff}
 .stbtn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
-.condline{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:10px;font-size:11.5px;font-weight:700;letter-spacing:.04em}
+/* Compare: three questions in order, answered in cards, rather than a six column table
+   turned sideways on a phone. */
+.cmpgroup{margin-top:36px}
+.cmpgroup:first-child{margin-top:0}
+.cmphead{font-family:var(--display);font-size:21px;font-weight:700;color:var(--ink);letter-spacing:-.012em;margin:0 0 6px}
+.cmpsub{font-size:13.5px;line-height:1.55;color:var(--muted);margin:0 0 16px;max-width:62ch}
+.cmpempty{font-size:14.5px;line-height:1.6;color:var(--muted);margin:0}
+.cmpcard{display:flex;gap:16px;align-items:flex-start;padding:19px 20px;border:1px solid var(--rule);border-radius:3px;background:var(--surface);box-shadow:var(--shadow);margin-bottom:11px}
+.cmpcard.win{border-color:var(--gold)}
+.cmpcard.out{background:var(--alt)}
+.cmpcard.cold{opacity:.62}
+.cmprank{flex:none;font-family:var(--display);font-size:27px;font-weight:700;line-height:1;color:var(--gold-dk);min-width:26px;font-variant-numeric:lining-nums tabular-nums;padding-top:2px}
+.cmpbody{flex:1 1 auto;min-width:0;display:block}
+.cmptop{display:flex;gap:14px;align-items:baseline;justify-content:space-between;flex-wrap:wrap}
+.cmpaddr{font-family:var(--display);font-size:20px;font-weight:700;color:var(--ink);letter-spacing:-.012em;line-height:1.2}
+.cmpscore{display:flex;gap:11px;align-items:baseline;flex:none}
+.cmpscore .pct{font-size:18px}
+.cmpmeta{display:block;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:900;margin-top:7px}
+.cmpwhy{font-size:14px;line-height:1.55;margin:12px 0 0;color:var(--ink)}
+.cmpwhy.good{color:var(--gold-dk);font-weight:700}
+.cmpwhy.short{color:var(--ink)}
+.cmpwhy.out{color:var(--red-bright)}
+.cmpwhy.quiet{color:var(--muted);font-style:italic}
+/* The grid. The criterion column is pinned, so a buyer scrolling sideways on a phone
+   never loses sight of what the row is. */
+.gridwrap{margin-top:18px;border:1px solid var(--rule);border-radius:3px;background:var(--surface)}
+table.grid{border-collapse:separate;border-spacing:0;width:auto;min-width:100%;font-size:13px}
+table.grid th,table.grid td{padding:10px 12px;text-align:center;vertical-align:middle;border-bottom:1px solid var(--rule);white-space:nowrap}
+table.grid th[scope=row],table.grid th.gcorner,table.grid tr.gsec th{position:sticky;left:0;z-index:1;text-align:left;background:var(--surface);min-width:166px;max-width:240px;white-space:normal;border-right:1px solid var(--rule)}
+table.grid th[scope=row]{font-size:13px;letter-spacing:0;text-transform:none;font-weight:400;color:var(--ink);line-height:1.4}
+table.grid thead th{position:sticky;top:0;z-index:2;background:var(--surface);border-bottom:1px solid var(--rule2)}
+table.grid thead th.gcorner{z-index:3;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--body);font-weight:900}
+.gnum{display:block;font-family:var(--display);font-size:18px;font-weight:700;color:var(--ink);line-height:1.1;font-variant-numeric:lining-nums tabular-nums}
+.gstop{display:block;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--body);font-weight:900;margin-top:3px}
+thead th.gout .gnum{color:var(--muted)}
+thead th.gout .gstop{color:var(--red-bright)}
+tr.gscore td{font-weight:900;background:var(--alt);font-size:13.5px}
+tr.gscore th[scope=row]{background:var(--alt);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--body);font-weight:900}
+.gpair{display:inline-flex;gap:7px;align-items:baseline}
+.gpair i{font-style:normal;opacity:.6}
+tr.gsec th{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--body);font-weight:900;background:var(--alt);padding-top:13px;padding-bottom:9px}
+tr.gsec td{background:var(--alt)}
+.gy,.gx{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:middle}
+.gy{background:var(--gold-dk)}
+.gx{background:var(--red-bright)}
+.gn{color:var(--rule2)}
+.gs{display:inline-block;min-width:19px;padding:2px 5px;border:1px solid var(--rule2);border-radius:2px;font-size:10px;font-weight:900;letter-spacing:.06em;color:var(--body)}
+table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
+@media (max-width:560px){
+  table.grid th[scope=row],table.grid th.gcorner,table.grid tr.gsec th{min-width:140px;max-width:164px}
+  table.grid th[scope=row]{font-size:12.5px}
+  table.grid th,table.grid td{padding:9px 10px}
+}
+.cmpmiss{font-size:13.5px;line-height:1.6;color:var(--ink);margin:6px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:0}
+.cmpmiss b{font-weight:900;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.cmpmiss .dot{color:var(--rule2);padding:0 7px}
+.cmpline{font-size:13px;line-height:1.5;color:var(--muted);margin:7px 0 0}
+.cmpline.cond{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:11.5px;font-weight:700;letter-spacing:.04em;margin-top:10px}
+@media (max-width:560px){
+  .cmpcard{padding:17px;gap:13px}
+  .cmpaddr{font-size:18px}
+  .cmprank{font-size:23px;min-width:21px}
+  .cmptop{gap:8px}
+}
+.condline{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:10px;font-size:11.5px;font-weight:700;letter-spacing:.04em;padding-right:74px}
 .cond.g{color:var(--green)} .cond.m{color:var(--gold-dk)} .cond.l{color:var(--red)} .cond.n{color:var(--muted)}
 .dot{color:var(--rule2)}
 .condcell{font-size:11.5px;font-weight:700;line-height:1.7}
@@ -386,8 +451,8 @@ tr.win td{background:var(--goodbg)}
 
 /* skipping a stop, reversibly */
 .stopwrap{position:relative}
-.skipbtn{position:absolute;top:10px;right:10px;font-size:10.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;padding:7px 11px;min-height:34px;border-radius:2px;border:1px solid var(--rule2);background:var(--surface);color:var(--muted);cursor:pointer;z-index:2}
-.skipbtn:hover{color:var(--ink);border-color:var(--ink3)}
+.skipbtn{position:absolute;bottom:11px;right:11px;font-size:10.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;padding:7px 11px;min-height:34px;border-radius:2px;border:1px solid var(--rule2);background:var(--surface);color:var(--muted);cursor:pointer;z-index:2}
+.skipbtn:hover{color:var(--ink);border-color:var(--ink)}
 .skipbtn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .stop.skipped{opacity:.45}
 .stop.skipped .pct,.stop.skipped .flag{filter:grayscale(1)}
@@ -424,6 +489,14 @@ tr.win td{background:var(--goodbg)}
   #view-stops,#view-compare{display:block!important}
   #view-detail[hidden]{display:none!important}
   .stop{break-inside:avoid;box-shadow:none}
+  .cmpcard{break-inside:avoid;box-shadow:none}
+  .gridwrap{overflow:visible!important;border-color:#111}
+  table.grid th[scope=row],table.grid thead th,table.grid tr.gsec th{position:static!important}
+  table.grid tr{break-inside:avoid}
+  table.grid th,table.grid td{border-color:#AAA!important}
+  .gy{background:#111!important}
+  .gx{background:#fff!important;box-shadow:inset 0 0 0 2px #111}
+  .gs{border-color:#111!important;color:#111!important}
   .agentcard{break-inside:avoid;border:1px solid #111}
   .closehint{border-left-color:#111}
   a[href^="http"]::after{content:" (" attr(href) ")";font-size:10px;color:#666}
@@ -516,14 +589,10 @@ tr.win td{background:var(--goodbg)}
   </section>
 
   <section id="view-compare" hidden>
-    <h2 class="sechead">Side by Side</h2>
-    <div class="scroll">
-      <table>
-        <thead><tr><th>Rank</th><th>Property</th><th>Score</th><th>Split</th><th>Gut</th><th>Condition</th></tr></thead>
-        <tbody id="cmp"></tbody>
-      </table>
-    </div>
+    <h2 class="sechead">Where Things Stand</h2>
+    <div id="cmp"></div>
     <div id="splitbox" hidden></div>
+    <div id="gridbox" hidden></div>
     <div class="btnrow">
       <a class="btn primary" id="sendsms" role="button" href="sms:+15550100100">Text it to Alex</a>
       <a class="btn" id="sendmail" role="button" href="mailto:alex@example.com">Email it to Alex</a>
@@ -782,9 +851,8 @@ function band(sc,k){
 }
 
 // The frame IS the building. One hairline elevation per property type, drawn to
-// architectural proportions rather than as a picture of a house: a pitched roof over a
-// drawn eave line for a single family, a stepped crown over a cornice for a tower. The
-// number sits in the wall, below the line, where a real address plate goes.
+// architectural proportions rather than as a picture of a house. The number sits in the
+// wall, below the eave, where a real address plate goes.
 var SHAPES = {
   // Both sit on the same walls and the same overhanging eave, so they read as one family
   // of marks. They differ exactly where two real buildings differ: the roof.
@@ -1099,32 +1167,123 @@ function ranked(){
 
 function renderCompare(){
   var t=document.getElementById("cmp"); t.innerHTML="";
+  var sp=document.getElementById("splitbox");
   if(!TOUR.length){
-    t.innerHTML='<tr><td colspan="6" style="color:var(--muted)">Nothing to compare yet.</td></tr>';
-    document.getElementById("splitbox").hidden=true;
-    return;
+    t.innerHTML='<p class="cmpempty">Nothing to compare yet. Once your agent adds the homes you are seeing, every one you score shows up here.</p>';
+    sp.hidden=true; document.getElementById("gridbox").hidden=true; return;
   }
-  ranked().forEach(function(r,idx){
-    var tr=document.createElement("tr");
-    if(idx===0&&r.sc.touched&&!r.sc.killed.length&&!r.sc.b.missed.length&&!r.sc.l.missed.length) tr.className="win";
-    var sco = r.sc.killed.length ? '<span class="flag">out</span>'
-      : (r.sc.touched
-         ? (SOLO ? '<span class="pct '+band(r.sc,"b")+'" style="font-size:18px">'+r.sc.b.pct+'%</span>'
-            : '<span class="ps"><span class="pinit b">'+P.b.initial+'</span><span class="pct '+band(r.sc,"b")+'" style="font-size:18px">'+r.sc.b.pct+'%</span></span> <span class="ps"><span class="pinit l">'+P.l.initial+'</span><span class="pct '+band(r.sc,"l")+'" style="font-size:18px">'+r.sc.l.pct+'%</span></span>')
-         : '<span class="n">&mdash;</span>');
-    var agree = (SOLO || !r.sc.touched || r.sc.killed.length)
-      ? '<span class="n">&mdash;</span>'
-      : (r.sc.split.length ? '<span class="flag split">'+r.sc.split.length+'</span>' : '<span class="g">agreed</span>');
-    var gut = SOLO ? (r.sc.b.gut?r.sc.b.gut+" / 5":"&mdash;")
-                   : ((r.sc.b.gut||r.sc.l.gut) ? (r.sc.b.gut||"&mdash;")+" / "+(r.sc.l.gut||"&mdash;") : "&mdash;");
-    tr.innerHTML='<td class="rank">'+(r.sc.killed.length?"&mdash;":(r.sc.touched?idx+1:"&mdash;"))+'</td>'+
-      '<td><span class="tname">'+esc(r.p.n)+'</span><span class="tsub">Stop '+(r.i+1)+'</span></td>'+
-      '<td>'+sco+'</td><td>'+agree+'</td><td class="rank">'+gut+'</td>'+
-      '<td class="condcell">'+condLine(r.p)+'</td>';
-    t.appendChild(tr);
+
+  // Three questions in order, not one ranked list: what is still in, what fell short of
+  // something they said they needed, and what is out regardless of how it scored.
+  var live=[], short=[], out=[], cold=[];
+  ranked().forEach(function(r){
+    if(r.sc.killed.length) out.push(r);
+    else if(!r.sc.touched) cold.push(r);
+    else if(r.sc.b.missed.length || (!SOLO && r.sc.l.missed.length)) short.push(r);
+    else live.push(r);
   });
 
-  var sp=document.getElementById("splitbox");
+  function scoreBlock(sc){
+    if(SOLO) return '<span class="pct '+band(sc,"b")+'">'+sc.b.pct+'%</span>';
+    return '<span class="ps"><span class="pinit b">'+P.b.initial+'</span>'+
+           '<span class="pct '+band(sc,"b")+'">'+sc.b.pct+'%</span></span>'+
+           '<span class="ps"><span class="pinit l">'+P.l.initial+'</span>'+
+           '<span class="pct '+band(sc,"l")+'">'+sc.l.pct+'%</span></span>';
+  }
+  // The criteria are noun phrases a buyer wrote ("A garage", "In Los Feliz"). Pushed into
+  // a sentence they read as broken English, so they are listed instead of conscripted.
+  var WORDS=["no","one","two","three","four","five","six","seven","eight","nine","ten"];
+  function count(n){ return WORDS[n] || String(n); }
+  function missList(list){
+    return '<p class="cmpmiss">'+list.map(esc).join('<span class="dot">&middot;</span>')+'</p>';
+  }
+  function missedBlock(sc){
+    var mine=sc.b.missed, theirs=SOLO?[]:sc.l.missed;
+    var same = SOLO || (mine.length===theirs.length &&
+                        mine.every(function(x){ return theirs.indexOf(x)>-1; }));
+    if(same){
+      var list=SOLO?mine:mine;
+      if(!list.length) return "";
+      return '<p class="cmpwhy short">Missing '+count(list.length)+
+             (list.length===1?" of your must-haves":" of your must-haves")+'</p>'+missList(list);
+    }
+    var out='<p class="cmpwhy short">You two do not agree on what this one is missing</p>';
+    if(mine.length) out+='<p class="cmpmiss"><b>'+esc(P.b.name)+'</b>'+
+      '<span class="dot">&middot;</span>'+mine.map(esc).join('<span class="dot">&middot;</span>')+'</p>';
+    else out+='<p class="cmpmiss"><b>'+esc(P.b.name)+'</b><span class="dot">&middot;</span>nothing missing</p>';
+    if(theirs.length) out+='<p class="cmpmiss"><b>'+esc(P.l.name)+'</b>'+
+      '<span class="dot">&middot;</span>'+theirs.map(esc).join('<span class="dot">&middot;</span>')+'</p>';
+    else out+='<p class="cmpmiss"><b>'+esc(P.l.name)+'</b><span class="dot">&middot;</span>nothing missing</p>';
+    return out;
+  }
+  function gutLine(sc){
+    if(SOLO) return sc.b.gut ? "Gut feel "+sc.b.gut+" out of 5." : "";
+    if(!sc.b.gut && !sc.l.gut) return "";
+    return "Gut feel, "+P.b.name+" "+(sc.b.gut||"&mdash;")+" and "+P.l.name+" "+(sc.l.gut||"&mdash;")+" out of 5.";
+  }
+
+  function card(r, rank, kind){
+    var sc=r.sc, el=document.createElement("article");
+    el.className="cmpcard"+(kind==="out"?" out":"")+(kind==="cold"?" cold":"")+(rank===1?" win":"");
+    var lines=[];
+    if(kind==="out"){
+      lines.push('<p class="cmpwhy out">Out on '+(sc.killed.length>1?"deal-breakers":"a deal-breaker")+'</p>'+
+                 '<p class="cmpmiss">'+sc.killed.map(esc).join('<span class="dot">&middot;</span>')+'</p>'+
+                 '<p class="cmpline">You said '+(sc.killed.length>1?"those were":"that was")+
+                 ' an instant no, so where it landed on points does not come into it.</p>');
+    } else if(kind==="cold"){
+      lines.push('<p class="cmpwhy quiet">Not scored yet.</p>');
+    } else if(kind==="short"){
+      lines.push(missedBlock(sc));
+    } else {
+      lines.push('<p class="cmpwhy good">Every must-have met.</p>');
+    }
+    if(kind!=="cold" && !SOLO && sc.split.length){
+      lines.push('<p class="cmpline">You two scored '+count(sc.split.length)+
+                 (sc.split.length===1?" thing differently. It is":" things differently. They are")+
+                 ' listed below.</p>');
+    }
+    var g = kind==="cold" ? "" : gutLine(sc);
+    if(g) lines.push('<p class="cmpline">'+g+'</p>');
+    var cond=condLine(r.p);
+    if(cond) lines.push('<p class="cmpline cond">'+cond+'</p>');
+
+    el.innerHTML =
+      (rank ? '<span class="cmprank">'+rank+'</span>' : '') +
+      '<span class="cmpbody">'+
+        '<span class="cmptop">'+
+          '<span class="cmpaddr">'+esc(r.p.n)+'</span>'+
+          (kind==="cold" ? '' : '<span class="cmpscore">'+scoreBlock(sc)+'</span>')+
+        '</span>'+
+        '<span class="cmpmeta">Stop '+(r.i+1)+(r.p.date?' &middot; '+esc(r.p.date):'')+'</span>'+
+        lines.join("")+
+      '</span>';
+    return el;
+  }
+
+  function group(title, sub, rows, kind, ranked_){
+    if(!rows.length) return;
+    var g=document.createElement("section"); g.className="cmpgroup";
+    var h='<h3 class="cmphead">'+title+'</h3>';
+    if(sub) h+='<p class="cmpsub">'+sub+'</p>';
+    g.innerHTML=h;
+    rows.forEach(function(r,i){ g.appendChild(card(r, ranked_?i+1:0, kind)); });
+    t.appendChild(g);
+  }
+
+  group("Still in the running",
+        live.length===1
+          ? "This one met every single thing you said you needed."
+          : "These met every single thing you said you needed. The percentage is the extras on top.",
+        live, "live", true);
+  group("Short on something you needed",
+        "A high percentage here still means a home that misses something you said you needed.",
+        short, "short", false);
+  group("Out",
+        "", out, "out", false);
+  group("Not scored yet", "", cold, "cold", false);
+  renderGrid();
+
   if(SOLO){ sp.hidden=true; return; }
   var rows=ranked().filter(function(r){ return r.sc.touched && r.sc.split.length; });
   if(!rows.length){ sp.hidden=true; return; }
@@ -1136,10 +1295,10 @@ function renderCompare(){
     h+='<p class="splitaddr">'+esc(r.p.n)+'</p><ul class="splitlist">';
     r.sc.split.forEach(function(label){
       var who="";
-      MUSTS.concat(NICES).forEach(function(t,idx){
-        if(t[0]!==label) return;
+      MUSTS.concat(NICES).forEach(function(tt,idx){
+        if(tt[0]!==label) return;
         var k=(idx<MUSTS.length?"m"+idx:"n"+(idx-MUSTS.length));
-        who = s.b[k] ? P.b.name+" counted it, "+P.l.name+" didn't" : P.l.name+" counted it, "+P.b.name+" didn't";
+        who = s.b[k] ? P.b.name+" counted it, "+P.l.name+" didn\'t" : P.l.name+" counted it, "+P.b.name+" didn\'t";
       });
       h+='<li>'+esc(label)+'<span>'+who+'</span></li>';
     });
@@ -1148,6 +1307,69 @@ function renderCompare(){
   sp.innerHTML=h;
 }
 
+// The full grid, under the cards. The cards answer which one; this answers exactly where
+// each home won and lost, which is the thing people want in front of them at the end.
+function renderGrid(){
+  var host=document.getElementById("gridbox");
+  var rows=ranked().filter(function(r){ return r.sc.hasData; });
+  if(rows.length<2){ host.hidden=true; return; }   // a grid of one is not a comparison
+  host.hidden=false;
+
+  function mark(yesB, yesL, bad){
+    var cls = bad ? "gx" : "gy";
+    if(SOLO) return yesB ? '<span class="'+cls+'"></span>' : '<span class="gn">&middot;</span>';
+    if(yesB && yesL) return '<span class="'+cls+'"></span>';
+    if(!yesB && !yesL) return '<span class="gn">&middot;</span>';
+    return '<span class="gs">'+(yesB?P.b.initial:P.l.initial)+'</span>';
+  }
+  function section(title, items, prefix, store, bad){
+    if(!items.length) return "";
+    var h='<tr class="gsec"><th scope="rowgroup">'+title+'</th><td colspan="'+rows.length+'"></td></tr>';
+    items.forEach(function(t,i){
+      var k=prefix+i;
+      h+='<tr><th scope="row">'+esc(t[0])+'</th>';
+      rows.forEach(function(r){
+        var st_=st(r.p.id);
+        var yb = store==="shared" ? !!st_.shared[k] : !!st_.b[k];
+        var yl = store==="shared" ? !!st_.shared[k] : !!st_.l[k];
+        h+='<td>'+mark(yb,yl,bad)+'</td>';
+      });
+      h+='</tr>';
+    });
+    return h;
+  }
+
+  var head='<tr><th scope="col" class="gcorner">Home</th>';
+  rows.forEach(function(r){
+    var num=(String(r.p.n).match(/^\s*([0-9]+)/)||[,""])[1] || ("#"+(r.i+1));
+    head+='<th scope="col"'+(r.sc.killed.length?' class="gout"':'')+'>'+
+          '<span class="gnum">'+esc(num)+'</span>'+
+          '<span class="gstop">'+(r.sc.killed.length?"out":"Stop "+(r.i+1))+'</span></th>';
+  });
+  head+='</tr>';
+
+  var score='<tr class="gscore"><th scope="row">Score</th>';
+  rows.forEach(function(r){
+    score += '<td>'+(r.sc.killed.length ? '<span class="gn">&mdash;</span>'
+      : (SOLO ? r.sc.b.pct+'%'
+         : '<span class="gpair">'+r.sc.b.pct+'%<i>'+r.sc.l.pct+'%</i></span>'))+'</td>';
+  });
+  score+='</tr>';
+
+  host.innerHTML =
+    '<h2 class="sechead" style="margin-top:38px">Every Home, Every Line</h2>'+
+    '<p class="cmpsub">'+(SOLO
+      ? 'A solid mark means you counted it in that home.'
+      : 'A solid mark means you both counted it. A letter means only one of you did.')+
+      ' Scroll sideways to see the rest. The names stay put.</p>'+
+    '<div class="scroll gridwrap"><table class="grid">'+
+      '<thead>'+head+'</thead><tbody>'+score+
+      section("Deal-breakers", KILLS, "k", "shared", true)+
+      section("Must-haves", MUSTS, "m", null, false)+
+      section("Nice to have", NICES, "n", null, false)+
+      section("Easy to forget", CONSIDER, "c", "shared", false)+
+    '</tbody></table></div>';
+}
 
 function shortSummary(){
   var out=["Showing scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:"")+" - 18 Oct",""];
