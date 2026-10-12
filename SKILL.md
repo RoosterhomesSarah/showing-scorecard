@@ -39,22 +39,43 @@ It does four things a paper checklist cannot:
 
 ## Before any of that: what never becomes a scored criterion
 
-**Read this before you take a single must-have from anybody.** This skill's whole method
-is to transcribe what the buyer said and score homes against it. That is exactly the
-mechanism that turns an offhand remark into a written, branded, scored record of homes
-rejected on an illegal basis. The agent's logo is on it. The buyer emails it back. It
-does not go away.
+**Read this before you take a single must-have from anybody.** This skill's method is to
+transcribe what a buyer said and score homes against it. That is also the mechanism that
+turns an offhand remark into a written, branded, scored record of homes rejected on an
+illegal basis.
+
+The exposure is not only that an agent might steer somebody. It is that **the document
+itself is a statement.** Under the Fair Housing Act, 42 U.S.C. section 3604(c), it is
+unlawful to make, print or publish any notice, statement or advertisement about the sale
+of a dwelling that indicates a preference, a limitation or discrimination on a protected
+basis. Two things about that provision decide how this skill has to behave:
+
+**Intent does not matter.** The test is whether an ordinary reader would take the
+statement to prefer or disfavor a protected group. Not whether anyone meant it that way.
+
+**"The buyer said it" is not a defense.** The agent made, printed and published it the
+moment it went on a page carrying their brand and got emailed back and forth. Spoken
+words and text messages have both been held to be statements under this provision.
 
 So the transcription is filtered, always, and the filter is not optional.
 
+### The protected classes
+
+HUD names seven under the federal Act: **race, color, national origin, religion, sex,
+familial status, and disability.** HUD's enforcement position since 2021 is that
+discrimination because of sex includes sexual orientation and gender identity.
+
+Most states and many cities add more. Source of income, age, marital status, veteran
+status and military status are common additions. The agent's own state is the floor they
+actually have to meet, and it is higher than this one.
+
+Steering, which is directing buyers toward or away from neighborhoods on a protected
+basis, is separately prohibited and defined at 24 C.F.R. section 100.70.
+
 ### Never score these, however the buyer phrases it
 
-Anything about **who lives there** rather than **what the property is**. Under federal
-fair housing law that covers race, color, religion, national origin, sex including
-sexual orientation and gender identity, familial status, and disability. Many states and
-cities add more, commonly source of income, age, marital status and veteran status.
-
-The phrases buyers actually use, which almost never sound illegal to them:
+Anything about **who lives there** rather than **what the property is**. The phrases
+buyers actually use, which almost never sound illegal to the buyer saying them:
 
 | What they say | Why it cannot be scored | What to write instead |
 |---|---|---|
@@ -63,9 +84,10 @@ The phrases buyers actually use, which almost never sound illegal to them:
 | "a family neighborhood", "family friendly" | familial status | the property facts they actually want: a fenced yard, a second bedroom, a park within a ten minute walk |
 | "near our church" / "near our temple" / "near our mosque" | religion, national origin | a drive time to one specific address they give you: "under 15 minutes to 412 Oak Street" |
 | "not a lot of renters", "mostly owners" | source of income and familial status proxy | nothing. Owner-occupancy rate is not a property feature |
-| "people like us", "somewhere we'd fit in", "our kind of area" | everything at once | ask what the home needs to have, and write that |
+| "people like us", "somewhere we'd fit in", "our kind of area" | several at once | ask what the home needs to have, and write that |
 | "up and coming", "an established area", "the right side of town" | race proxy | the specific thing underneath it: new construction nearby, a commute time, a price trend they can look up |
 | "quiet, no kids around" | familial status | the property fact: not backing a playground, a corner lot, double glazing |
+| "a walkable, diverse area" | sounds positive, still describes residents | walk score, a named amenity, a drive time |
 
 ### How to handle it in the moment
 
@@ -73,23 +95,28 @@ Do not lecture the agent and do not refuse to build. Convert, then say one line 
 learn it too:
 
 > "I left 'good schools' off the scored list and put 'inside the Lincoln Elementary
-> attendance boundary' instead. Scoring a school's reputation is a fair housing problem;
-> scoring a boundary is a fact. If they meant something else by it, tell me."
+> attendance boundary' instead. A school's reputation is a fair housing problem on a
+> written record; a boundary is a fact. If they meant something else by it, tell me."
 
-If a buyer's stated criterion has no lawful property-fact equivalent, say so plainly and
-leave it off. A short honest list beats a long one that cannot be defended.
+If a stated criterion has no lawful property-fact equivalent, say so plainly and leave it
+off. A short list that can be defended beats a long one that cannot.
 
 ### The same filter applies to
 
-The eight-question interview in Path B, especially question six. The starter sets. The
-hint text under any item. Anything the agent types into the brief line at the top of the
-page. And the notes field, which the buyer fills in themselves: if the summary comes back
-with that kind of language in it, tell the agent before it goes anywhere near a file.
+The eight-question interview, especially question six. The starter sets. The hint text
+under any item. The brief line at the top of the page. And the buyer's own free-text
+notes, which arrive in the summary: if that language comes back, tell the agent before
+it goes into a file or a CRM.
 
 ### This is a floor, not advice
 
-These are the common cases, not the whole of the law, and local rules add to them. The
-agent is responsible for what goes out under their license. Run it past the broker.
+These are common cases, not the whole of the law, and state and local rules add to them.
+Nothing here is legal advice. The agent is responsible for everything that goes out under
+their license, and their broker and state association are the authority on what that
+requires.
+
+Sources: HUD, Fair Housing Act overview, hud.gov/helping-americans/fair-housing-act-overview.
+Statutory text at 42 U.S.C. section 3604. Steering at 24 C.F.R. section 100.70.
 
 ## First run only: five questions
 
