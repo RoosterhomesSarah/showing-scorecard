@@ -42,28 +42,20 @@ six weeks later during inspection, badly.
 
 ## Get it
 
-Clone it and open the folder. That is the install.
+**Most people:** paste this into the Claude chat you already have open.
 
-```bash
-git clone https://github.com/RoosterhomesSarah/showing-scorecard.git
-```
+> Install the Showing Scorecard for me from
+> https://github.com/RoosterhomesSarah/showing-scorecard
 
-Open that folder in Claude Code and say **set me up**. Seven questions, about three
-minutes, and it builds your first scorecard with you.
+Then say **set up my showing scorecard**. Seven questions, three minutes, and it builds
+your first one with you. You never touch GitHub and you never leave your chat.
 
-Everything lives in the folder: the engine, your brand answers, and a folder per client
-with their scorecards in it. Nothing installs anywhere hidden and nothing of yours leaves
-your computer.
-
-Already set up? Open the folder and say who you are touring with:
+After that, for every buyer:
 
 > build a tour scorecard for the Hendersons
 
-**First time only, it asks you five questions:** business name, two colors, your logo,
-your phone, your email. It writes those to one small file and never asks again. Every
-scorecard after that is one sentence.
-
----
+**Prefer it as its own folder?** `git clone` it and open it, and say **set me up**.
+Both doors and the update steps are in [INSTALL.md](INSTALL.md).
 
 ## You do not need to run buyer consultations to use this
 
@@ -127,12 +119,8 @@ That is the right habit with any repo you did not write, including this one.
 
 ## Updating
 
-Pull the repo again from inside the folder. Your brand answers and your clients are
-ignored by git, so neither is touched.
-
-```bash
-git pull
-```
+Say **update my showing scorecard**. Your brand answers and your client folders are left
+alone.
 
 The version is at the top of `SKILL.md`.
 

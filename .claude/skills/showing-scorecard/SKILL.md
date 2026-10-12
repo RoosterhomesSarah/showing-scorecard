@@ -33,7 +33,8 @@ It does four things a paper checklist cannot:
 - `We're seeing homes with [client] on [date]`
 - `Build the scorecard for [address]`
 - `Add [address] to [client]'s tour`
-- `Set me up` (first run only, the brand questions)
+- `Set me up` / `Set up my showing scorecard` (first run only, the brand questions)
+- `Update my showing scorecard` (pull the newest version, leaving brand and clients alone)
 
 ---
 
@@ -163,8 +164,18 @@ Every agent should be working from their own state's current advisory, not this 
 
 ## First run only: seven questions
 
-Check for `your-brand.json` at the root of this project folder. The trigger is also
-**"set me up"**, which new people are told to say by `START-HERE.md`. If it is missing, ask these. If it
+**Where your files live depends on how this was installed, so work it out first.**
+
+- If there is a `START-HERE.md` beside this skill's own folder, this is its own project.
+  `your-brand.json` and `clients/` go at that project root.
+- Otherwise this was added into somebody else's setup. `your-brand.json` and `clients/`
+  go **inside this skill's own folder**, so nothing of theirs gets touched and nothing
+  of this gets scattered through their system.
+
+Either way: if `your-brand.json` is missing, run the questions below. If it exists but a
+required field is blank, ask only for the blank ones. Triggers are **"set me up"** or
+**"set up my showing scorecard"**, the second being what people say inside a larger
+system where "set me up" could mean something else. If it is missing, ask these. If it
 exists but a required field is empty, ask only for the empty ones. Never write the file
 half-filled and never stop asking while a required field is blank, or the buyer's main
 button ends up reading "Copy for " forever.
@@ -222,7 +233,8 @@ The skill produces one HTML file. Nothing about it is finished until the buyer c
 it, so pick one of these and tell the agent which you used.
 
 **First, save it where it belongs.** Every scorecard goes to
-`clients/<client-slug>/YYYY-MM-DD-scorecard.html` at the project root, and the criteria
+`clients/<client-slug>/YYYY-MM-DD-scorecard.html`, under whichever `clients/` location
+the install check above settled on, and the criteria
 you worked from go beside it as `criteria.md`. The date in the filename means a second
 tour with the same buyer never overwrites the first, and a year later the agent can see
 how that buyer's list moved. Create the client folder if it is not there.
@@ -484,9 +496,16 @@ the client. Two things in it are worth acting on the same day:
 
 ## A worked example
 
-`examples/example-scorecard.html`, at the project root, is a finished scorecard with every token filled, two
+`examples/example-scorecard.html` in the repository is a finished scorecard with every token filled, two
 buyers, three stops, and one home knocked out by a deal-breaker. Open it before you
 build your first one.
+
+## Updating an installed copy
+
+On **update my showing scorecard**: clone the repo fresh to a temporary folder, copy
+`SKILL.md` and `assets/` over the installed ones, and delete the temporary folder. Never
+touch `your-brand.json` or `clients/`. Say in one line what changed, reading the repo's
+own recent history rather than guessing.
 
 ## Credit
 

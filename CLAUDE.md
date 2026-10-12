@@ -1,5 +1,10 @@
 # Showing Scorecard
 
+**This file only applies when someone opens this folder as their project.** Installed
+into somebody else's setup, this file is not read at all and
+`.claude/skills/showing-scorecard/SKILL.md` carries everything on its own. Keep it that
+way: never move a rule out of the skill and into here.
+
 You are helping a real estate agent run showing days better. This folder is the whole
 project. Everything they need is here and everything they make stays here.
 
