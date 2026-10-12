@@ -14,7 +14,8 @@
     {{ON_ACCENT}} {{ON_ACTION}}  #fff or #1A1A1A, whichever reads on that colour.
                         Compute it, do not guess: relative luminance above 0.45 takes
                         the dark label, below it takes white.
-    {{AGENT_FOOTER}}
+    {{AGENT_FOOTER}}   {{AGENT_LICENSE}}  license line the broker or state requires,
+                       or an empty string. The card hides the line when it is empty.
 
   THIS BUYER, THIS TOUR
     {{TITLE}} {{BUYER_NAMES}} {{TOUR_DATE}} {{HERO_LINE_1}} {{HERO_LINE_2}} {{LEDE}}
@@ -22,7 +23,9 @@
     {{STOPS_HEADING}}
     {{P1_NAME}} {{P1_INITIAL}} {{P2_NAME}} {{P2_INITIAL}}   P2 empty = solo mode
     {{MUSTS}} {{KILLS}} {{NICES}} {{CONSIDER}}   ["Label","Hint or empty"],
-    {{TOUR}}   {id:"slug", n:"Address", facts:"Area &middot; type", type:"house"|"tower"},
+    {{TOUR}}   {id:"slug", n:"123 Example St", facts:"Area &middot; 3 bd 2 ba &middot; listed $X",
+               area:"City, ST", type:"house"|"tower"},
+               area is what makes the maps links land on the right house. Include it.
     {{STORAGE_KEY}}   MUST be unique per buyer per tour
     {{SUMMARY_SUBHEAD}}
     {{KILLS_NOTE}}    one sentence naming THIS buyer's hard no's
@@ -333,6 +336,58 @@ tr.win td{background:var(--goodbg)}
   .flag,.flag.ok,.flag.split{border:1px solid currentColor}
   .btn.primary:hover{background:var(--red)}
 }
+
+/* the day's route, and per-stop navigation */
+.routebar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:16px}
+.routebtn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.routenote{font-size:13px;color:var(--muted)}
+.navrow{display:flex;gap:16px;margin-top:8px}
+.navrow a{font-size:12.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-dk);text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px}
+
+/* skipping a stop, reversibly */
+.stopwrap{position:relative}
+.skipbtn{position:absolute;top:10px;right:10px;font-size:10.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;padding:7px 11px;min-height:34px;border-radius:2px;border:1px solid var(--rule2);background:var(--surface);color:var(--muted);cursor:pointer;z-index:2}
+.skipbtn:hover{color:var(--ink);border-color:var(--ink3)}
+.skipbtn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.stop.skipped{opacity:.45}
+.stop.skipped .pct,.stop.skipped .flag{filter:grayscale(1)}
+
+/* the decision the day is actually for */
+.closing{margin-top:44px;padding-top:4px}
+.closenote{font-size:15.5px;color:var(--body);line-height:1.6;max-width:62ch;margin-top:14px}
+.closerow{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-top:18px}
+.closebtn{font-family:var(--sans);font-size:15px;font-weight:700;text-align:left;padding:16px 18px;min-height:62px;border-radius:3px;border:1px solid var(--rule2);background:var(--surface);color:var(--ink);cursor:pointer;line-height:1.35}
+.closebtn:hover{border-color:var(--gold)}
+.closebtn[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:var(--on-accent)}
+.closebtn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.closehint{margin-top:14px;padding:16px 18px;border-radius:3px;background:var(--alt);border-left:3px solid var(--gold);font-size:15.5px;color:var(--body);line-height:1.6;max-width:62ch}
+
+/* the sign-off */
+.agentcard{display:flex;gap:18px;align-items:center;margin-top:44px;padding:22px;border:1px solid var(--rule2);border-radius:4px;background:var(--surface);flex-wrap:wrap}
+.ac-mark img{height:62px;width:auto;display:block}
+.ac-body{flex:1 1 220px;min-width:0}
+.ac-name{font-family:var(--display);font-size:24px;font-weight:700;color:var(--ink);line-height:1.15}
+.ac-biz{font-size:11.5px;font-weight:900;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-dk);margin-top:5px}
+.ac-lines{display:flex;gap:18px;flex-wrap:wrap;margin-top:11px}
+.ac-lines a{font-size:15px;font-weight:700;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--rule2)}
+.ac-lines a:hover{border-color:var(--gold)}
+.ac-lic{font-size:12px;color:var(--muted);margin-top:11px;letter-spacing:.02em}
+.ac-lic:empty{display:none}
+
+/* an agent hands clients paper. Cmd-P should produce something, not a mess. */
+@media print{
+  :root{--page:#fff;--surface:#fff;--alt:#fff;--ink:#111;--body:#333;--muted:#555;--deep:#fff}
+  .dock,.bar,.skipbtn,.routebar,.navrow,.btnrow,#sendbox,#sendhint,#storewarn,.closerow{display:none!important}
+  .hero{background:#fff!important;color:#111!important;padding-block:0 18px;border-bottom:2px solid #111}
+  .hero h1,.hero h1 em,.kicker,.lede,.lede b,.bi b,.bi span{color:#111!important}
+  .wrap{padding-block:0 0;max-width:100%}
+  #view-stops,#view-compare{display:block!important}
+  #view-detail[hidden]{display:none!important}
+  .stop{break-inside:avoid;box-shadow:none}
+  .agentcard{break-inside:avoid;border:1px solid #111}
+  .closehint{border-left-color:#111}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:10px;color:#666}
+}
 </style>
 
 <div class="util"><div class="in">
@@ -364,6 +419,10 @@ tr.win td{background:var(--goodbg)}
 <main>
   <section id="view-stops">
     <h2 class="sechead">{{STOPS_HEADING}}</h2>
+    <div class="routebar">
+      <a class="btn routebtn" id="routeall" role="button">Open today&rsquo;s route</a>
+      <span class="routenote">Every stop, in order, in Google Maps.</span>
+    </div>
     <div class="stops" id="stoplist"></div>
     <p id="storewarn" hidden>This phone is not saving your answers, so they will be lost if you close or reload the page. Private browsing usually causes this. Copy your results before you leave each house.</p>
     <p class="note"><b>How it scores.</b> A must-have is worth 25, a nice-to-have 4, and an easy-to-forget item 2. The percentage is what a place earned out of everything possible for it. Any must-have left unchecked gets flagged, because one missed must-have matters more than five nice extras.</p>
@@ -377,6 +436,7 @@ tr.win td{background:var(--goodbg)}
         <p class="snum" id="d-num"></p>
         <h2 class="d-addr" id="d-addr"></h2>
         <p class="sfacts" id="d-facts"></p>
+        <p class="navrow"><a id="nav-g" target="_blank" rel="noopener">Directions</a><a id="nav-w" target="_blank" rel="noopener">Waze</a></p>
       </div>
     </div>
     <div id="groups"></div>
@@ -401,7 +461,9 @@ tr.win td{background:var(--goodbg)}
     </div>
     <div id="splitbox" hidden></div>
     <div class="btnrow">
-      <button class="btn primary" id="send">Copy for {{AGENT_FIRST_NAME}}</button>
+      <a class="btn primary" id="sendsms" role="button">Text it to {{AGENT_FIRST_NAME}}</a>
+      <a class="btn" id="sendmail" role="button">Email it to {{AGENT_FIRST_NAME}}</a>
+      <button class="btn" id="send">Copy instead</button>
       <button class="btn" id="copy">Copy full detail</button>
       <button class="btn" id="reset">Clear this tour</button>
     </div>
@@ -411,6 +473,26 @@ tr.win td{background:var(--goodbg)}
     <p class="note"><b>Your answers stay on this phone.</b> Nobody else can see them and nothing is uploaded. (The page does load its fonts from Google, like most websites.) When you're done, tap <b>Copy for {{AGENT_FIRST_NAME}}</b> and then paste it into a text or an email yourself. This page cannot send anything on its own, so it is not with {{AGENT_FIRST_NAME}} until you press send in your own app.</p>
   </section>
 </main>
+
+<section class="closing" id="closing">
+  <h2 class="sechead" style="margin-top:0">Where to from here</h2>
+  <p class="closenote">A tour is only useful if it ends in a decision. Tell {{AGENT_FIRST_NAME}} which of these it is and the next step happens today, not next week.</p>
+  <div class="closerow" id="closerow"></div>
+  <p class="closehint" id="closehint" hidden></p>
+</section>
+
+<div class="agentcard">
+  <div class="ac-mark">{{LOGO_IMG}}</div>
+  <div class="ac-body">
+    <p class="ac-name">{{AGENT_FIRST_NAME}}</p>
+    <p class="ac-biz">{{BUSINESS_NAME}}</p>
+    <p class="ac-lines">
+      <a href="tel:{{AGENT_PHONE_RAW}}">{{AGENT_PHONE}}</a>
+      <a href="mailto:{{AGENT_SEND_EMAIL}}">{{AGENT_SEND_EMAIL}}</a>
+    </p>
+    <p class="ac-lic">{{AGENT_LICENSE}}</p>
+  </div>
+</div>
 
 <p class="foot"><span>{{AGENT_FOOTER}}</span><span>Built from your buyer consultation</span></p>
 </div>
@@ -587,6 +669,20 @@ function twoScore(sc){
   return h;
 }
 
+function wireRoute(){
+  var a=document.getElementById("routeall"); if(!a) return;
+  var live=TOUR.filter(function(p){ return !st(p.id).skipped; });
+  if(live.length<1){ a.style.display="none"; return; }
+  a.style.display="";
+  var addrs=live.map(function(p){ return encodeURIComponent(p.n+", "+(p.area||"")); });
+  var dest=addrs[addrs.length-1];
+  var mid=addrs.slice(0,-1);
+  a.href="https://www.google.com/maps/dir/?api=1&travelmode=driving&destination="+dest+
+         (mid.length?"&waypoints="+mid.join("%7C"):"");
+  a.target="_blank"; a.rel="noopener";
+  a.textContent = live.length===1 ? "Directions to this one" : "Open today\u2019s route, "+live.length+" stops";
+}
+
 function renderStops(){
   var el=document.getElementById("stoplist"); el.innerHTML="";
   if(!TOUR.length){
@@ -600,14 +696,25 @@ function renderStops(){
     btn.innerHTML=
       '<span class="shot">'+glyph(p)+'</span>'+
       '<span class="sbody">'+
-        '<span class="snum">Stop '+(i+1)+'</span>'+
+        '<span class="snum">Stop '+(i+1)+(st(p.id).skipped?' &middot; skipped':'')+'</span>'+
         '<span class="saddr">'+esc(p.n)+'</span>'+
         '<span class="sfacts">'+p.facts+'</span>'+
         '<span class="sscore">'+twoScore(sc)+'</span>'+
         '<span class="condline">'+condLine(p)+'</span>'+
       '</span>';
     btn.addEventListener("click",function(){ openStop(p.id); });
-    el.appendChild(btn);
+    if(st(p.id).skipped) btn.classList.add("skipped");
+    var wrap=document.createElement("div"); wrap.className="stopwrap";
+    var sk=document.createElement("button");
+    sk.type="button"; sk.className="skipbtn";
+    sk.textContent=st(p.id).skipped?"Put back":"Skip";
+    sk.setAttribute("aria-label",(st(p.id).skipped?"Put back ":"Skip ")+p.n);
+    sk.addEventListener("click",function(ev){
+      ev.stopPropagation();
+      var sp=st(p.id); sp.skipped=!sp.skipped; save(); renderStops(); wireRoute();
+    });
+    wrap.appendChild(btn); wrap.appendChild(sk);
+    el.appendChild(wrap);
   });
 }
 
@@ -617,6 +724,9 @@ function renderDetail(){
   document.getElementById("d-num").textContent="Stop "+(TOUR.indexOf(p)+1);
   document.getElementById("d-addr").textContent=p.n;
   document.getElementById("d-facts").innerHTML=p.facts;
+  var q=encodeURIComponent(p.n+", "+(p.area||""));
+  document.getElementById("nav-g").href="https://www.google.com/maps/dir/?api=1&destination="+q+"&travelmode=driving";
+  document.getElementById("nav-w").href="https://waze.com/ul?q="+q+"&navigate=yes";
 
   var groups=[
     {key:"k", store:"shared", two:false, title:"Deal-breakers", sub:"Check one only if it's true of the place. Any check here takes it out of the running for both of you.", w:"not scored", items:KILLS, cls:" kill", gcls:" kill"},
@@ -661,7 +771,7 @@ function renderDetail(){
   g.querySelectorAll(".ck2").forEach(function(b){
     b.addEventListener("click",function(){
       var pk=b.getAttribute("data-p"), k=b.getAttribute("data-k"), on=b.getAttribute("aria-pressed")==="true";
-      s[pk][k]=!on; b.setAttribute("aria-pressed",String(!on)); save();
+      s[pk][k]=!on; b.setAttribute("aria-pressed",String(!on)); save(); wireSendLinks();
       var row=b.closest(".row2");
       if(row) row.classList.toggle("split", !!s.b[k]!==!!s.l[k]);
       dock();
@@ -681,7 +791,7 @@ function renderDetail(){
   g.querySelectorAll(".ck[data-shared]").forEach(function(b){
     b.addEventListener("click",function(){
       var k=b.getAttribute("data-k"), on=b.getAttribute("aria-pressed")==="true";
-      s.shared[k]=!on; b.setAttribute("aria-pressed",String(!on)); save(); dock();
+      s.shared[k]=!on; b.setAttribute("aria-pressed",String(!on)); save(); dock(); wireSendLinks();
     });
   });
 
@@ -739,6 +849,7 @@ function dock(){
 
 function ranked(){
   return TOUR.map(function(p,i){ return {p:p,i:i,sc:score(p)}; })
+    .filter(function(r){ return !st(r.p.id).skipped; })
     .sort(function(a,b){
       // the gate first: a home missing a must-have never outranks one that meets them all
       var rk=function(r){
@@ -833,6 +944,8 @@ function shortSummary(){
     out.push("");
   });
   if(out.length<3) return "";
+  var dec=CLOSERS.filter(function(c){ return c[0]===DECISION; })[0];
+  if(dec) out.push("WHERE WE LANDED: "+dec[1]);
   return out.join("\n");
 }
 
@@ -859,6 +972,35 @@ function copyText(text, done){
   }
   done(legacyCopy(text));
 }
+
+var CLOSERS=[
+  ["offer","We want to write on one of these","Good. {{AGENT_FIRST_NAME}} will pull the comps and the condition notes you logged today and have numbers to you within the day."],
+  ["second","We want to see one of them again","Say which, and {{AGENT_FIRST_NAME}} will set a second showing and bring the answers to everything you marked to ask."],
+  ["keep","None of these. Keep looking","That is a useful result, not a wasted day. Send this over and {{AGENT_FIRST_NAME}} will adjust what gets shown next time."],
+  ["think","We need to sit with it","Send it anyway. A week from now this page is the only accurate record of what you actually thought."]
+];
+function renderClosing(){
+  var row=document.getElementById("closerow"); if(!row) return;
+  row.innerHTML="";
+  var any=TOUR.some(function(p){ return score(p).touched; });
+  document.getElementById("closing").hidden=!any;
+  CLOSERS.forEach(function(c){
+    var b=document.createElement("button");
+    b.type="button"; b.className="closebtn";
+    b.textContent=c[1];
+    b.setAttribute("aria-pressed",String(DECISION===c[0]));
+    b.addEventListener("click",function(){
+      DECISION = DECISION===c[0] ? "" : c[0];
+      try{ localStorage.setItem(KEY+"-decision",DECISION); }catch(e){}
+      renderClosing();
+      var h=document.getElementById("closehint");
+      h.hidden=!DECISION; h.textContent=DECISION?c[2]:"";
+      wireSendLinks();
+    });
+    row.appendChild(b);
+  });
+}
+var DECISION=(function(){ try{ return localStorage.getItem(KEY+"-decision")||""; }catch(e){ return ""; } })();
 
 function summary(){
   var out=["Showing day scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:""),"{{SUMMARY_SUBHEAD}}",""];
@@ -894,10 +1036,27 @@ function show(v){
 function openStop(id){ current=id; renderDetail(); show("detail"); }
 
 document.getElementById("tab-stops").addEventListener("click",function(){ renderStops(); show("stops"); });
-document.getElementById("tab-compare").addEventListener("click",function(){ renderCompare(); show("compare"); });
+document.getElementById("tab-compare").addEventListener("click",function(){ renderCompare(); renderClosing(); show("compare"); });
 document.getElementById("back").addEventListener("click",function(){ renderStops(); show("stops"); });
 document.getElementById("dock-done").addEventListener("click",function(){ renderStops(); show("stops"); });
 
+
+function sendBody(){
+  var b=shortSummary();
+  return b || "";
+}
+function wireSendLinks(){
+  var body=sendBody();
+  var sms=document.getElementById("sendsms"), mail=document.getElementById("sendmail");
+  if(!body){
+    [sms,mail].forEach(function(a){ if(a){ a.removeAttribute("href"); a.setAttribute("aria-disabled","true"); } });
+    return;
+  }
+  var enc=encodeURIComponent(body);
+  // iOS wants sms:number&body=, Android wants sms:number?body=. This form works on both.
+  if(sms) sms.href="sms:{{AGENT_PHONE_RAW}}"+(/(iPhone|iPad|Macintosh)/.test(navigator.userAgent)?"&":"?")+"body="+enc;
+  if(mail) mail.href="mailto:{{AGENT_SEND_EMAIL}}?subject="+encodeURIComponent("Showing scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:""))+"&body="+enc;
+}
 
 document.getElementById("send").addEventListener("click",function(){
   var btn=this, body=shortSummary();
@@ -911,6 +1070,7 @@ document.getElementById("send").addEventListener("click",function(){
         ? "Copied. Now paste it into a text to {{AGENT_FIRST_NAME}} at <a href=\"tel:{{AGENT_PHONE_RAW}}\">{{AGENT_PHONE}}</a> or an email to <a href=\"mailto:{{AGENT_SEND_EMAIL}}\">{{AGENT_SEND_EMAIL}}</a>. Nothing leaves this phone until you do."
         : "Copy did not work on this phone. Select the text below, copy it, and send it to {{AGENT_FIRST_NAME}} at {{AGENT_PHONE}}.";
     }
+    wireSendLinks();
     btn.textContent = copied ? "Copied, now paste it" : "Use the box below";
     setTimeout(function(){ btn.textContent="Copy for {{AGENT_FIRST_NAME}}"; },5000);
   });
@@ -940,6 +1100,9 @@ document.getElementById("reset").addEventListener("click",function(){
 try{ localStorage.setItem("__probe__","1"); localStorage.removeItem("__probe__"); }
 catch(e){ STORAGE_OK=false; }
 renderStops();
+wireRoute();
+renderClosing();
+wireSendLinks();
 storageWarn();
 </script>
 </body>

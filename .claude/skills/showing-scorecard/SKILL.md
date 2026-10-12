@@ -193,6 +193,10 @@ button ends up reading "Copy for " forever.
    in `+15550102030` form for the tap-to-call link. Derive the second from the first.
 6. **The email** a client should send results to.
 7. **A footer line.** One line, usually the business name and the website.
+8. **The license line your broker or state requires** on client-facing material. Ask
+   what it should say rather than guessing: in some states it is the agent's own licence
+   number, in others the brokerage's, in others both. Empty is fine and the card hides
+   the line, but ask once rather than silently leaving it off.
 
 Then compute two more and write them in. Do not ask for these:
 
@@ -213,12 +217,13 @@ Then compute two more and write them in. Do not ask for these:
   "phone_display": "",
   "phone_raw": "",
   "email": "",
-  "footer_line": ""
+  "footer_line": "",
+  "license_line": ""
 }
 ```
 
 Required before anything is built: `business_name`, `agent_first_name`, `color_accent`,
-`color_action`, `phone_display`, `phone_raw`, `email`. The logo and the footer are
+`color_action`, `phone_display`, `phone_raw`, `email`. The logo, the footer and the licence line are
 optional and the page handles their absence.
 
 A logo is embedded directly into the page as a data URI, resized to roughly 200px on its
@@ -472,7 +477,10 @@ logic, the disagreement panel, the condition section, and the copy handoff. Repl
 `{{TOKEN}}`. The list below is in the template's own header comment.
 
 Array tokens take entries shaped `["Label","Hint, or an empty string"],`. The tour token
-takes `{id:"slug", n:"Address", facts:"Area · type · detail", type:"house"|"tower"},`.
+takes `{id:"slug", n:"123 Example St", facts:"Area · 3 bd 2 ba · listed $X", area:"City, ST",
+type:"house"|"tower"},`. **Always fill `area`**, because the route and the per-stop
+navigation links are built from the address plus the area, and an address alone sends
+the buyer to the wrong city.
 **The storage key must be unique per buyer per tour**, or two tours share one set of
 checkmarks.
 
@@ -481,6 +489,23 @@ phone width before handing it over, and open the finished link yourself once bef
 sending it.
 
 ---
+
+## What the page does at the end of a tour
+
+Three things that are not scoring, and they matter as much as the scoring.
+
+**A route.** Every stop, in order, opened in Google Maps from one button. Per stop there
+is also a Directions link and a Waze link, because Waze takes one destination at a time.
+Order the tour in `{{TOUR}}` the way the agent is actually driving it.
+
+**Skip.** A stop they drove past and did not go into gets skipped rather than deleted:
+greyed on the list, out of the ranking, out of the route, out of the summary, and
+reversible. The record that it was considered survives, which a delete would lose.
+
+**A decision.** The page closes by asking which of four things today was: write on one,
+see one again, keep looking, or sit with it. Whichever they pick travels in the summary
+the agent receives. A tour that ends without a decision is the one that drifts into next
+month.
 
 ## After the tour
 
