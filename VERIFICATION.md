@@ -272,3 +272,61 @@ the grid is 8.06:1 light and 8.49:1 dark, the row labels 15.34 and 14.74.
 **Status: DONE** for this slice. The grid is new surface and has not been seen by anyone
 but me.
 
+---
+
+## Slice: the backup code, the one-phone rule, and the delivery section, v1.4
+
+**Working means:** a buyer whose phone is wiped in week six gets every home back, and the
+agent does nothing to make that true beyond keeping the message they already receive.
+
+**Ran the real thing:** served over HTTP and driven in a real browser. Every state was
+built by clicking the page's own controls, not by writing into storage, then encoded,
+decoded, and compared field by field against the original.
+
+**Design:** the code is a compact encoding rather than JSON, because it has to survive
+inside a text message. Four fully scored homes with notes and condition is 266 characters
+against 1302 for the raw state, and twelve homes is 685. It rides at the bottom of the
+summary the buyer already sends, so neither party changes behaviour.
+
+A fingerprint of the criteria lists travels with it. The masks are positional, so a
+rebuilt scorecard with a changed list would restore every answer against the wrong
+question. The page refuses in that case and says why.
+
+### Break attempts
+
+1. **A note containing a tilde.** The record separator. `encodeURIComponent` leaves `~`
+   alone, so a buyer writing "kitchen ~ 25k" split their own backup in half and it decoded
+   as incomplete. Found by testing with a realistic note rather than "test". Escaped.
+2. **A code from a different criteria list** — refused, with the reason.
+3. **Truncated, garbage, empty, null, and a valid prefix with a broken body** — all
+   refused with a plain sentence, nothing written.
+4. **A code pasted inside a whole text message**, greeting and sign-off around it, which
+   is how it will actually arrive. Extracted and restored.
+5. **A code carrying a house no longer on the list.** Held, not shown, and the message
+   says so rather than silently dropping it.
+6. **Restoring over existing scoring.** Arms once and states what it will replace before
+   it will do it. A clean phone restores in one tap with no warning.
+7. **Round trip, field by field**, across must-haves, nice-to-haves, easy-to-forget,
+   deal-breakers, both people's columns, seven condition states, two work states, gut
+   scores, skipped flags and a note containing a tilde, quotes, an ampersand, a percent
+   and a colon. EXACT, in both solo and two-buyer builds.
+8. **A sentence starting with a number word.** "Restored. two homes are back." Added a
+   capitalising form.
+
+### The one-phone rule
+
+Nowhere did the page or the skill say this tool assumes one shared phone, and two buyers
+on two phones each get a complete-looking page holding half the data, with no warning.
+Sarah chose one phone. It is now stated at the top of the stops list whenever there are
+two names, hidden for a single buyer, and written into the skill in three places.
+
+### The delivery section
+
+Not missing content, a broken document. The heading promised "pick one of these" and then
+a different section ran for fifty lines, with the actual options buried at its end. The
+sections are now in the order someone reads them, each delivers what its heading promises,
+the permanent link is the recommendation rather than one of three equals, and the doubled
+divider is gone.
+
+**Status: DONE** for this slice. Still no buyer has used any of it.
+

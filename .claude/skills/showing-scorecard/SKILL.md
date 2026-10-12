@@ -38,8 +38,6 @@ It does four things a paper checklist cannot:
 
 ---
 
----
-
 ## Fair housing: what never becomes a scored criterion
 
 **Read this before you take a single must-have from anybody.** This skill's method is to
@@ -235,11 +233,6 @@ linked logo will not render.
 
 ---
 
-## Getting the finished page onto the buyer's phone
-
-The skill produces one HTML file. Nothing about it is finished until the buyer can open
-it, so pick one of these and tell the agent which you used.
-
 ## One scorecard per client, not one per tour
 
 **This is the thing to get right and the easy thing to get wrong.**
@@ -271,28 +264,43 @@ it is the thing a buyer cannot build for themselves after six weekends.
 Houses they have ruled out get skipped rather than removed, which takes them out of the
 ranking and the route while keeping the record that they were seen and rejected.
 
+This rebuild is a two-minute job the night before a showing day. Frame it to the agent
+that way: it sits in the same slot as the prep they already do, and it replaces printing
+listing sheets rather than being added on top of it.
+
 **Where the file goes.** Every scorecard goes to
 `clients/<client-slug>/YYYY-MM-DD-scorecard.html`, under whichever `clients/` location
-the install check above settled on, and the criteria
-you worked from go beside it as `criteria.md`. The date in the filename is a version stamp rather than a separate scorecard: the
-newest file is the live one and the earlier ones are history worth keeping. Create the client folder if it is not there.
+the install check above settled on, and the criteria you worked from go beside it as
+`criteria.md`. The date in the filename is a version stamp rather than a separate
+scorecard: the newest file is the live one and the earlier ones are history worth
+keeping. Create the client folder if it is not there.
 
-When the buyer sends their results back, save those too, as
-`YYYY-MM-DD-results.md` in the same folder.
+When the buyer sends their results back, save those too, as `YYYY-MM-DD-results.md` in
+the same folder. **Keep the whole message, including the backup code at the bottom.**
+That code is the client's only copy of their own scoring if their phone is ever lost; see
+the section below.
 
-Then get it onto the buyer's phone, one of these ways.
+---
 
-**The file itself.** Email or text it as an attachment. Works everywhere, needs nothing,
-and is the right answer for an agent who is not going to set anything up. The buyer opens
-it from their mail app and it behaves like a page.
+## Getting the finished page onto the buyer's phone
 
-**Free static hosting, for a real link.** Netlify Drop, Cloudflare Pages, or GitHub Pages
-all take a single HTML file and hand back a URL, free, no card. This is the best result:
-a short link the agent can text, and one the buyer can reopen. Walk them through it once
-and every tour after that is a drag and drop.
+The skill produces one HTML file, and nothing about it is finished until the buyer can
+open it. Pick one of these and tell the agent which you used.
 
-**Wherever they already publish.** If the agent already has a website or a page builder,
-it goes there, under their own domain.
+**A permanent link. Do this one.** Netlify Drop, Cloudflare Pages or GitHub Pages all
+take a single HTML file and hand back a URL, free, no card, no account hoops. Walk the
+agent through it once and every tour after that is a drag and a drop onto the same site,
+so **the buyer keeps one link that never changes and never needs re-sending.** That
+matters more than it sounds: a buyer who has bookmarked one address will still have their
+whole search in week six, and the agent has one less thing to remember on a Friday night.
+
+**The file itself, if the agent will not set anything up.** Email or text it as an
+attachment. Works everywhere, needs nothing, and the buyer opens it from their mail app
+and it behaves like a page. The cost is a new attachment every tour, and a buyer who has
+to find the newest one.
+
+**Wherever they already publish.** If the agent has a website or a page builder, it goes
+there, under their own domain. Same benefit as the permanent link, with their name on it.
 
 **Then make it a QR code**, because half of this is handing a phone to somebody standing
 next to you. Any free QR generator takes the URL.
@@ -301,7 +309,37 @@ Open the finished link yourself, on a phone, before the agent sends it to anybod
 
 ---
 
+## One phone between two buyers
+
+**The page saves to whichever phone the tap happened on, and nothing syncs.** With two
+buyers, that makes one phone the only correct way to use it. Two people on two phones
+each end up with half the picture, and nothing warns them, because each phone looks
+complete on its own.
+
+The page says this at the top of the stops list whenever there are two names, so the
+agent does not have to remember to. The agent should say it out loud anyway when they
+hand the link over: *one phone, pass it back and forth, tap your own initial.*
+
 ---
+
+## The backup code
+
+Everything the buyer taps lives in that one phone's storage. A cleared browser, a private
+window or a new handset wipes it with nothing to recover from.
+
+So the summary the buyer sends their agent ends with a short backup code, a few hundred
+characters, carrying every tick, note, gut score and condition answer. It rides inside a
+message they already send, which makes the agent the backup without either of them doing
+anything extra.
+
+**What to tell the agent:** keep the whole message, including the ugly line at the
+bottom. If the buyer ever loses their phone, send that code back. They paste it into
+**If You Lose This Phone** at the end of Compare and the whole search returns.
+
+The code carries a fingerprint of the criteria lists. If the agent has since rebuilt the
+scorecard with a changed list, the page refuses the code and says so rather than quietly
+restoring the answers against the wrong questions. Photos the buyer added do not travel
+in the code; everything else does.
 
 ## Then: three ways to get the buyer's list
 
@@ -503,11 +541,15 @@ have a client believing their agent has the results while the agent has nothing.
 
 ---
 
-## Tell every buyer these three things
+## Tell every buyer these four things
 
-- The answers live on whichever phone they are tapped into. **One phone, not two.**
-  Private browsing or clearing site data wipes them.
-- Nothing reaches the agent on its own. The copy button is the handoff.
+- **One phone, not two.** The answers live on whichever phone they are tapped into, and
+  nothing syncs. Two people on two phones end up with half the picture each.
+- **Nothing reaches the agent on its own.** The button at the end is the handoff, and the
+  buyer has to press send in their own app.
+- **Send the whole message, backup code and all.** The ugly line at the bottom is the
+  only copy of their scoring that exists anywhere but that phone. The agent keeps it and
+  can hand it back.
 - If the page is published through a hosted link, the viewer may see that host's banner
   above it.
 
@@ -547,7 +589,7 @@ sending it.
 
 ## What the page does at the end of a tour
 
-Three things that are not scoring, and they matter as much as the scoring.
+Four things that are not scoring, and they matter as much as the scoring.
 
 **A route.** Every stop, in order, opened in Google Maps from one button. Per stop there
 is also a Directions link and a Waze link, because Waze takes one destination at a time.
@@ -561,6 +603,11 @@ reversible. The record that it was considered survives, which a delete would los
 see one again, keep looking, or sit with it. Whichever they pick travels in the summary
 the agent receives. A tour that ends without a decision is the one that drifts into next
 month.
+
+**A backup.** The summary ends with a code carrying everything they have tapped, and
+Compare has a panel to paste one back in. See **The backup code** above. The agent holding
+that message is the difference between a lost phone costing an afternoon and costing six
+weekends.
 
 ## After the tour
 

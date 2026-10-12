@@ -378,6 +378,14 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
   table.grid th[scope=row]{font-size:12.5px}
   table.grid th,table.grid td{padding:9px 10px}
 }
+.onephone{font-size:13.5px;line-height:1.6;margin:0 0 22px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--goldbg);color:var(--ink)}
+.onephone b{font-weight:900}
+.backup{margin-top:38px}
+.restorelab{display:block;font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--body);margin:16px 0 8px}
+#restorein{width:100%;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;padding:12px;border:1px solid var(--rule2);border-radius:3px;background:var(--surface);color:var(--ink);resize:vertical}
+#restorein:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.restoremsg{font-size:13.5px;line-height:1.55;margin:12px 0 0;padding:12px 14px;border-left:3px solid var(--gold);background:var(--alt);color:var(--ink)}
+.restoremsg.bad{border-left-color:var(--red)}
 .cmpmiss{font-size:13.5px;line-height:1.6;color:var(--ink);margin:6px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:0}
 .cmpmiss b{font-weight:900;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .cmpmiss .dot{color:var(--rule2);padding:0 7px}
@@ -549,6 +557,7 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
 
 <main>
   <section id="view-stops">
+    <p class="onephone" id="onephone" hidden><b>Use one phone between you.</b> You each have your own column, so pass it back and forth and tap your own initial. Everything saves to the phone you tap it into, so two phones would leave you each with half the picture.</p>
     <h2 class="sechead">{{STOPS_HEADING}}</h2>
     <div class="routebar">
       <a class="btn primary routebtn" id="routeall" role="button">
@@ -600,6 +609,21 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
     <p class="sendempty" id="sendempty" hidden>Nothing is scored on <em>this</em> phone yet. Your ticks live on whichever phone you tap them into, so if you scored on a different one, send it from there. Otherwise open a house above and start ticking.</p>
     <p class="sendhint" id="sendhint" hidden></p>
     <textarea id="sendbox" hidden readonly aria-label="Summary to send"></textarea>
+
+    <section id="backupbox" class="backup">
+      <h2 class="sechead">If You Lose This Phone</h2>
+      <p class="note"><b>Everything you tap is saved on this phone and nowhere else.</b> A new phone, a cleared browser or a private window wipes it, and there is no way to get it back on our own. So the summary you send {{AGENT_FIRST_NAME}} ends with a short backup code. {{AGENT_FIRST_NAME}} keeps it. If anything happens to this phone, ask for it back, paste it below, and every home you have scored returns.</p>
+      <div class="btnrow">
+        <button class="btn" id="copycode">Copy my backup code</button>
+        <button class="btn" id="showrestore">I have a code to restore</button>
+      </div>
+      <div id="restorewrap" hidden>
+        <label class="restorelab" for="restorein">Paste the code {{AGENT_FIRST_NAME}} sent you</label>
+        <textarea id="restorein" rows="3" placeholder="RH1...." aria-label="Backup code to restore"></textarea>
+        <div class="btnrow"><button class="btn primary" id="dorestore">Restore</button></div>
+        <p class="restoremsg" id="restoremsg" hidden></p>
+      </div>
+    </section>
     <p class="note"><b>No home is going to score 100%.</b> The number isn't there to find a perfect one. It's to show you in writing which trade-offs you're actually making, so the decision is a clear one instead of a feeling on a Saturday afternoon.</p>
     <p class="note"><b>Your answers stay on this phone.</b> Nobody else can see them and nothing is uploaded. (The page does load its fonts from Google, like most websites.) When you're done, tap <b>Copy for {{AGENT_FIRST_NAME}}</b> and then paste it into a text or an email yourself. This page cannot send anything on its own, so it is not with {{AGENT_FIRST_NAME}} until you press send in your own app.</p>
   </section>
@@ -638,6 +662,7 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
 var P={b:{key:"b",initial:"{{P1_INITIAL}}",name:"{{P1_NAME}}"}, l:{key:"l",initial:"{{P2_INITIAL}}",name:"{{P2_NAME}}"}};
 var SOLO = !P.l.name;
 if(SOLO) document.documentElement.setAttribute("data-solo","1");
+else { var op=document.getElementById("onephone"); if(op) op.hidden=false; }
 
 var MUSTS=[
 {{MUSTS}}
@@ -721,6 +746,100 @@ function st(id){
   return s;
 }
 function esc(s){ var d=document.createElement("div"); d.textContent=s; return d.innerHTML; }
+
+/* ------------------------------------------------------------------
+   The backup code. Everything a buyer taps lives in this one phone's storage, which a
+   cleared cache, a private window or a new handset wipes with no way back. The code is a
+   plain-text copy of that state, small enough to ride inside the summary they already
+   send their agent, so the agent becomes the backup without doing anything.
+
+   It carries a fingerprint of the criteria lists. A rebuilt scorecard with a changed list
+   would shift every position in the masks, so a code from the old one is refused rather
+   than silently restoring the wrong ticks against the wrong questions.
+   ------------------------------------------------------------------ */
+var WORDS=["no","one","two","three","four","five","six","seven","eight","nine","ten"];
+function count(n){ return WORDS[n] || String(n); }
+function Count(n){ var w=count(n); return w.charAt(0).toUpperCase()+w.slice(1); }
+
+function bitsOut(get, n){
+  var b="", i, out="";
+  for(i=0;i<n;i++) b += get(i) ? "1" : "0";
+  for(i=0;i<b.length;i+=4) out += parseInt((b.substr(i,4)+"0000").slice(0,4),2).toString(16);
+  return out;
+}
+function bitsIn(hex){
+  var b="", i;
+  for(i=0;i<hex.length;i++){
+    var v=parseInt(hex.charAt(i),16);
+    if(isNaN(v)) return function(){ return false; };
+    b += ("0000"+v.toString(2)).slice(-4);
+  }
+  return function(i){ return b.charAt(i)==="1"; };
+}
+function listFingerprint(){
+  var src=[KILLS,MUSTS,NICES,CONSIDER,COND_SYS,COND_WORK].map(function(L){
+    return L.map(function(t){ return t[0]; }).join("|");
+  }).join("#");
+  var h=5381;
+  for(var i=0;i<src.length;i++) h=(((h*33)>>>0) ^ src.charCodeAt(i))>>>0;
+  return h.toString(36);
+}
+function stateIndex(states, v){
+  for(var i=0;i<states.length;i++) if(states[i][0]===v) return String(i);
+  return "-";
+}
+function backupCode(){
+  var nM=MUSTS.length, nN=NICES.length, recs=[];
+  TOUR.forEach(function(p){
+    var s=state[p.id]; if(!s) return;
+    var b=s.b||{}, l=s.l||{}, sh=s.shared||{}, cd=s.cond||{};
+    var pb=bitsOut(function(i){ return i<nM ? b["m"+i] : b["n"+(i-nM)]; }, nM+nN);
+    var pl=bitsOut(function(i){ return i<nM ? l["m"+i] : l["n"+(i-nM)]; }, nM+nN);
+    var pc=bitsOut(function(i){ return sh["c"+i]; }, CONSIDER.length);
+    var pk=bitsOut(function(i){ return sh["k"+i]; }, KILLS.length);
+    var sy="", wk="";
+    COND_SYS.forEach(function(_,i){ sy += stateIndex(SYS_STATES, cd["s"+i]); });
+    COND_WORK.forEach(function(_,i){ wk += stateIndex(WORK_STATES, cd["w"+i]); });
+    var rec=[p.id, pb, pl, pc, pk, sy, wk,
+             String(s.gutB||0)+String(s.gutL||0),
+             s.skipped?"1":"0",
+             encodeURIComponent(s.notes||"").replace(/~/g,"%7E")].join(":");
+    // a house nobody has touched is not worth carrying
+    if(/^[^:]*:0*:0*:0*:0*:-*:-*:00:0:$/.test(rec)) return;
+    recs.push(rec);
+  });
+  if(!recs.length) return "";
+  return "RH1." + listFingerprint() + "." + recs.join("~");
+}
+function readCode(txt){
+  var m=String(txt||"").trim().match(/RH1\.[a-z0-9]+\.[^\s]+/i);
+  if(!m) return {err:"That does not look like a backup code. It starts with RH1."};
+  var parts=m[0].split(".");
+  if(parts[1]!==listFingerprint())
+    return {err:"That code was made from a different version of this list, so the answers would land against the wrong questions. Ask your agent to send the matching one."};
+  var nM=MUSTS.length, nN=NICES.length, next={}, houses=0;
+  var ok=parts.slice(2).join(".").split("~").every(function(rec){
+    var f=rec.split(":"); if(f.length<10) return false;
+    var id=f[0]; if(!id) return false;
+    var gb=bitsIn(f[1]), gl=bitsIn(f[2]), gc=bitsIn(f[3]), gk=bitsIn(f[4]);
+    var o={b:{},l:{},shared:{},cond:{},gutB:0,gutL:0,notes:""};
+    MUSTS.forEach(function(_,i){ if(gb(i)) o.b["m"+i]=true; if(gl(i)) o.l["m"+i]=true; });
+    NICES.forEach(function(_,i){ if(gb(nM+i)) o.b["n"+i]=true; if(gl(nM+i)) o.l["n"+i]=true; });
+    CONSIDER.forEach(function(_,i){ if(gc(i)) o.shared["c"+i]=true; });
+    KILLS.forEach(function(_,i){ if(gk(i)) o.shared["k"+i]=true; });
+    COND_SYS.forEach(function(_,i){ var c=f[5].charAt(i); if(c&&c!=="-"&&SYS_STATES[+c]) o.cond["s"+i]=SYS_STATES[+c][0]; });
+    COND_WORK.forEach(function(_,i){ var c=f[6].charAt(i); if(c&&c!=="-"&&WORK_STATES[+c]) o.cond["w"+i]=WORK_STATES[+c][0]; });
+    o.gutB=+(f[7].charAt(0))||0; o.gutL=+(f[7].charAt(1))||0;
+    o.skipped=f[8]==="1";
+    try{ o.notes=decodeURIComponent(f.slice(9).join(":")); }catch(e){ o.notes=""; }
+    next[id]=o; houses++;
+    return true;
+  });
+  if(!ok || !houses) return {err:"That code is incomplete. Ask your agent to send the whole thing, including the end."};
+  var known=0;
+  TOUR.forEach(function(p){ if(next[p.id]) known++; });
+  return {state:next, houses:houses, known:known};
+}
 
 // The photo control. A circle on the corner of the tile, nothing more, and the tile
 // looks finished without it ever being touched.
@@ -1154,8 +1273,6 @@ function renderCompare(){
   }
   // The criteria are noun phrases a buyer wrote ("A garage", "In Los Feliz"). Pushed into
   // a sentence they read as broken English, so they are listed instead of conscripted.
-  var WORDS=["no","one","two","three","four","five","six","seven","eight","nine","ten"];
-  function count(n){ return WORDS[n] || String(n); }
   function missList(list){
     return '<p class="cmpmiss">'+list.map(esc).join('<span class="dot">&middot;</span>')+'</p>';
   }
@@ -1466,7 +1583,12 @@ document.getElementById("dock-done").addEventListener("click",function(){ render
 
 function sendBody(){
   var b=shortSummary();
-  return b || "";
+  if(!b) return "";
+  // The code rides inside the message the buyer already sends, so the agent becomes the
+  // backup without either of them doing anything extra.
+  var c=backupCode();
+  if(c) b += "\n\n-- Backup code. Ignore this unless this phone is ever lost, then send it back. --\n" + c;
+  return b;
 }
 function wireSendLinks(){
   var body=sendBody();
@@ -1527,6 +1649,59 @@ document.getElementById("reset").addEventListener("click",function(){
   state={}; save(); btn.dataset.armed="0"; btn.textContent="Cleared";
   renderCompare(); renderStops();
   setTimeout(function(){ btn.textContent="Clear this tour"; },2000);
+});
+
+function copyText(txt, btn, done){
+  var fin=function(){ var o=btn.textContent; btn.textContent=done; setTimeout(function(){ btn.textContent=o; },1800); };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(fin, function(){ legacyCopy(txt); fin(); });
+  } else { legacyCopy(txt); fin(); }
+}
+function legacyCopy(txt){
+  var t=document.createElement("textarea");
+  t.value=txt; t.setAttribute("readonly",""); t.style.position="fixed"; t.style.left="-9999px";
+  document.body.appendChild(t); t.select();
+  try{ document.execCommand("copy"); }catch(e){}
+  document.body.removeChild(t);
+}
+document.getElementById("copycode").addEventListener("click",function(){
+  var c=backupCode();
+  if(!c){ this.textContent="Nothing scored yet"; var b=this;
+    setTimeout(function(){ b.textContent="Copy my backup code"; },2000); return; }
+  copyText(c, this, "Copied");
+});
+document.getElementById("showrestore").addEventListener("click",function(){
+  var w=document.getElementById("restorewrap");
+  w.hidden=!w.hidden;
+  this.textContent = w.hidden ? "I have a code to restore" : "Never mind";
+  if(!w.hidden) document.getElementById("restorein").focus();
+});
+document.getElementById("dorestore").addEventListener("click",function(){
+  var msg=document.getElementById("restoremsg");
+  var res=readCode(document.getElementById("restorein").value);
+  var say=function(t, bad){ msg.hidden=false; msg.textContent=t; msg.classList.toggle("bad", !!bad); };
+  if(res.err) return say(res.err, true);
+
+  var scored=0;
+  TOUR.forEach(function(p){ if(state[p.id] && score(p).hasData) scored++; });
+  var btn=this;
+  if(scored && btn.dataset.armed!=="1"){
+    btn.dataset.armed="1"; btn.textContent="Tap again to replace";
+    say("You already have "+count(scored)+(scored===1?" home":" homes")+" scored on this phone. "+
+        "Restoring replaces "+(scored===1?"it":"them")+" with the "+count(res.houses)+
+        " in the code. Tap Restore again if that is what you want.", true);
+    setTimeout(function(){ btn.dataset.armed="0"; btn.textContent="Restore"; },6000);
+    return;
+  }
+  btn.dataset.armed="0"; btn.textContent="Restore";
+  state=res.state; save();
+  renderStops(); renderCompare(); wireSendLinks(); wireRoute();
+  say(res.known===res.houses
+    ? "Restored. "+Count(res.houses)+(res.houses===1?" home is":" homes are")+" back exactly as you left "+(res.houses===1?"it":"them")+"."
+    : "Restored "+count(res.houses)+(res.houses===1?" home":" homes")+". "+Count(res.houses-res.known)+
+      " of them "+(res.houses-res.known===1?"is":"are")+" not on this list any more, so "+
+      (res.houses-res.known===1?"it is":"they are")+" held but not shown.");
+  document.getElementById("restorein").value="";
 });
 
 try{ localStorage.setItem("__probe__","1"); localStorage.removeItem("__probe__"); }
