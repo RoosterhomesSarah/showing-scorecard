@@ -525,10 +525,14 @@ corrupts anything that later reads the file back.
 
 Array tokens take entries shaped `["Label","Hint, or an empty string"],`. The tour token
 takes `{id:"slug", n:"123 Example St", facts:"Area · 3 bd 2 ba · listed $X", area:"City, ST",
-type:"house"|"tower"},`. `type` decides the tile's mark: `"house"` draws a pediment,
-`"tower"` a flat cornice, which is what makes a condo read differently from a house at a
-glance. An optional `photo:"data:image/jpeg;base64,..."` replaces the plate, and is only
-ever a picture the agent took. **Always fill `area`**, because the route and the per-stop
+type:"house"|"condo"},`. `type` draws the tile: both are the same hairline elevation,
+walls on an overhanging eave, and they differ at the roof, pitched for a house and flat
+with a parapet for anything stacked. That is what makes a condo read differently from a
+house before the buyer has read a word. Write the word you would say out loud; `condo`,
+`apartment`, `loft`, `high-rise`, `co-op` and `unit` all draw the stacked one, and
+`townhouse`, `bungalow`, `duplex` and anything unrecognised draw the house. An optional
+`photo:"data:image/jpeg;base64,..."` replaces the elevation, and is only ever a picture
+the agent took. **Always fill `area`**, because the route and the per-stop
 navigation links are built from the address plus the area, and an address alone sends
 the buyer to the wrong city.
 **The storage key is one per client and never changes.** Not per tour. It is what makes

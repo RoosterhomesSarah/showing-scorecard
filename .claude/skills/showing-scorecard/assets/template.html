@@ -32,7 +32,10 @@
     P1_NAME P1_INITIAL P2_NAME P2_INITIAL   P2 empty = solo mode
     MUSTS KILLS NICES CONSIDER   ["Label","Hint or empty"],
     TOUR   {id:"slug", n:"123 Example St", facts:"Area &middot; 3 bd 2 ba &middot; listed $X",
-               area:"City, ST", type:"house"|"tower", date:"Sat 12 Oct"},
+               area:"City, ST", type:"house"|"condo", date:"Sat 12 Oct"},
+               type draws the tile's elevation: pitched roof, or flat with a parapet.
+               Write the word you would say. condo, apartment, loft, high-rise, co-op
+               and unit all draw the stacked one; anything else draws the house.
                area makes the maps links land on the right house. Include it.
                date groups the list when a search runs over several outings. Newest
                first. Omit it only on a one-off tour.
@@ -169,11 +172,14 @@ p{margin:0}
 .stop.dead{border-color:color-mix(in srgb,var(--red) 55%,transparent)}
 .shot{flex:0 0 118px;background:linear-gradient(160deg,color-mix(in srgb,var(--gold) 9%,var(--surface)),color-mix(in srgb,var(--ink) 7%,var(--surface)));display:flex;align-items:center;justify-content:center;border-right:1px solid var(--rule);overflow:hidden;position:relative}
 .tile-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.tile-plate{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 10px;width:100%}
-.tile-cap{display:block;width:58px;height:auto;color:var(--gold-dk);opacity:.9;margin-bottom:-2px}
-.tile-box{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:64px;padding:8px 10px 7px;border:1px solid color-mix(in srgb,var(--gold-dk) 62%,transparent)}
-.tile-num{font-family:var(--display);font-size:27px;font-weight:700;line-height:1.05;letter-spacing:-.025em;color:var(--ink);font-variant-numeric:lining-nums tabular-nums}
-.tile-st{font-size:8px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2);text-align:center;line-height:1.2}
+.tile-plate{position:relative;width:80px;height:76px;flex:none}
+.tile-frame{position:absolute;inset:0;width:100%;height:100%;display:block;color:var(--gold-dk);opacity:.85;stroke-width:1.1px}
+.tile-inner{position:absolute;left:7%;right:7%;top:var(--inner-top,38%);bottom:7%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.tile-num{font-family:var(--display);font-weight:700;line-height:1;letter-spacing:-.025em;color:var(--ink);font-variant-numeric:lining-nums tabular-nums}
+.tile-num.s1{font-size:25px}
+.tile-num.s2{font-size:21px}
+.tile-num.s3{font-size:17px}
+.tile-st{font-size:7.5px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--ink2);text-align:center;line-height:1.2}
 /* tap the tile's corner to put a real photo there. optional, always. */
 .photobtn{position:absolute;left:7px;bottom:7px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--rule2);background:var(--surface);color:var(--muted);cursor:pointer;z-index:2;padding:0;opacity:.85}
 .photobtn:hover{color:var(--ink);border-color:var(--gold);opacity:1}
@@ -257,9 +263,10 @@ tr.win td{background:var(--goodbg)}
 .foot{margin-top:48px;padding-top:24px;border-top:1px solid var(--rule);font-size:11.5px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;letter-spacing:.06em}
 @media (max-width:470px){
   .shot{flex-basis:92px}
-  .tile-num{font-size:23px}
-  .tile-cap{width:50px}
-  .tile-box{min-width:56px;padding:7px 8px 6px}
+  .tile-plate{width:72px;height:68px}
+  .tile-num.s1{font-size:22px}
+  .tile-num.s2{font-size:19px}
+  .tile-num.s3{font-size:15px}
   .sbody{padding:18px 17px}
   .saddr{font-size:21px}
   .saddr{font-size:19px}
@@ -365,7 +372,7 @@ tr.win td{background:var(--goodbg)}
   .row2.split{background:var(--alt);box-shadow:inset 3px 0 0 var(--gold)}
   .stop.dead{border-color:var(--red)}
   .flag,.flag.ok,.flag.split{border:1px solid currentColor}
-  .tile-box{border-color:var(--gold-dk)}
+  .tile-frame{color:var(--gold-dk)}
   .btn.primary:hover{background:var(--red)}
 }
 
@@ -736,20 +743,49 @@ function band(sc,k){
   return one.pct>=70?"g":"m";
 }
 
+// The frame IS the building. One hairline elevation per property type, drawn to
+// architectural proportions rather than as a picture of a house: a pitched roof over a
+// drawn eave line for a single family, a stepped crown over a cornice for a tower. The
+// number sits in the wall, below the line, where a real address plate goes.
+var SHAPES = {
+  // Both sit on the same walls and the same overhanging eave, so they read as one family
+  // of marks. They differ exactly where two real buildings differ: the roof.
+  house: { box:"0 0 80 76", top:"40%",
+    d:["M8 72 V28 M72 72 V28 M8 72 H72","M40 6 L72 28 L8 28 Z","M4 28 H76"] },
+  tower: { box:"0 0 80 76", top:"40%",
+    d:["M8 72 V28 M72 72 V28 M8 72 H72","M12 28 V20 H68 V28","M4 28 H76"] }
+};
+// Whoever fills the tour writes the word they would say out loud, not an internal name.
+var SHAPE_ALIAS = {
+  condo:"tower", apartment:"tower", apt:"tower", loft:"tower", unit:"tower",
+  highrise:"tower", "high-rise":"tower", midrise:"tower", "mid-rise":"tower",
+  coop:"tower", "co-op":"tower", building:"tower",
+  sfr:"house", single:"house", "single-family":"house", townhouse:"house",
+  townhome:"house", bungalow:"house", duplex:"house", cottage:"house"
+};
+function shapeFor(t){
+  var k=String(t||"").trim().toLowerCase();
+  return SHAPES[k] || SHAPES[SHAPE_ALIAS[k]] || SHAPES.house;
+}
+
 function glyph(p, i){
   var saved = st(p.id).photo;
   if(saved || p.photo) return '<img class="tile-photo" src="'+(saved||p.photo)+'" alt="">';
-  var num = (String(p.n).match(/^\s*([0-9]+)/) || [,""])[1];
+  var num = (String(p.n).match(/^\s*([0-9]+)/) || [,""])[1] || String(i+1);
   var rest = String(p.n).replace(/^\s*[0-9]+\s*/, "");
   var suffix = rest.split(/\s+/).slice(-1)[0] || "";
-  // A pediment for a house, a flat cornice for anything stacked. Architecture,
-  // drawn with one line, rather than a picture of a house.
-  var cap = p.type === "tower"
-    ? '<svg class="tile-cap" viewBox="0 0 64 11" aria-hidden="true"><path d="M3 9 H61 M8 4.5 H56" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="square"/></svg>'
-    : '<svg class="tile-cap" viewBox="0 0 64 13" aria-hidden="true"><path d="M3 12 L32 2 L61 12" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round"/></svg>';
-  return '<span class="tile-plate">'+cap+
-           '<span class="tile-box">'+
-             '<span class="tile-num">'+esc(num || String(i+1))+'</span>'+
+  var sh = shapeFor(p.type);
+  // The wall is only so wide. A long number steps down instead of overflowing it.
+  var size = num.length >= 5 ? "s3" : (num.length === 4 ? "s2" : "s1");
+  var frame = '<svg class="tile-frame" viewBox="'+sh.box+'" aria-hidden="true" '+
+              'preserveAspectRatio="xMidYMid meet">'+
+              sh.d.map(function(d){
+                return '<path d="'+d+'" fill="none" stroke="currentColor" stroke-width="1.6" '+
+                       'stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>';
+              }).join("")+'</svg>';
+  return '<span class="tile-plate" style="--inner-top:'+sh.top+'">'+frame+
+           '<span class="tile-inner">'+
+             '<span class="tile-num '+size+'">'+esc(num)+'</span>'+
              (suffix ? '<span class="tile-st">'+esc(suffix)+'</span>' : '')+
            '</span>'+
          '</span>';

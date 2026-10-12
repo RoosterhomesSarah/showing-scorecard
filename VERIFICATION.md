@@ -185,3 +185,38 @@ true of every answer on the page and is documented, not solved. The camera icon 
 bar. The hero band and the Compare table are still the plainest parts of the page.
 
 **Status: DONE** for this slice.
+
+---
+
+## Slice: the frame is the building, v1.2
+
+**Working means:** a buyer can tell a single family from a condo by the shape of the mark,
+before reading anything, and both still read as one family of marks rather than two
+unrelated drawings.
+
+**Ran the real thing:** served over HTTP, driven in a real browser, both themes, both
+accent extremes, phone and laptop width.
+
+**Design pass:** the two elevations share the same walls and the same overhanging eave and
+differ only at the roof, pitched for a house and flat with a parapet for anything stacked.
+Frame 7:1 light, 5.96:1 dark, 4.29:1 at a pale accent. Number 13.43 and 12.25. Suffix 7.06
+and 7.05. Playfair confirmed rendering as itself.
+
+### Break attempts
+
+1. **Two earlier shapes were rejected by looking at them, not by measuring.** A standalone
+   pentagon with no eave overhang read as a tent; a projecting cornice over a narrower body
+   read as a coat hanger. The overhanging eave is the detail that makes it a building.
+2. **A long house number.** Five and six digits overflowed the wall at a fixed size. The
+   number now steps down by digit count: 41px wide in a 62px wall at four digits, 48px at
+   six.
+3. **A long street suffix.** "Parkway", "Highway" and an address with no leading number at
+   all ("Corner of Vine and Fountain", which falls back to the stop index). Widest was 48px
+   in a 62px wall. No overflow.
+4. **The word an agent would actually write.** The field was documented `"house"|"tower"`,
+   and nobody types "tower". `condo`, `apartment`, `loft`, `high-rise`, `co-op`, `unit`,
+   `townhouse`, `bungalow` and `duplex` now resolve, case and whitespace insensitive, and
+   an unrecognised word draws the house rather than nothing.
+
+**Status: DONE** for this slice.
+
