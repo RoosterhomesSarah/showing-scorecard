@@ -30,13 +30,11 @@ After that, for every buyer:
 
 ### What your AI should actually do, if it asks
 
-```bash
-git clone --depth 1 https://github.com/RoosterhomesSarah/showing-scorecard /tmp/ssc
-mkdir -p .claude/skills/showing-scorecard
-cp -R /tmp/ssc/.claude/skills/showing-scorecard/. .claude/skills/showing-scorecard/
-cp /tmp/ssc/LICENSE .claude/skills/showing-scorecard/LICENSE
-rm -rf /tmp/ssc
-```
+Describe the outcome, not the commands, so your AI uses whatever it is allowed to use:
+
+> Shallow-clone the repository to a temporary folder. Copy the contents of
+> `.claude/skills/showing-scorecard/` into `.claude/skills/showing-scorecard/` in my
+> setup, plus the `LICENSE` file beside it. Delete the temporary folder.
 
 Your brand answers and your client folders are then created next to the skill, inside
 your own setup, and stay on your computer.
@@ -48,11 +46,7 @@ your own setup, and stay on your computer.
 **For anyone who would rather keep it separate from everything else,** or who wants to
 read it before trusting it.
 
-```bash
-git clone https://github.com/RoosterhomesSarah/showing-scorecard.git
-```
-
-Open that folder in Claude Code and say:
+Clone the repository, open that folder in Claude Code, and say:
 
 > set me up
 
@@ -62,10 +56,17 @@ Everything lives in the folder: the engine, your brand answers, and a folder per
 
 ## Updating, either way
 
-Door 1: say **update my showing scorecard** and your AI pulls the newest version over
-the old one. Your brand file and your clients are left alone.
+Say **update my showing scorecard**. Your brand file and your clients are left alone.
 
-Door 2: run `git pull` inside the folder.
+## If your setup vets incoming skills
+
+Good. It should, and this one is written to pass. It has no hooks, no scheduled jobs,
+nothing that sends anything anywhere, and the only outbound request any page makes is
+for the Google Fonts stylesheet, which the page discloses to the buyer.
+
+The one thing a scanner may flag is the deletion of the temporary download folder during
+install. That is housekeeping, and it is also why the step above is written as an
+instruction rather than a command to paste, so your own setup decides how to do it.
 
 ---
 
