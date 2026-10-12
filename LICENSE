@@ -6,8 +6,11 @@ Copyright 2026 Sarah Arlington, Rooster Homes.
 
 Use this in your own real estate business, free, for as many clients as you like.
 
-Change it. Rebrand it with your own colors, logo and wording. Add your own must-have
-lists, your own market's inspection prompts, your own buyer types.
+Change it. Add your own must-have lists, your own market's inspection prompts, your own
+buyer types.
+
+Put **your** colors, logo and wording on the scorecards it produces. That is what it is
+for, and the output is yours. The skill itself keeps its credit line.
 
 Give the scorecards you build with it to your own clients, including as part of paid
 services you sell them.
@@ -16,12 +19,20 @@ Show it to other agents and point them at this repository.
 
 ## What you may not do
 
-Do not redistribute this skill, the template, or a modified version of either, as your
-own work or under your own name. Point people here instead.
+Do not redistribute **the skill itself**, or a modified version of it, as your own work
+or under your own name. Point people here instead.
 
-Do not sell this skill or a derivative of it as a product, a template pack, a course
-asset, a lead magnet, or a bonus. Selling your own real estate services, with this as one
-of the tools you use, is fine and is the point.
+Do not sell **the skill itself**, or a derivative of it, as a product, a template pack,
+a course asset or a paid bonus.
+
+To be clear about what is not restricted, because the line matters:
+
+- Using it with clients and with prospective clients is unrestricted, including to win
+  business you have not won yet.
+- An installed copy living inside your own project or your own repository is fine, public
+  or private. That is how the tool is installed and it is not redistribution.
+- The scorecards you generate are yours. Give them away, attach them to anything, use
+  them to get hired.
 
 Do not remove the credit line from `SKILL.md` or from this file.
 

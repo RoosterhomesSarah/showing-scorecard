@@ -1,63 +1,79 @@
 <!--
   Showing Scorecard template. Built by Sarah Arlington, Rooster Homes.
-  Replace every {{TOKEN}} before publishing. Nothing here phones home.
+  Replace every {{TOKEN}} before publishing. The only outbound request is the
+  Google Fonts stylesheet below, which the page discloses to the buyer.
 
   BRAND, from scorecard-brand.json
     Example Realty            an <img src="data:..."> tag, or empty
-    #1F4E79    headings, rules, the gold-role accent
+    #1F6F8B    headings, rules, the gold-role accent
     #B33A2B    the one primary button, and deal-breakers
     family=Source+Serif+4:opsz,wght@8..60,400;8..60,700&family=Inter:wght@300;400;700;900      Google Fonts query string. Neutral default:
                         family=Source+Serif+4:opsz,wght@8..60,400;8..60,700&family=Inter:wght@300;400;700;900
     "Source Serif 4"    e.g. "Source Serif 4"      "Inter"  e.g. "Inter"
-    Dana (555) 010-2030 +15550102030 hello@example.com
-    dana@example.com Example Realty &middot; example.com
+    Dana (555) 010-2030 +15550102030 dana@example.com
+    #FFFFFF #FFFFFF  #fff or #1A1A1A, whichever reads on that colour.
+                        Compute it, do not guess: relative luminance above 0.45 takes
+                        the dark label, below it takes white.
+    Example Realty
 
   THIS BUYER, THIS TOUR
-    Scorecard Smoke Test Test buyers Smoke test Showing Day Scorecard Smoke test with neutral brand values, to prove the template renders with no Rooster Homes anything in it.
-    <div class="bi"><b>Under $600K</b><span>Range</span></div>
-<div class="bi"><b>3 bed &middot; 2 bath</b><span>Size</span></div>  four <div class="bi"><b>value</b><span>label</span></div>
-    Today&rsquo;s Stops
+    duo Pat & Jo Test Showing Day Scorecard Test.
+    <div class="bi"><b>Under $600K</b><span>Range</span></div>  four <div class="bi"><b>value</b><span>label</span></div>
+    Stops
     Pat P Jo J   P2 empty = solo mode
     ["Central air",""],
  ["A real bathtub",""],
- ["Dishwasher",""],
  ["Parking included",""],
- ["In-unit laundry",""],
- ["3 bedrooms",""],
- ["2 bathrooms",""],
- ["Priced under $600,000",""] ["Unpermitted addition",""],
+ ["3 bedrooms",""] ["Unpermitted addition",""],
  ["Busy street frontage",""] ["Room for a garden",""],
- ["An office with a door",""],
- ["Original details intact",""],
- ["Walkable to a park",""] ["Light at 6pm, not 11am",""],
- ["Street parking after 6pm",""],
- ["Water pressure","Run the shower and a tap together."],
- ["Roof age and visible patching",""],
- ["Cell signal in the back room",""],
- ["The commute at 8am",""]   ["Label","Hint or empty"],
-    {id:"t1", n:"118 Example Street", facts:"Sample stop &middot; single story", type:"house"},
- {id:"t2", n:"900 Sample Tower #410", facts:"Sample stop &middot; 4th floor", type:"tower"}   {id:"slug", n:"Address", facts:"Area &middot; type", type:"house"|"tower"},
-    smoke-test-v1   MUST be unique per buyer per tour
-    Smoke test
+ ["An office with a door",""] ["Light at 6pm",""],
+ ["Water pressure",""]   ["Label","Hint or empty"],
+    {id:"t1", n:"118 Example Street", facts:"Sample", type:"house"},
+ {id:"t2", n:"900 Sample Tower", facts:"Sample", type:"tower"}   {id:"slug", n:"Address", facts:"Area &middot; type", type:"house"|"tower"},
+    k-duo   MUST be unique per buyer per tour
+    Test
+    Two hard no's on file.    one sentence naming THIS buyer's hard no's
+    ["Foundation",""],
+ ["Roof",""],
+ ["Sewer line",""]      the seven systems, written for YOUR market. Questions, never
+                      claims. Never a cost estimate, an insurability claim, or a
+                      local custom, because this ships to agents in other states.
+    ["Kitchen remodeled",""]     pre-inspections, kitchen, bathrooms
 
   Scoring: a must-have is 25, a nice-to-have 4, an easy-to-forget 2. One must-have
   outweighs every nice-to-have combined, on purpose. Keep that true if you change them.
+
+  DOCUMENT SHELL: this file is a complete standalone HTML document, which is what you
+  want when you save it, host it, or hand someone the file. If you publish it through
+  something that supplies its own <!doctype>, <head> and <body> (some hosted artifact
+  and preview tools do), delete the eight lines below this comment and the two at the
+  very bottom, and paste the rest.
 -->
-<title>Scorecard Smoke Test</title>
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>duo</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,700&family=Inter:wght@300;400;700;900&display=swap">
+</head>
+<body>
 <style>
 :root{
   --page:#FFFFFF; --alt:#F6F7FB; --sunk:#ECEEF4; --surface:#FFFFFF;
   --ink:#202437; --body:#505050; --muted:#6E7280;
   --rule:#E3E6EE; --rule2:#CBD0DC;
-  --gold:#1F4E79;
-  --gold-dk:color-mix(in srgb,var(--gold) 78%,#000);
+  --gold:#1F6F8B;
+  --gold-dk:color-mix(in srgb,var(--gold) 55%,#000);
   --goldbg:color-mix(in srgb,var(--gold) 13%,#fff);
   --red:#B33A2B;
   --red-bright:color-mix(in srgb,var(--red) 85%,#fff);
   --redbg:color-mix(in srgb,var(--red) 10%,#fff);
   --green:#37696F; --green-mid:#468E95; --greenbg:#E4EFF0;
   --deep:#1B1F2E;
+  /* forced light enough to read on --deep whatever accent was chosen */
+  --on-deep:color-mix(in srgb,#1F6F8B 42%,#fff);
   --display:"Source Serif 4",Georgia,"Times New Roman",serif;
   --sans:"Inter",ui-sans-serif,system-ui,sans-serif;
   --shadow:0 1px 2px rgba(32,36,55,.05),0 10px 26px rgba(32,36,55,.08);
@@ -69,9 +85,9 @@
   --page:#14161F; --alt:#1A1D28; --sunk:#222634; --surface:#1A1D28;
   --ink:#EEF0F6; --body:#B4B8C6; --muted:#7D8294;
   --rule:#272B38; --rule2:#3A4054;
-  --gold:color-mix(in srgb,#1F4E79 72%,#fff);
-  --gold-dk:color-mix(in srgb,#1F4E79 78%,#fff);
-  --goldbg:color-mix(in srgb,#1F4E79 22%,#14161F);
+  --gold:color-mix(in srgb,#1F6F8B 72%,#fff);
+  --gold-dk:color-mix(in srgb,#1F6F8B 78%,#fff);
+  --goldbg:color-mix(in srgb,#1F6F8B 22%,#14161F);
   --red:color-mix(in srgb,#B33A2B 62%,#fff);
   --red-bright:color-mix(in srgb,#B33A2B 70%,#fff);
   --redbg:color-mix(in srgb,#B33A2B 24%,#14161F);
@@ -83,9 +99,9 @@
   --page:#14161F; --alt:#1A1D28; --sunk:#222634; --surface:#1A1D28;
   --ink:#EEF0F6; --body:#B4B8C6; --muted:#7D8294;
   --rule:#272B38; --rule2:#3A4054;
-  --gold:color-mix(in srgb,#1F4E79 72%,#fff);
-  --gold-dk:color-mix(in srgb,#1F4E79 78%,#fff);
-  --goldbg:color-mix(in srgb,#1F4E79 22%,#14161F);
+  --gold:color-mix(in srgb,#1F6F8B 72%,#fff);
+  --gold-dk:color-mix(in srgb,#1F6F8B 78%,#fff);
+  --goldbg:color-mix(in srgb,#1F6F8B 22%,#14161F);
   --red:color-mix(in srgb,#B33A2B 62%,#fff);
   --red-bright:color-mix(in srgb,#B33A2B 70%,#fff);
   --redbg:color-mix(in srgb,#B33A2B 24%,#14161F);
@@ -114,15 +130,15 @@ p{margin:0}
 /* hero, echoes the dark photo band on the site */
 .hero{background:var(--deep);color:#fff;padding-block:46px 40px}
 .hero .in{max-width:820px;margin:0 auto;padding-inline:20px}
-.kicker{font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:900}
+.kicker{font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--on-deep);font-weight:900}
 .hero h1{font-size:clamp(34px,7vw,56px);line-height:1.06;letter-spacing:-.005em;color:#fff;margin-top:14px}
-.hero h1 em{font-style:italic;font-weight:400;display:block;color:var(--gold)}
+.hero h1 em{font-style:italic;font-weight:400;display:block;color:var(--on-deep)}
 .lede{font-size:17px;line-height:1.65;color:rgba(255,255,255,.82);max-width:56ch;margin-top:18px;font-weight:300}
 .lede b{color:#fff;font-weight:700}
 
 .brief{display:flex;flex-wrap:wrap;margin-top:28px;border-top:1px solid rgba(255,255,255,.18)}
 .bi{flex:1 1 150px;padding:15px 18px 3px 0}
-.bi b{display:block;font-family:var(--display);font-size:20px;font-weight:700;color:var(--gold);letter-spacing:-.01em;line-height:1.2}
+.bi b{display:block;font-family:var(--display);font-size:20px;font-weight:700;color:var(--on-deep);letter-spacing:-.01em;line-height:1.2}
 .bi span{display:block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:5px;font-weight:700}
 
 .wrap{max-width:820px;margin:0 auto;padding-inline:20px;padding-block:0 210px}
@@ -132,7 +148,7 @@ p{margin:0}
 .tab:focus-visible,.stop:focus-visible,.ck:focus-visible,.btn:focus-visible,.back:focus-visible,.gut button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
 /* section heading like the site's gold rules */
-.sechead{font-family:var(--display);font-size:23px;font-weight:700;color:var(--gold);margin-top:34px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+.sechead{font-family:var(--display);font-size:23px;font-weight:700;color:var(--gold-dk);margin-top:34px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
 
 /* stop cards, echo the listing cards */
 .stops{display:flex;flex-direction:column;gap:16px;margin-top:20px}
@@ -160,7 +176,7 @@ p{margin:0}
 
 .grp{margin-top:36px}
 .gh{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;padding-bottom:11px;border-bottom:1px solid var(--rule)}
-.gh h3{font-family:var(--display);font-size:23px;font-weight:700;color:var(--gold)}
+.gh h3{font-family:var(--display);font-size:23px;font-weight:700;color:var(--gold-dk)}
 .gh .sub{font-size:14.5px;color:var(--muted);flex:1 1 100%;margin-top:7px;line-height:1.5;font-weight:400}
 .gw{font-size:10.5px;color:var(--muted);margin-left:auto;text-transform:uppercase;letter-spacing:.14em;flex:0 0 auto;font-weight:700}
 .grp.kill .gh h3{color:var(--red)}
@@ -182,7 +198,7 @@ p{margin:0}
 .gut p{font-size:14.5px;color:var(--body);margin-bottom:13px}
 .gutrow{display:flex;gap:8px;flex-wrap:wrap}
 .gut button{flex:1 1 56px;min-height:48px;font-family:var(--display);font-size:17px;font-weight:700;border-radius:3px;border:1px solid var(--rule2);background:var(--surface);color:var(--body);cursor:pointer}
-.gut button[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#fff}
+.gut button[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#FFFFFF}
 
 .notes{margin-top:22px}
 .notes label{display:block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:9px;font-weight:700}
@@ -193,7 +209,7 @@ textarea:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
 .dock .inner{max-width:820px;margin:0 auto;width:100%;display:flex;gap:12px 15px;align-items:center;flex-wrap:wrap}
 .dock .btn{flex:1 1 auto;min-width:130px}
 .dock .pct{font-size:33px;color:#fff}
-.dock .pct.g{color:#5FD3A2} .dock .pct.m{color:var(--gold)} .dock .pct.l{color:#FF8A90} .dock .pct.n{color:rgba(255,255,255,.5)}
+.dock .pct.g{color:#5FD3A2} .dock .pct.m{color:var(--on-deep)} .dock .pct.l{color:#FF8A90} .dock .pct.n{color:rgba(255,255,255,.5)}
 .dockmeta{font-size:11px;color:rgba(255,255,255,.62);line-height:1.5;flex:1 1 130px;min-width:0;letter-spacing:.04em}
 .dockmeta b{display:block;color:#fff;font-weight:700}
 
@@ -209,9 +225,9 @@ tr.win td{background:var(--goodbg)}
 
 .btnrow{display:flex;gap:11px;margin-top:30px;flex-wrap:wrap}
 .btn{font-family:var(--sans);font-size:12.5px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;padding:15px 26px;min-height:50px;border-radius:2px;border:1px solid var(--rule2);background:var(--surface);color:var(--ink);cursor:pointer}
-.btn.primary{background:var(--red);color:#fff;border-color:var(--red)}
+.btn.primary{background:var(--red);color:#FFFFFF;border-color:var(--red)}
 .btn:hover{border-color:var(--gold);color:var(--gold-dk)}
-.btn.primary:hover{background:#9E1118;border-color:#9E1118;color:#fff}
+.btn.primary:hover{background:color-mix(in srgb,var(--red) 85%,#000);border-color:transparent;color:#fff}
 .note{margin-top:22px;padding:19px 21px;border-radius:3px;background:var(--alt);border-left:3px solid var(--gold);font-size:15.5px;color:var(--body);max-width:64ch;line-height:1.65}
 .note b{color:var(--ink);font-weight:700}
 .note+.note{margin-top:11px}
@@ -253,7 +269,7 @@ tr.win td{background:var(--goodbg)}
 
 #dock-scores{display:flex;gap:16px;align-items:center;flex:0 0 auto}
 .dock .pinit.b{background:rgba(255,255,255,.26)}
-.dock .pinit.l{background:var(--gold)}
+.dock .pinit.l{background:var(--on-deep);color:#14161F}
 .dock .pct{font-size:27px}
 @media (max-width:470px){
   .ck2{width:40px;height:40px}
@@ -268,8 +284,8 @@ tr.win td{background:var(--goodbg)}
 .states{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
 .stbtn{flex:1 1 76px;min-height:44px;font-family:var(--sans);font-size:11.5px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;border-radius:3px;border:1px solid var(--rule2);background:var(--surface);color:var(--muted);cursor:pointer}
 .stbtn[aria-pressed="true"].g{background:var(--green-mid,var(--green));border-color:var(--green-mid,var(--green));color:#fff}
-.stbtn[aria-pressed="true"].m{background:var(--gold);border-color:var(--gold);color:#fff}
-.stbtn[aria-pressed="true"].l{background:var(--red);border-color:var(--red);color:#fff}
+.stbtn[aria-pressed="true"].m{background:var(--gold);border-color:var(--gold);color:#FFFFFF}
+.stbtn[aria-pressed="true"].l{background:var(--red);border-color:var(--red);color:#FFFFFF}
 .stbtn[aria-pressed="true"].n{background:var(--ink);border-color:var(--ink);color:#fff}
 .stbtn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
@@ -287,34 +303,60 @@ tr.win td{background:var(--goodbg)}
 
 /* B2: pressed fills are pastel in dark mode, so their label must be dark, not white */
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --on-fill:#14161F;
+  --on-fill:#14161F; --on-accent:#14161F; --on-action:#14161F;
 }}
-:root[data-theme="dark"]{ --on-fill:#14161F; }
-:root{ --on-fill:#FFFFFF; }
-.btn.primary{color:var(--on-fill)}
+:root[data-theme="dark"]{ --on-fill:#14161F; --on-accent:#14161F; --on-action:#14161F; }
+:root{ --on-fill:#FFFFFF; --on-accent:#FFFFFF; --on-action:#FFFFFF; }
+.btn.primary{color:var(--on-action)}
 .ck2.must[aria-pressed="true"]{color:var(--on-fill)}
-.stbtn[aria-pressed="true"].g,.stbtn[aria-pressed="true"].m,.stbtn[aria-pressed="true"].l{color:var(--on-fill)}
-.gut button[aria-pressed="true"]{color:var(--on-fill)}
+.stbtn[aria-pressed="true"].g{color:var(--on-fill)}
+.stbtn[aria-pressed="true"].m{color:var(--on-accent)}
+.stbtn[aria-pressed="true"].l{color:var(--on-action)}
+.gut button[aria-pressed="true"]{color:var(--on-accent)}
 .ck.must[aria-pressed="true"] .box::after{border-color:var(--on-fill)}
+
+/* solo mode: one person, so no second column and nothing to disagree with */
+:root[data-solo] [data-solo-hide]{display:none!important}
+:root[data-solo] .pair{gap:0}
+:root[data-solo] .ck2{width:28px;height:44px;font-size:0}
+:root[data-solo] .ck2::after{content:"";width:17px;height:17px;border-radius:4px;border:1.5px solid var(--rule2);background:var(--surface);display:block}
+:root[data-solo] .ck2[aria-pressed="true"]::after{background:var(--ink);border-color:var(--ink)}
+:root[data-solo] .ck2.must[aria-pressed="true"]::after{background:var(--green-mid,var(--green));border-color:var(--green-mid,var(--green))}
+
+/* a save that failed silently used to leave the page promising it had saved */
+#storewarn{margin-top:14px;padding:13px 16px;border-radius:3px;background:var(--lowbg);color:var(--low);font-size:14.5px;font-weight:700;line-height:1.5}
+
+/* color-mix needs iOS 16.2. Older phones get flat fallbacks rather than nothing. */
+@supports not (color: color-mix(in srgb, red 50%, blue)){
+  :root{
+    --gold-dk:var(--gold); --goldbg:var(--alt);
+    --red-bright:var(--red); --redbg:var(--alt);
+    --mid:var(--gold); --midbg:var(--alt);
+    --low:var(--red); --lowbg:var(--alt);
+  }
+  .row2.split{background:var(--alt);box-shadow:inset 3px 0 0 var(--gold)}
+  .stop.dead{border-color:var(--red)}
+  .flag,.flag.ok,.flag.split{border:1px solid currentColor}
+  .btn.primary:hover{background:var(--red)}
+}
 </style>
 
 <div class="util"><div class="in">
   <a href="tel:+15550102030">(555) 010-2030</a>
-  <a href="mailto:hello@example.com">hello@example.com</a>
+  <a href="mailto:dana@example.com">dana@example.com</a>
 </div></div>
 
 <div class="mast"><div class="in">
   <span class="mark"><span class="wm">Example Realty</span></span>
-  <span class="who">Test buyers &middot; Smoke test</span>
+  <span class="who">Pat & Jo &middot; Test</span>
 </div></div>
 
 <div class="hero"><div class="in">
   <p class="kicker">Showing day scorecard</p>
   <h1>Showing Day <em>Scorecard</em></h1>
-  <p class="lede">Smoke test with neutral brand values, to prove the template renders with no Rooster Homes anything in it.</p>
+  <p class="lede">Test.</p>
   <div class="brief">
 <div class="bi"><b>Under $600K</b><span>Range</span></div>
-<div class="bi"><b>3 bed &middot; 2 bath</b><span>Size</span></div>
   </div>
 </div></div>
 
@@ -327,10 +369,11 @@ tr.win td{background:var(--goodbg)}
 
 <main>
   <section id="view-stops">
-    <h2 class="sechead">Today&rsquo;s Stops</h2>
+    <h2 class="sechead">Stops</h2>
     <div class="stops" id="stoplist"></div>
-    <p class="note"><b>How it scores.</b> A must-have is worth 10, a nice-to-have 4, and an easy-to-forget item 2. The percentage is what a place earned out of everything possible for it. Any must-have left unchecked gets flagged, because one missed must-have matters more than five nice extras.</p>
-    <p class="note"><b>Deal-breakers aren't scored.</b> Soft-story and mobile home were your two hard no's. If either turns out to be true, the place is out no matter how well it scored, and the card says so.</p>
+    <p id="storewarn" hidden>This phone is not saving your answers, so they will be lost if you close or reload the page. Private browsing usually causes this. Copy your results before you leave each house.</p>
+    <p class="note"><b>How it scores.</b> A must-have is worth 25, a nice-to-have 4, and an easy-to-forget item 2. The percentage is what a place earned out of everything possible for it. Any must-have left unchecked gets flagged, because one missed must-have matters more than five nice extras.</p>
+    <p class="note"><b>Deal-breakers aren't scored.</b> Two hard no's on file. If one turns out to be true, the place is out no matter how well it scored, and the card says so.</p>
   </section>
 
   <section id="view-detail" hidden>
@@ -345,8 +388,8 @@ tr.win td{background:var(--goodbg)}
     <div id="groups"></div>
     <div class="gut">
       <p>Gut feel, each of you, before you talk each other into or out of it. Not scored, just written down.</p>
-      <div class="gutp"><span class="pinit b">B</span><div class="gutrow" id="gut-b"></div></div>
-      <div class="gutp"><span class="pinit l">L</span><div class="gutrow" id="gut-l"></div></div>
+      <div class="gutp"><span class="pinit b" data-solo-hide>P</span><div class="gutrow" id="gut-b"></div></div>
+      <div class="gutp" data-solo-hide><span class="pinit l">J</span><div class="gutrow" id="gut-l"></div></div>
     </div>
     <div class="notes">
       <label for="notes">What either of you would remember about this one</label>
@@ -375,28 +418,26 @@ tr.win td{background:var(--goodbg)}
   </section>
 </main>
 
-<p class="foot"><span>Example Realty &middot; example.com</span><span>Built from your buyer consultation</span></p>
+<p class="foot"><span>Example Realty</span><span>Built from your buyer consultation</span></p>
 </div>
 
 <div class="dock" id="dock" hidden><div class="inner">
   <span id="dock-scores"></span>
-  <span class="dockmeta"><b id="dock-pts">0 / 0 of 150 points</b><span id="dock-must">nothing checked yet</span></span>
+  <span class="dockmeta"><b id="dock-pts">nothing scored yet</b><span id="dock-must">nothing checked yet</span></span>
   <button class="btn primary" id="dock-done" style="margin-left:auto">Done here</button>
 </div></div>
 
 <script>
 var MUST=25, NICE=4, CONS=2;
 var P={b:{key:"b",initial:"P",name:"Pat"}, l:{key:"l",initial:"J",name:"Jo"}};
+var SOLO = !P.l.name;
+if(SOLO) document.documentElement.setAttribute("data-solo","1");
 
 var MUSTS=[
 ["Central air",""],
  ["A real bathtub",""],
- ["Dishwasher",""],
  ["Parking included",""],
- ["In-unit laundry",""],
- ["3 bedrooms",""],
- ["2 bathrooms",""],
- ["Priced under $600,000",""]
+ ["3 bedrooms",""]
 ];
 
 var KILLS=[
@@ -406,18 +447,12 @@ var KILLS=[
 
 var NICES=[
 ["Room for a garden",""],
- ["An office with a door",""],
- ["Original details intact",""],
- ["Walkable to a park",""]
+ ["An office with a door",""]
 ];
 
 var CONSIDER=[
-["Light at 6pm, not 11am",""],
- ["Street parking after 6pm",""],
- ["Water pressure","Run the shower and a tap together."],
- ["Roof age and visible patching",""],
- ["Cell signal in the back room",""],
- ["The commute at 8am",""]
+["Light at 6pm",""],
+ ["Water pressure",""]
 ];
 
 
@@ -425,19 +460,14 @@ var SYS_STATES=[["up","Updated","g"],["orig","Original","m"],["issue","Issue","l
 var WORK_STATES=[["yes","Yes","g"],["part","Partly","m"],["no","No","l"],["ask","Ask","n"]];
 
 var COND_SYS=[
- ["Foundation","Is it bolted to the foundation? In LA that retrofit is the difference between insurable and not. Ask for the paperwork, and remember soft-story is a hard no for you."],
- ["Roof","Ask the age, whether it was permitted, and whether any warranty transfers to you."],
- ["Sewer line","Ask for a camera inspection. Clay pipe is common in older Los Angeles neighborhoods and replacing it runs five figures."],
- ["Plumbing","Galvanized or copper and PEX? Galvanized means a repipe at some point, and you want to know that now."],
- ["Electrical","Ask the panel amperage and whether there is knob-and-tube left. 100 amps is thin once you add central AC."],
- ["HVAC","Central AC is on your must-have list. If it isn't already in, ask what adding it to this house actually costs."],
- ["Termite and pest","Ask whether there's a report, and who is paying for Section 1 clearance."]
+["Foundation",""],
+ ["Roof",""],
+ ["Sewer line",""]
 ];
+var COND_DISCLAIMER = "These are your own impressions on the day, not an inspection, and not anything your agent is telling you about the property. Only a licensed inspector can tell you the condition of a home.";
 
 var COND_WORK=[
- ["Pre-inspections already done","If the seller has them, ask for them today. Having them changes what you'd offer and what you'd ask for."],
- ["Kitchen remodeled",""],
- ["Bathrooms remodeled",""]
+["Kitchen remodeled",""]
 ];
 
 function condCount(p){
@@ -461,14 +491,29 @@ function condLine(p){
 }
 
 var TOUR=[
-{id:"t1", n:"118 Example Street", facts:"Sample stop &middot; single story", type:"house"},
- {id:"t2", n:"900 Sample Tower #410", facts:"Sample stop &middot; 4th floor", type:"tower"}
+{id:"t1", n:"118 Example Street", facts:"Sample", type:"house"},
+ {id:"t2", n:"900 Sample Tower", facts:"Sample", type:"tower"}
 ];
 
-var KEY="smoke-test-v1", state=load(), current=null;
+var KEY="k-duo", state=load(), current=null;
 
-function load(){ try{ var r=localStorage.getItem(KEY); if(r) return JSON.parse(r); }catch(e){} return {}; }
-function save(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
+function load(){
+  try{
+    var r=localStorage.getItem(KEY);
+    if(r){ var v=JSON.parse(r); if(v && typeof v==="object" && !Array.isArray(v)) return v; }
+  }catch(e){}
+  return {};
+}
+var STORAGE_OK=true;
+function storageWarn(){
+  if(STORAGE_OK) return;
+  var el=document.getElementById("storewarn");
+  if(el) el.hidden=false;
+}
+function save(){
+  try{ localStorage.setItem(KEY,JSON.stringify(state)); STORAGE_OK=true; }
+  catch(e){ STORAGE_OK=false; storageWarn(); }
+}
 function st(id){
   var s=state[id]; if(!s) s=state[id]={};
   if(!s.b) s.b={}; if(!s.l) s.l={}; if(!s.shared) s.shared={};
@@ -480,7 +525,7 @@ function st(id){
 }
 function esc(s){ var d=document.createElement("div"); d.textContent=s; return d.innerHTML; }
 
-var POSS = MUSTS.length*MUST + NICES.length*NICE + CONSIDER.length*CONS;
+var POSS = (MUSTS.length*MUST + NICES.length*NICE + CONSIDER.length*CONS) || 1;
 
 function score(p){
   var s=st(p.id), out={poss:POSS};
@@ -499,8 +544,10 @@ function score(p){
   });
 
   var dis=[];
-  MUSTS.forEach(function(t,i){ if(!!s.b["m"+i]!==!!s.l["m"+i]) dis.push(t[0]); });
-  NICES.forEach(function(t,i){ if(!!s.b["n"+i]!==!!s.l["n"+i]) dis.push(t[0]); });
+  if(!SOLO){
+    MUSTS.forEach(function(t,i){ if(!!s.b["m"+i]!==!!s.l["m"+i]) dis.push(t[0]); });
+    NICES.forEach(function(t,i){ if(!!s.b["n"+i]!==!!s.l["n"+i]) dis.push(t[0]); });
+  }
   out.split=dis;
   out.touched=out.b.touched||out.l.touched;
   out.hasData=out.touched||sharedTouched||Object.keys(s.cond||{}).some(function(k){return s.cond[k]});
@@ -541,17 +588,22 @@ function twoScore(sc){
   if(sc.killed.length) return '<span class="flag">out &middot; '+esc(sc.killed[0])+'</span>';
   if(!sc.touched) return '<span class="pct n">&mdash;</span><span class="pl">'+(sc.hasData?'notes only, nobody scored it yet':'not scored yet')+'</span>';
   var h='';
-  ["b","l"].forEach(function(k){
-    h+='<span class="ps"><span class="pinit '+k+'">'+P[k].initial+'</span><span class="pct '+band(sc,k)+'">'+sc[k].pct+'%</span></span>';
+  (SOLO?["b"]:["b","l"]).forEach(function(k){
+    h+='<span class="ps">'+(SOLO?'':'<span class="pinit '+k+'">'+P[k].initial+'</span>')+'<span class="pct '+band(sc,k)+'">'+sc[k].pct+'%</span></span>';
   });
-  h+= sc.split.length
+  if(!SOLO) h+= sc.split.length
     ? '<span class="flag split">'+sc.split.length+' disagreement'+(sc.split.length>1?"s":"")+'</span>'
     : '<span class="flag ok">you agree on everything</span>';
+  else if(!sc.b.missed.length) h+='<span class="flag ok">every must-have met</span>';
   return h;
 }
 
 function renderStops(){
   var el=document.getElementById("stoplist"); el.innerHTML="";
+  if(!TOUR.length){
+    el.innerHTML='<p class="note">No stops on this tour yet. Ask '+esc(P.b.name?"Dana":"your agent")+' to add the addresses you are seeing today.</p>';
+    return;
+  }
   TOUR.forEach(function(p,i){
     var sc=score(p);
     var btn=document.createElement("button");
@@ -582,7 +634,7 @@ function renderDetail(){
     {key:"m", store:null, two:true, title:"Must-haves", sub:"From your consultation. Each of you taps your own initial, so you can see where you don't agree.", w:MUST+" pts each", items:MUSTS, cls:" must", gcls:""},
     {key:"n", store:null, two:true, title:"Nice to have", sub:"", w:NICE+" pts each", items:NICES, cls:"", gcls:""},
     {key:"c", store:"shared", two:false, title:"Easy to forget", sub:"Facts about the place rather than opinions, so one check covers you both.", w:CONS+" pts each", items:CONSIDER, cls:"", gcls:""},
-    {key:"s", cond:SYS_STATES, title:"The big systems", sub:"None of this changes the score above. It changes what the house costs you after you own it, which is a separate question and usually the more expensive one.", w:"not scored", items:COND_SYS},
+    {key:"s", cond:SYS_STATES, title:"The big systems", sub:COND_DISCLAIMER+" None of this changes the score above. It changes what the house costs you after you own it, which is a separate question and usually the more expensive one.", w:"not scored", items:COND_SYS},
     {key:"w", cond:WORK_STATES, title:"Work already done", sub:"", w:"not scored", items:COND_WORK}
   ];
 
@@ -604,9 +656,9 @@ function renderDetail(){
         var split = (!!s.b[k]!==!!s.l[k]);
         h+='<div class="row2'+(split?" split":"")+'">'+
            '<span class="pair">'+
-             ['b','l'].map(function(pk){
+             (SOLO?['b']:['b','l']).map(function(pk){
                var on=!!s[pk][k];
-               return '<button type="button" class="ck2'+grp.cls+' '+pk+'" aria-pressed="'+on+'" data-p="'+pk+'" data-k="'+k+'" aria-label="'+P[pk].name+': '+esc(it[0])+'">'+P[pk].initial+'</button>';
+               return '<button type="button" class="ck2'+grp.cls+' '+pk+'" aria-pressed="'+on+'" data-p="'+pk+'" data-k="'+k+'" aria-label="'+(SOLO?'':P[pk].name+': ')+esc(it[0])+'">'+(SOLO?'':P[pk].initial)+'</button>';
              }).join('')+
            '</span>'+label+'</div>';
       } else {
@@ -644,7 +696,7 @@ function renderDetail(){
     });
   });
 
-  ["b","l"].forEach(function(pk){
+  (SOLO?["b"]:["b","l"]).forEach(function(pk){
     var gr=document.getElementById("gut-"+pk); gr.innerHTML="";
     ["1","2","3","4","5"].forEach(function(v){
       var cur = pk==="b" ? s.gutB : s.gutL;
@@ -681,41 +733,55 @@ function dock(){
     box.innerHTML='<span class="pct l">OUT</span>';
     document.getElementById("dock-pts").textContent="scored "+sc.b.pct+"% / "+sc.l.pct+"% before this";
   } else {
-    ["b","l"].forEach(function(k){
+    (SOLO?["b"]:["b","l"]).forEach(function(k){
       var sp=document.createElement("span"); sp.className="ps";
-      sp.innerHTML='<span class="pinit '+k+'">'+P[k].initial+'</span><span class="pct '+band(sc,k)+'">'+sc[k].pct+'%</span>';
+      sp.innerHTML=(SOLO?'':'<span class="pinit '+k+'">'+P[k].initial+'</span>')+'<span class="pct '+band(sc,k)+'">'+sc[k].pct+'%</span>';
       box.appendChild(sp);
     });
-    document.getElementById("dock-pts").textContent=sc.b.got+" / "+sc.l.got+" of "+sc.poss+" points";
+    document.getElementById("dock-pts").textContent=(SOLO?sc.b.got:sc.b.got+" / "+sc.l.got)+" of "+sc.poss+" points";
   }
   document.getElementById("dock-must").textContent = sc.killed.length
     ? "deal-breaker: "+sc.killed.join(", ")
-    : (sc.split.length ? sc.split.length+" thing"+(sc.split.length>1?"s":"")+" you see differently"
-                       : (sc.b.missed.length||sc.l.missed.length ? sc.b.missed.length+" / "+sc.l.missed.length+" must-haves not met" : "you both have every must-have"));
+    : (SOLO
+        ? (sc.b.missed.length ? sc.b.missed.length+" must-have"+(sc.b.missed.length>1?"s":"")+" not met" : "every must-have met")
+        : (sc.split.length ? sc.split.length+" thing"+(sc.split.length>1?"s":"")+" you see differently"
+           : (sc.b.missed.length||sc.l.missed.length ? sc.b.missed.length+" / "+sc.l.missed.length+" must-haves not met" : "you both have every must-have")));
 }
 
 function ranked(){
   return TOUR.map(function(p,i){ return {p:p,i:i,sc:score(p)}; })
     .sort(function(a,b){
-      var av=a.sc.killed.length?-2:(a.sc.touched?a.sc.avg:-1);
-      var bv=b.sc.killed.length?-2:(b.sc.touched?b.sc.avg:-1);
-      return bv-av;
+      // the gate first: a home missing a must-have never outranks one that meets them all
+      var rk=function(r){
+        if(r.sc.killed.length) return -1e6;
+        if(!r.sc.touched) return -1e5;
+        var worstMissed=Math.max(r.sc.b.missed.length, SOLO?0:r.sc.l.missed.length);
+        return (worstMissed? -1000*worstMissed : 0) + r.sc.avg;
+      };
+      return rk(b)-rk(a);
     });
 }
 
 function renderCompare(){
   var t=document.getElementById("cmp"); t.innerHTML="";
+  if(!TOUR.length){
+    t.innerHTML='<tr><td colspan="6" style="color:var(--muted)">Nothing to compare yet.</td></tr>';
+    document.getElementById("splitbox").hidden=true;
+    return;
+  }
   ranked().forEach(function(r,idx){
     var tr=document.createElement("tr");
     if(idx===0&&r.sc.touched&&!r.sc.killed.length&&!r.sc.b.missed.length&&!r.sc.l.missed.length) tr.className="win";
     var sco = r.sc.killed.length ? '<span class="flag">out</span>'
       : (r.sc.touched
-         ? '<span class="ps"><span class="pinit b">B</span><span class="pct '+band(r.sc,"b")+'" style="font-size:18px">'+r.sc.b.pct+'%</span></span> <span class="ps"><span class="pinit l">L</span><span class="pct '+band(r.sc,"l")+'" style="font-size:18px">'+r.sc.l.pct+'%</span></span>'
+         ? (SOLO ? '<span class="pct '+band(r.sc,"b")+'" style="font-size:18px">'+r.sc.b.pct+'%</span>'
+            : '<span class="ps"><span class="pinit b">'+P.b.initial+'</span><span class="pct '+band(r.sc,"b")+'" style="font-size:18px">'+r.sc.b.pct+'%</span></span> <span class="ps"><span class="pinit l">'+P.l.initial+'</span><span class="pct '+band(r.sc,"l")+'" style="font-size:18px">'+r.sc.l.pct+'%</span></span>')
          : '<span class="n">&mdash;</span>');
-    var agree = (!r.sc.touched || r.sc.killed.length)
+    var agree = (SOLO || !r.sc.touched || r.sc.killed.length)
       ? '<span class="n">&mdash;</span>'
       : (r.sc.split.length ? '<span class="flag split">'+r.sc.split.length+'</span>' : '<span class="g">agreed</span>');
-    var gut = (r.sc.b.gut||r.sc.l.gut) ? (r.sc.b.gut||"&mdash;")+" / "+(r.sc.l.gut||"&mdash;") : "&mdash;";
+    var gut = SOLO ? (r.sc.b.gut?r.sc.b.gut+" / 5":"&mdash;")
+                   : ((r.sc.b.gut||r.sc.l.gut) ? (r.sc.b.gut||"&mdash;")+" / "+(r.sc.l.gut||"&mdash;") : "&mdash;");
     tr.innerHTML='<td class="rank">'+(r.sc.killed.length?"&mdash;":(r.sc.touched?idx+1:"&mdash;"))+'</td>'+
       '<td><span class="tname">'+esc(r.p.n)+'</span><span class="tsub">Stop '+(r.i+1)+'</span></td>'+
       '<td>'+sco+'</td><td>'+agree+'</td><td class="rank">'+gut+'</td>'+
@@ -724,6 +790,7 @@ function renderCompare(){
   });
 
   var sp=document.getElementById("splitbox");
+  if(SOLO){ sp.hidden=true; return; }
   var rows=ranked().filter(function(r){ return r.sc.touched && r.sc.split.length; });
   if(!rows.length){ sp.hidden=true; return; }
   sp.hidden=false;
@@ -748,7 +815,7 @@ function renderCompare(){
 
 
 function shortSummary(){
-  var out=["Showing scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:"")+" - Smoke test",""];
+  var out=["Showing scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:"")+" - Test",""];
   ranked().forEach(function(r){
     if(!r.sc.hasData) return;
     out.push(r.p.n);
@@ -771,7 +838,7 @@ function shortSummary(){
       if(c.mid) cb.push(c.mid+" original");
       if(c.bad) cb.push(c.bad+" needs work");
       if(c.asked) cb.push(c.asked+" TO ASK");
-      out.push("Condition: "+cb.join(", "));
+      out.push("Condition (our impressions, not an inspection): "+cb.join(", "));
     }
     var nt=st(r.p.id).notes; if(nt&&nt.trim()) out.push("Note: "+nt.trim());
     out.push("");
@@ -805,7 +872,7 @@ function copyText(text, done){
 }
 
 function summary(){
-  var out=["Showing day scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:""),"Smoke test",""];
+  var out=["Showing day scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:""),"Test",""];
   ranked().forEach(function(r){
     if(!r.sc.hasData){ out.push(r.p.n+" - not scored"); out.push(""); return; }
     out.push(r.p.n);
@@ -819,7 +886,7 @@ function summary(){
     var cs=st(r.p.id).cond, cl=[];
     COND_SYS.forEach(function(t,i){ var v=cs["s"+i]; if(v) cl.push("    "+t[0]+": "+({up:"updated",orig:"original",issue:"needs work",ask:"still to ask"}[v])); });
     COND_WORK.forEach(function(t,i){ var v=cs["w"+i]; if(v) cl.push("    "+t[0]+": "+({yes:"yes",part:"partly",no:"no",ask:"still to ask"}[v])); });
-    if(cl.length){ out.push("  Condition:"); cl.forEach(function(x){ out.push(x); }); }
+    if(cl.length){ out.push("  Condition, our own impressions on the day, not an inspection:"); cl.forEach(function(x){ out.push(x); }); }
     var nt=st(r.p.id).notes; if(nt&&nt.trim()) out.push("  Notes: "+nt.trim());
     out.push("");
   });
@@ -881,5 +948,10 @@ document.getElementById("reset").addEventListener("click",function(){
   setTimeout(function(){ btn.textContent="Clear this tour"; },2000);
 });
 
+try{ localStorage.setItem("__probe__","1"); localStorage.removeItem("__probe__"); }
+catch(e){ STORAGE_OK=false; }
 renderStops();
+storageWarn();
 </script>
+</body>
+</html>

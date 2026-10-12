@@ -42,11 +42,19 @@ six weeks later during inspection, badly.
 
 ## Install
 
+**Needs Node 22 or newer** for the one-line installer. Check with `node -v`. On Node 20
+the installer dies with a bare syntax error and no explanation, so use the clone method
+below instead.
+
 ```bash
-npx skills add RoosterhomesSarah/showing-scorecard
+npx skills add -g RoosterhomesSarah/showing-scorecard
 ```
 
-Or clone it into your skills folder by hand:
+The `-g` matters. Without it the skill installs into whatever project folder you happen
+to be in, which means a different copy, and a different set of setup questions, every
+time you change folders.
+
+Or clone it, which works on any Node version:
 
 ```bash
 git clone https://github.com/RoosterhomesSarah/showing-scorecard.git ~/.claude/skills/showing-scorecard
@@ -135,10 +143,11 @@ The version is at the top of `SKILL.md`.
 
 ## License
 
-Use it in your business, free, including with paying clients. Rebrand it. Change it.
+Use it in your business, free, including with paying clients and with people you are
+trying to win. The scorecards it produces carry your branding and are yours.
 
-Do not redistribute it or sell it as your own. Keep the credit line. Full terms in
-[LICENSE](LICENSE).
+What you may not do is redistribute or sell the skill itself as your own work. Keep the
+credit line on it. Full terms in [LICENSE](LICENSE).
 
 ---
 

@@ -1,8 +1,9 @@
 ---
 name: showing-scorecard
 description: Build a buyer a phone scorecard for a showing day, scored against what that buyer actually told you they want. Two people score independently on one phone so disagreements surface while they are still standing in the house, deal-breakers take a home out regardless of score, and the big systems get logged separately because condition is a different question from fit. No login for the buyer, nothing to host. Use when the agent says "build a tour scorecard for [client]", "showing scorecard for [client]", "we're seeing homes with [client] on [date]", "build the scorecard for [address]", or "add [address] to [client]'s tour".
-version: 1.0
+version: "1.0"
 author: Sarah Arlington, Rooster Homes
+license: See LICENSE. Use freely in your business; do not redistribute or resell the skill.
 ---
 
 # Showing Scorecard
@@ -159,27 +160,42 @@ California Association of Realtors Form FHDA, Fair Housing and Discrimination Ad
 revised 12/24, for the state list, the positive practices and the buyer-letter warning.
 Every agent should be working from their own state's current advisory, not this summary.
 
-## First run only: five questions
+## First run only: seven questions
 
-Check for `scorecard-brand.json` next to this skill. If it is missing, ask these five
-and write the file. Never ask again.
+Check for `scorecard-brand.json` next to this skill. If it is missing, ask these. If it
+exists but a required field is empty, ask only for the empty ones. Never write the file
+half-filled and never stop asking while a required field is blank, or the buyer's main
+button ends up reading "Copy for " forever.
 
-1. What is your business name, as it should read on the page?
-2. Two colors, as hex codes if you have them. One for headings and accents, one for the
-   single action button. ("I don't know" is fine. Say so and use near-black `#1A1A1A`
-   for headings and a deep blue `#1F4E79` for the button, and tell them where to change
-   it later.)
-3. Do you have a logo file? Give me the path. Square or near-square works best at phone
-   size. (No logo is fine. The page sets your business name in type instead.)
-4. The phone number a client should text you on.
-5. The email address a client should send their results to.
+1. **Your business name**, as it should read on the page.
+2. **Your first name**, as a client would say it. This goes on the button they tap.
+3. **Two colors**, as hex codes. One for headings and accents, one for the single action
+   button. Ask for **mid-tone** colors, not pastels and not near-black: the heading color
+   sits on a dark band and on white, so an extreme at either end disappears on one of
+   them. No colors is fine. Use `#1F6F8B` and `#B33A2B`, say so, and tell them where to
+   change it.
+4. **A logo file path.** Square or near-square reads best at phone size. No logo is fine;
+   the masthead then shows the business name on its own.
+5. **The phone number** a client should text. Store it twice: as they would read it, and
+   in `+15550102030` form for the tap-to-call link. Derive the second from the first.
+6. **The email** a client should send results to.
+7. **A footer line.** One line, usually the business name and the website.
+
+Then compute two more and write them in. Do not ask for these:
+
+- `on_accent` and `on_action` are the label colors that sit on top of each brand color.
+  Work out the relative luminance of each. Above about 0.45 take `#1A1A1A`, below it take
+  `#FFFFFF`. White text on a pale yellow button is the single most common way a branded
+  page looks broken.
 
 ```json
 {
   "business_name": "",
   "agent_first_name": "",
-  "color_accent": "#1A1A1A",
-  "color_action": "#1F4E79",
+  "color_accent": "#1F6F8B",
+  "color_action": "#B33A2B",
+  "on_accent": "#FFFFFF",
+  "on_action": "#FFFFFF",
   "logo_path": "",
   "phone_display": "",
   "phone_raw": "",
@@ -188,9 +204,39 @@ and write the file. Never ask again.
 }
 ```
 
-A logo is embedded directly into the page as a data URI, resized to about 200px on its
-long edge. A published page can only display an image that ships inside it, so a linked
-logo will not render.
+Required before anything is built: `business_name`, `agent_first_name`, `color_accent`,
+`color_action`, `phone_display`, `phone_raw`, `email`. The logo and the footer are
+optional and the page handles their absence.
+
+A logo is embedded directly into the page as a data URI, resized to roughly 200px on its
+long edge first. A published page can only display an image that ships inside it, so a
+linked logo will not render.
+
+---
+
+## Getting the finished page onto the buyer's phone
+
+The skill produces one HTML file. Nothing about it is finished until the buyer can open
+it, so pick one of these and tell the agent which you used.
+
+**The file itself.** Email or text it as an attachment. Works everywhere, needs nothing,
+and is the right answer for an agent who is not going to set anything up. The buyer opens
+it from their mail app and it behaves like a page.
+
+**Free static hosting, for a real link.** Netlify Drop, Cloudflare Pages, or GitHub Pages
+all take a single HTML file and hand back a URL, free, no card. This is the best result:
+a short link the agent can text, and one the buyer can reopen. Walk them through it once
+and every tour after that is a drag and drop.
+
+**Wherever they already publish.** If the agent already has a website or a page builder,
+it goes there, under their own domain.
+
+**Then make it a QR code**, because half of this is handing a phone to somebody standing
+next to you. Any free QR generator takes the URL.
+
+Open the finished link yourself, on a phone, before the agent sends it to anybody.
+
+---
 
 ---
 
@@ -420,6 +466,12 @@ the client. Two things in it are worth acting on the same day:
   will otherwise happen six weeks from now, during an inspection, badly.
 
 ---
+
+## A worked example
+
+`examples/example-scorecard.html` is a finished scorecard with every token filled, two
+buyers, three stops, and one home knocked out by a deal-breaker. Open it before you
+build your first one.
 
 ## Credit
 
