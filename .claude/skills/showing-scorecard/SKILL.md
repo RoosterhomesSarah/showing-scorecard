@@ -196,7 +196,7 @@ button ends up reading "Copy for " forever.
 6. **The email** a client should send results to.
 7. **A footer line.** One line, usually the business name and the website.
 8. **The license line your broker or state requires** on client-facing material. Ask
-   what it should say rather than guessing: in some states it is the agent's own licence
+   what it should say rather than guessing: in some states it is the agent's own license
    number, in others the brokerage's, in others both. Empty is fine and the card hides
    the line, but ask once rather than silently leaving it off.
 
@@ -226,7 +226,7 @@ Then compute two more and write them in. Do not ask for these:
 ```
 
 Required before anything is built: `business_name`, `agent_first_name`, `agent_full_name`, `color_accent`,
-`color_action`, `phone_display`, `phone_raw`, `email`. The logo, the footer and the licence line are
+`color_action`, `phone_display`, `phone_raw`, `email`. The logo, the footer and the license line are
 optional and the page handles their absence.
 
 A logo is embedded directly into the page as a data URI, resized to roughly 200px on its
@@ -480,9 +480,19 @@ not pre-cleared.
 ask. A wrong name in front of a client is worse than no name.
 
 **Never use a photo you do not own.** Not the listing photos, not the portal, not street
-view. All of those belong to somebody else and carry a visible or invisible claim. The
-template draws its own property tiles. Use a real photo only when the agent took it
-themselves, and then resize it before embedding.
+view. All of those belong to somebody else and carry a visible or invisible claim.
+
+**Never ask the agent for photos, and never leave an empty slot waiting for one.** The
+tile is finished without a photograph. It draws a plate: the house number in the display
+face inside a hairline frame, under a pediment for a house or a flat cornice for anything
+stacked. That is the shipped look and a scorecard with no photograph anywhere on it is
+complete.
+
+Agent and buyer can each add one later if they want to, by tapping the small camera on a
+tile and choosing a picture from the phone. The page resizes it and keeps it. Two things
+to say plainly when it comes up, and never imply otherwise: a photo added on a phone
+stays on that phone, so the agent's copy will not show the buyer's, and the agent adding
+one is adding a photograph they took themselves.
 
 **Never invent a criterion.** Everything scored traces to something the buyer actually
 said. If a bucket is thin, say it is thin.
@@ -507,11 +517,18 @@ have a client believing their agent has the results while the agent has nothing.
 
 `.claude/skills/showing-scorecard/assets/template.html` carries the whole page: scoring, two-person columns, deal-breaker
 logic, the disagreement panel, the condition section, and the copy handoff. Replace every
-`{{TOKEN}}`. The list below is in the template's own header comment.
+`{{TOKEN}}`. The list below is in the template's own header comment, where the names are
+written WITHOUT braces on purpose. Leave them that way. A token inside its own
+documentation gets filled by the same replace that fills the real one, which quietly
+writes a second copy of every list, the whole tour and the logo into that comment, and
+corrupts anything that later reads the file back.
 
 Array tokens take entries shaped `["Label","Hint, or an empty string"],`. The tour token
 takes `{id:"slug", n:"123 Example St", facts:"Area · 3 bd 2 ba · listed $X", area:"City, ST",
-type:"house"|"tower"},`. **Always fill `area`**, because the route and the per-stop
+type:"house"|"tower"},`. `type` decides the tile's mark: `"house"` draws a pediment,
+`"tower"` a flat cornice, which is what makes a condo read differently from a house at a
+glance. An optional `photo:"data:image/jpeg;base64,..."` replaces the plate, and is only
+ever a picture the agent took. **Always fill `area`**, because the route and the per-stop
 navigation links are built from the address plus the area, and an address alone sends
 the buyer to the wrong city.
 **The storage key is one per client and never changes.** Not per tour. It is what makes
@@ -533,7 +550,7 @@ is also a Directions link and a Waze link, because Waze takes one destination at
 Order the tour in `{{TOUR}}` the way the agent is actually driving it.
 
 **Skip.** A stop they drove past and did not go into gets skipped rather than deleted:
-greyed on the list, out of the ranking, out of the route, out of the summary, and
+grayed on the list, out of the ranking, out of the route, out of the summary, and
 reversible. The record that it was considered survives, which a delete would lose.
 
 **A decision.** The page closes by asking which of four things today was: write on one,
