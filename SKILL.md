@@ -35,6 +35,62 @@ It does four things a paper checklist cannot:
 
 ---
 
+---
+
+## Before any of that: what never becomes a scored criterion
+
+**Read this before you take a single must-have from anybody.** This skill's whole method
+is to transcribe what the buyer said and score homes against it. That is exactly the
+mechanism that turns an offhand remark into a written, branded, scored record of homes
+rejected on an illegal basis. The agent's logo is on it. The buyer emails it back. It
+does not go away.
+
+So the transcription is filtered, always, and the filter is not optional.
+
+### Never score these, however the buyer phrases it
+
+Anything about **who lives there** rather than **what the property is**. Under federal
+fair housing law that covers race, color, religion, national origin, sex including
+sexual orientation and gender identity, familial status, and disability. Many states and
+cities add more, commonly source of income, age, marital status and veteran status.
+
+The phrases buyers actually use, which almost never sound illegal to them:
+
+| What they say | Why it cannot be scored | What to write instead |
+|---|---|---|
+| "a safe neighborhood", "low crime" | long-established race proxy | nothing. Point them at the local police department's or city's own public crime map and let them read it themselves |
+| "good schools", "a good school district" | the most common race proxy in the industry | the named attendance boundary as a boundary: "inside the Lincoln Elementary attendance area". Never a rating, never "good" |
+| "a family neighborhood", "family friendly" | familial status | the property facts they actually want: a fenced yard, a second bedroom, a park within a ten minute walk |
+| "near our church" / "near our temple" / "near our mosque" | religion, national origin | a drive time to one specific address they give you: "under 15 minutes to 412 Oak Street" |
+| "not a lot of renters", "mostly owners" | source of income and familial status proxy | nothing. Owner-occupancy rate is not a property feature |
+| "people like us", "somewhere we'd fit in", "our kind of area" | everything at once | ask what the home needs to have, and write that |
+| "up and coming", "an established area", "the right side of town" | race proxy | the specific thing underneath it: new construction nearby, a commute time, a price trend they can look up |
+| "quiet, no kids around" | familial status | the property fact: not backing a playground, a corner lot, double glazing |
+
+### How to handle it in the moment
+
+Do not lecture the agent and do not refuse to build. Convert, then say one line so they
+learn it too:
+
+> "I left 'good schools' off the scored list and put 'inside the Lincoln Elementary
+> attendance boundary' instead. Scoring a school's reputation is a fair housing problem;
+> scoring a boundary is a fact. If they meant something else by it, tell me."
+
+If a buyer's stated criterion has no lawful property-fact equivalent, say so plainly and
+leave it off. A short honest list beats a long one that cannot be defended.
+
+### The same filter applies to
+
+The eight-question interview in Path B, especially question six. The starter sets. The
+hint text under any item. Anything the agent types into the brief line at the top of the
+page. And the notes field, which the buyer fills in themselves: if the summary comes back
+with that kind of language in it, tell the agent before it goes anywhere near a file.
+
+### This is a floor, not advice
+
+These are the common cases, not the whole of the law, and local rules add to them. The
+agent is responsible for what goes out under their license. Run it past the broker.
+
 ## First run only: five questions
 
 Check for `scorecard-brand.json` next to this skill. If it is missing, ask these five
@@ -133,14 +189,14 @@ monthly dues above their stated ceiling. Nice: outdoor space; second bathroom; s
 walkable to something they would actually use.
 
 **Move-up family.** Must: bedroom count; a second full bathroom; a yard the kids can use
-unsupervised; in the school attendance area they named; a place to work from home.
+unsupervised; inside the specific school attendance boundary they named, by boundary, never by school reputation; a place to work from home.
 Breakers: busy street frontage; a pool they did not ask for. Nice: separate dining;
 primary on the same floor as the kids; garage that fits two; flat lot.
 
 **Downsizer.** Must: single level or a working elevator; primary bedroom on the entry
 level; low maintenance outside; parking close to the door; in budget without touching
 retirement funds. Breakers: stairs to the front door; a yard needing weekly work. Nice:
-guest room; a spot for the grandkids; walkable to errands; a community with people around.
+guest room; a spot for the grandkids; walkable to errands; a clubhouse, or organized activities on site.
 
 **Investor.** Must: the number works at their stated return; condition they are willing
 to carry; rentable as-is or after the work they have budgeted; permitted square footage
@@ -150,7 +206,7 @@ pending litigation. Nice: separate entrance; existing tenant in place; room to a
 **Relocation.** Must: commute they can live with on a real weekday; in budget; move-in
 ready; enough bedrooms for whoever is arriving. Breakers: anything needing work before
 they can move in; a commute over the number they named. Nice: furnished or partly;
-short-term flexibility; near others who moved for the same reason.
+short-term flexibility; furnished or partly furnished.
 
 ---
 
@@ -236,6 +292,10 @@ generic answer.
 ## Before it goes out
 
 Four things stop a build. Each one has cost somebody something.
+
+**Never score who lives somewhere.** The fair housing filter above runs on every list,
+every time, including lists that arrive already written. An intake sheet handed to you is
+not pre-cleared.
 
 **Never guess a client's name.** If handwriting is unclear, leave names off the page and
 ask. A wrong name in front of a client is worse than no name.

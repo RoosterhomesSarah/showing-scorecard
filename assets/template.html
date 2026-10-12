@@ -1,6 +1,7 @@
 <!--
   Showing Scorecard template. Built by Sarah Arlington, Rooster Homes.
-  Replace every {{TOKEN}} before publishing. Nothing here phones home.
+  Replace every {{TOKEN}} before publishing. The only outbound request is the
+  Google Fonts stylesheet below, which the page discloses to the buyer.
 
   BRAND, from scorecard-brand.json
     {{BUSINESS_NAME}}   {{LOGO_IMG}}         an <img src="data:..."> tag, or empty
@@ -21,12 +22,31 @@
     {{TOUR}}   {id:"slug", n:"Address", facts:"Area &middot; type", type:"house"|"tower"},
     {{STORAGE_KEY}}   MUST be unique per buyer per tour
     {{SUMMARY_SUBHEAD}}
+    {{KILLS_NOTE}}    one sentence naming THIS buyer's hard no's
+    {{COND_SYS}}      the seven systems, written for YOUR market. Questions, never
+                      claims. Never a cost estimate, an insurability claim, or a
+                      local custom, because this ships to agents in other states.
+    {{COND_WORK}}     pre-inspections, kitchen, bathrooms
 
   Scoring: a must-have is 25, a nice-to-have 4, an easy-to-forget 2. One must-have
   outweighs every nice-to-have combined, on purpose. Keep that true if you change them.
+
+  DOCUMENT SHELL: this file is a complete standalone HTML document, which is what you
+  want when you save it, host it, or hand someone the file. If you publish it through
+  something that supplies its own <!doctype>, <head> and <body> (some hosted artifact
+  and preview tools do), delete the eight lines below this comment and the two at the
+  very bottom, and paste the rest.
 -->
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{{TITLE}}</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?{{FONT_QUERY}}&display=swap">
+</head>
+<body>
 <style>
 :root{
   --page:#FFFFFF; --alt:#F6F7FB; --sunk:#ECEEF4; --surface:#FFFFFF;
@@ -193,7 +213,7 @@ tr.win td{background:var(--goodbg)}
 .btn{font-family:var(--sans);font-size:12.5px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;padding:15px 26px;min-height:50px;border-radius:2px;border:1px solid var(--rule2);background:var(--surface);color:var(--ink);cursor:pointer}
 .btn.primary{background:var(--red);color:#fff;border-color:var(--red)}
 .btn:hover{border-color:var(--gold);color:var(--gold-dk)}
-.btn.primary:hover{background:#9E1118;border-color:#9E1118;color:#fff}
+.btn.primary:hover{background:color-mix(in srgb,var(--red) 85%,#000);border-color:transparent;color:#fff}
 .note{margin-top:22px;padding:19px 21px;border-radius:3px;background:var(--alt);border-left:3px solid var(--gold);font-size:15.5px;color:var(--body);max-width:64ch;line-height:1.65}
 .note b{color:var(--ink);font-weight:700}
 .note+.note{margin-top:11px}
@@ -310,8 +330,8 @@ tr.win td{background:var(--goodbg)}
   <section id="view-stops">
     <h2 class="sechead">{{STOPS_HEADING}}</h2>
     <div class="stops" id="stoplist"></div>
-    <p class="note"><b>How it scores.</b> A must-have is worth 10, a nice-to-have 4, and an easy-to-forget item 2. The percentage is what a place earned out of everything possible for it. Any must-have left unchecked gets flagged, because one missed must-have matters more than five nice extras.</p>
-    <p class="note"><b>Deal-breakers aren't scored.</b> Soft-story and mobile home were your two hard no's. If either turns out to be true, the place is out no matter how well it scored, and the card says so.</p>
+    <p class="note"><b>How it scores.</b> A must-have is worth 25, a nice-to-have 4, and an easy-to-forget item 2. The percentage is what a place earned out of everything possible for it. Any must-have left unchecked gets flagged, because one missed must-have matters more than five nice extras.</p>
+    <p class="note"><b>Deal-breakers aren't scored.</b> {{KILLS_NOTE}} If one turns out to be true, the place is out no matter how well it scored, and the card says so.</p>
   </section>
 
   <section id="view-detail" hidden>
@@ -361,7 +381,7 @@ tr.win td{background:var(--goodbg)}
 
 <div class="dock" id="dock" hidden><div class="inner">
   <span id="dock-scores"></span>
-  <span class="dockmeta"><b id="dock-pts">0 / 0 of 150 points</b><span id="dock-must">nothing checked yet</span></span>
+  <span class="dockmeta"><b id="dock-pts">nothing scored yet</b><span id="dock-must">nothing checked yet</span></span>
   <button class="btn primary" id="dock-done" style="margin-left:auto">Done here</button>
 </div></div>
 
@@ -390,19 +410,11 @@ var SYS_STATES=[["up","Updated","g"],["orig","Original","m"],["issue","Issue","l
 var WORK_STATES=[["yes","Yes","g"],["part","Partly","m"],["no","No","l"],["ask","Ask","n"]];
 
 var COND_SYS=[
- ["Foundation","Is it bolted to the foundation? In LA that retrofit is the difference between insurable and not. Ask for the paperwork, and remember soft-story is a hard no for you."],
- ["Roof","Ask the age, whether it was permitted, and whether any warranty transfers to you."],
- ["Sewer line","Ask for a camera inspection. Clay pipe is common in older Los Angeles neighborhoods and replacing it runs five figures."],
- ["Plumbing","Galvanized or copper and PEX? Galvanized means a repipe at some point, and you want to know that now."],
- ["Electrical","Ask the panel amperage and whether there is knob-and-tube left. 100 amps is thin once you add central AC."],
- ["HVAC","Central AC is on your must-have list. If it isn't already in, ask what adding it to this house actually costs."],
- ["Termite and pest","Ask whether there's a report, and who is paying for Section 1 clearance."]
+{{COND_SYS}}
 ];
 
 var COND_WORK=[
- ["Pre-inspections already done","If the seller has them, ask for them today. Having them changes what you'd offer and what you'd ask for."],
- ["Kitchen remodeled",""],
- ["Bathrooms remodeled",""]
+{{COND_WORK}}
 ];
 
 function condCount(p){
@@ -847,3 +859,5 @@ document.getElementById("reset").addEventListener("click",function(){
 
 renderStops();
 </script>
+</body>
+</html>

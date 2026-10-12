@@ -111,12 +111,13 @@ material. The license is clear that this comes with no warranty and that part is
 
 ---
 
-## If you are in the Krista Mashore Coaching program
+## It stands on its own
 
-Run it through `skill-intake` before you install it, the way you would with any skill
-from outside your kit. It is written to stand on its own, so it does not assume your
-vault layout, your brand file path or any other skill being present. It will use a brand
-file if you point it at one.
+It assumes no particular folder layout and no other skill being installed. It will read a
+brand file if you point it at one, and it writes its own if you do not have one.
+
+If your setup has a vetting step for skills from outside it, run this through it first.
+That is the right habit with any repo you did not write, including this one.
 
 ---
 
