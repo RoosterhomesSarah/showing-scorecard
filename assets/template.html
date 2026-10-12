@@ -1,0 +1,849 @@
+<!--
+  Showing Scorecard template. Built by Sarah Arlington, Rooster Homes.
+  Replace every {{TOKEN}} before publishing. Nothing here phones home.
+
+  BRAND, from scorecard-brand.json
+    {{BUSINESS_NAME}}   {{LOGO_IMG}}         an <img src="data:..."> tag, or empty
+    {{COLOR_ACCENT}}    headings, rules, the gold-role accent
+    {{COLOR_ACTION}}    the one primary button, and deal-breakers
+    {{FONT_QUERY}}      Google Fonts query string. Neutral default:
+                        family=Source+Serif+4:opsz,wght@8..60,400;8..60,700&family=Inter:wght@300;400;700;900
+    {{FONT_DISPLAY}}    e.g. "Source Serif 4"      {{FONT_BODY}}  e.g. "Inter"
+    {{AGENT_FIRST_NAME}} {{AGENT_PHONE}} {{AGENT_PHONE_RAW}} {{AGENT_EMAIL}}
+    {{AGENT_SEND_EMAIL}} {{AGENT_FOOTER}}
+
+  THIS BUYER, THIS TOUR
+    {{TITLE}} {{BUYER_NAMES}} {{TOUR_DATE}} {{HERO_LINE_1}} {{HERO_LINE_2}} {{LEDE}}
+    {{BRIEF_CELLS}}  four <div class="bi"><b>value</b><span>label</span></div>
+    {{STOPS_HEADING}}
+    {{P1_NAME}} {{P1_INITIAL}} {{P2_NAME}} {{P2_INITIAL}}   P2 empty = solo mode
+    {{MUSTS}} {{KILLS}} {{NICES}} {{CONSIDER}}   ["Label","Hint or empty"],
+    {{TOUR}}   {id:"slug", n:"Address", facts:"Area &middot; type", type:"house"|"tower"},
+    {{STORAGE_KEY}}   MUST be unique per buyer per tour
+    {{SUMMARY_SUBHEAD}}
+
+  Scoring: a must-have is 25, a nice-to-have 4, an easy-to-forget 2. One must-have
+  outweighs every nice-to-have combined, on purpose. Keep that true if you change them.
+-->
+<title>{{TITLE}}</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?{{FONT_QUERY}}&display=swap">
+<style>
+:root{
+  --page:#FFFFFF; --alt:#F6F7FB; --sunk:#ECEEF4; --surface:#FFFFFF;
+  --ink:#202437; --body:#505050; --muted:#6E7280;
+  --rule:#E3E6EE; --rule2:#CBD0DC;
+  --gold:{{COLOR_ACCENT}};
+  --gold-dk:color-mix(in srgb,var(--gold) 78%,#000);
+  --goldbg:color-mix(in srgb,var(--gold) 13%,#fff);
+  --red:{{COLOR_ACTION}};
+  --red-bright:color-mix(in srgb,var(--red) 85%,#fff);
+  --redbg:color-mix(in srgb,var(--red) 10%,#fff);
+  --green:#37696F; --green-mid:#468E95; --greenbg:#E4EFF0;
+  --deep:#1B1F2E;
+  --display:{{FONT_DISPLAY}},Georgia,"Times New Roman",serif;
+  --sans:{{FONT_BODY}},ui-sans-serif,system-ui,sans-serif;
+  --shadow:0 1px 2px rgba(32,36,55,.05),0 10px 26px rgba(32,36,55,.08);
+  --good:var(--green); --goodbg:var(--greenbg);
+  --mid:var(--gold-dk); --midbg:var(--goldbg);
+  --low:var(--red); --lowbg:var(--redbg);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --page:#14161F; --alt:#1A1D28; --sunk:#222634; --surface:#1A1D28;
+  --ink:#EEF0F6; --body:#B4B8C6; --muted:#7D8294;
+  --rule:#272B38; --rule2:#3A4054;
+  --gold:color-mix(in srgb,{{COLOR_ACCENT}} 72%,#fff);
+  --gold-dk:color-mix(in srgb,{{COLOR_ACCENT}} 78%,#fff);
+  --goldbg:color-mix(in srgb,{{COLOR_ACCENT}} 22%,#14161F);
+  --red:color-mix(in srgb,{{COLOR_ACTION}} 62%,#fff);
+  --red-bright:color-mix(in srgb,{{COLOR_ACTION}} 70%,#fff);
+  --redbg:color-mix(in srgb,{{COLOR_ACTION}} 24%,#14161F);
+  --green:#79C3C9; --green-mid:#68B6BD; --greenbg:#0E2528;
+  --deep:#0D0F17;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 10px 26px rgba(0,0,0,.45);
+}}
+:root[data-theme="dark"]{
+  --page:#14161F; --alt:#1A1D28; --sunk:#222634; --surface:#1A1D28;
+  --ink:#EEF0F6; --body:#B4B8C6; --muted:#7D8294;
+  --rule:#272B38; --rule2:#3A4054;
+  --gold:color-mix(in srgb,{{COLOR_ACCENT}} 72%,#fff);
+  --gold-dk:color-mix(in srgb,{{COLOR_ACCENT}} 78%,#fff);
+  --goldbg:color-mix(in srgb,{{COLOR_ACCENT}} 22%,#14161F);
+  --red:color-mix(in srgb,{{COLOR_ACTION}} 62%,#fff);
+  --red-bright:color-mix(in srgb,{{COLOR_ACTION}} 70%,#fff);
+  --redbg:color-mix(in srgb,{{COLOR_ACTION}} 24%,#14161F);
+  --green:#79C3C9; --green-mid:#68B6BD; --greenbg:#0E2528;
+  --deep:#0D0F17;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 10px 26px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--body);font-family:var(--sans);font-size:16px;line-height:1.6;font-weight:400;-webkit-text-size-adjust:100%}
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:700;color:var(--ink);text-wrap:balance}
+p{margin:0}
+
+/* utility bar, mirrors the site */
+.util{background:var(--alt);border-bottom:1px solid var(--rule)}
+.util .in{max-width:820px;margin:0 auto;padding:8px 20px;display:flex;gap:20px;flex-wrap:wrap;font-size:12.5px;color:var(--body);letter-spacing:.02em}
+.util a{color:inherit;text-decoration:none}
+
+/* masthead */
+.mast{background:var(--surface);border-bottom:1px solid var(--rule)}
+.mast .in{max-width:820px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;gap:13px;flex-wrap:wrap}
+.mark{display:flex;align-items:center;gap:12px}
+.mark img{height:44px;width:auto;display:block;flex:0 0 auto}
+.mark .wm{font-family:var(--sans);font-size:12px;font-weight:900;letter-spacing:.3em;text-transform:uppercase;color:var(--ink);line-height:1.1;white-space:nowrap}
+.mast .who{margin-left:auto;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dk);font-weight:700}
+
+/* hero, echoes the dark photo band on the site */
+.hero{background:var(--deep);color:#fff;padding-block:46px 40px}
+.hero .in{max-width:820px;margin:0 auto;padding-inline:20px}
+.kicker{font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:900}
+.hero h1{font-size:clamp(34px,7vw,56px);line-height:1.06;letter-spacing:-.005em;color:#fff;margin-top:14px}
+.hero h1 em{font-style:italic;font-weight:400;display:block;color:var(--gold)}
+.lede{font-size:17px;line-height:1.65;color:rgba(255,255,255,.82);max-width:56ch;margin-top:18px;font-weight:300}
+.lede b{color:#fff;font-weight:700}
+
+.brief{display:flex;flex-wrap:wrap;margin-top:28px;border-top:1px solid rgba(255,255,255,.18)}
+.bi{flex:1 1 150px;padding:15px 18px 3px 0}
+.bi b{display:block;font-family:var(--display);font-size:20px;font-weight:700;color:var(--gold);letter-spacing:-.01em;line-height:1.2}
+.bi span{display:block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:5px;font-weight:700}
+
+.wrap{max-width:820px;margin:0 auto;padding-inline:20px;padding-block:0 210px}
+.bar{display:flex;gap:0;margin-top:0;flex-wrap:wrap;border-bottom:1px solid var(--rule);padding-top:4px}
+.tab{font-family:var(--sans);font-size:13px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;padding:16px 20px;min-height:48px;border:0;border-bottom:3px solid transparent;background:none;color:var(--muted);cursor:pointer}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--gold)}
+.tab:focus-visible,.stop:focus-visible,.ck:focus-visible,.btn:focus-visible,.back:focus-visible,.gut button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* section heading like the site's gold rules */
+.sechead{font-family:var(--display);font-size:23px;font-weight:700;color:var(--gold);margin-top:34px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+
+/* stop cards, echo the listing cards */
+.stops{display:flex;flex-direction:column;gap:16px;margin-top:20px}
+.stop{display:flex;width:100%;padding:0;border:1px solid var(--rule);border-radius:4px;background:var(--surface);box-shadow:var(--shadow);cursor:pointer;overflow:hidden;font-family:var(--sans);color:inherit;text-align:left}
+.stop:hover{border-color:var(--gold)}
+.stop.dead{border-color:color-mix(in srgb,var(--red) 55%,transparent)}
+.shot{flex:0 0 124px;background:var(--sunk);display:flex;align-items:flex-end;justify-content:center;border-right:1px solid var(--rule)}
+.shot svg{display:block;width:100%;height:auto}
+.sbody{flex:1 1 auto;padding:17px 19px;display:flex;flex-direction:column;min-width:0}
+.snum{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.saddr{font-family:var(--display);font-size:23px;font-weight:700;color:var(--ink);letter-spacing:-.008em;line-height:1.2;margin-top:5px}
+.sfacts{font-size:13px;color:var(--gold-dk);margin-top:5px;font-weight:700;letter-spacing:.01em}
+.sscore{display:flex;gap:11px;align-items:baseline;margin-top:12px;flex-wrap:wrap}
+.pct{font-family:var(--display);font-size:31px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1}
+.pl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-weight:700}
+.flag{font-size:10.5px;padding:4px 10px;border-radius:2px;background:var(--lowbg);color:var(--low);font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+.flag.ok{background:var(--goodbg);color:var(--good)}
+.g{color:var(--good)} .m{color:var(--mid)} .l{color:var(--low)} .n{color:var(--muted)}
+
+/* detail */
+.head{display:flex;gap:15px;align-items:flex-start;padding-top:30px}
+.back{font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;padding:10px 16px;min-height:46px;display:inline-flex;align-items:center;border-radius:2px;border:1px solid var(--rule2);background:var(--surface);color:var(--body);cursor:pointer;flex:0 0 auto}
+.back:hover{color:var(--ink);border-color:var(--gold)}
+.d-addr{font-family:var(--display);font-size:clamp(25px,5.2vw,34px);font-weight:700;color:var(--ink);letter-spacing:-.012em;line-height:1.12;margin-top:6px}
+
+.grp{margin-top:36px}
+.gh{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;padding-bottom:11px;border-bottom:1px solid var(--rule)}
+.gh h3{font-family:var(--display);font-size:23px;font-weight:700;color:var(--gold)}
+.gh .sub{font-size:14.5px;color:var(--muted);flex:1 1 100%;margin-top:7px;line-height:1.5;font-weight:400}
+.gw{font-size:10.5px;color:var(--muted);margin-left:auto;text-transform:uppercase;letter-spacing:.14em;flex:0 0 auto;font-weight:700}
+.grp.kill .gh h3{color:var(--red)}
+.list{display:flex;flex-direction:column}
+.ck{display:flex;gap:15px;align-items:flex-start;padding:15px 2px;border:0;border-bottom:1px solid var(--rule);cursor:pointer;background:none;text-align:left;width:100%;font-family:var(--sans);font-size:16px;color:var(--ink);line-height:1.5;font-weight:400}
+.box{flex:0 0 auto;width:24px;height:24px;border-radius:3px;border:1.5px solid var(--rule2);background:var(--surface);margin-top:2px;display:flex;align-items:center;justify-content:center}
+.ck[aria-pressed="true"] .box{background:var(--ink);border-color:var(--ink)}
+.ck[aria-pressed="true"] .box::after{content:"";width:6px;height:11px;border:solid var(--surface);border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.ck.must[aria-pressed="true"] .box{background:var(--green-mid,var(--green));border-color:var(--green-mid,var(--green))}
+.ck.kill .box{border-radius:999px}
+.ck.kill[aria-pressed="true"] .box{background:var(--red);border-color:var(--red)}
+.ck[aria-pressed="true"] .lab{color:var(--muted)}
+.ck.must[aria-pressed="true"] .lab{color:var(--green);font-weight:700}
+.ck.kill[aria-pressed="true"] .lab{color:var(--red);font-weight:900}
+.lab{flex:1 1 auto;min-width:0}
+.hint{display:block;font-size:14px;color:var(--muted);margin-top:4px;line-height:1.5;font-weight:400}
+
+.gut{margin-top:32px;padding:19px;border:1px solid var(--rule);border-radius:4px;background:var(--alt)}
+.gut p{font-size:14.5px;color:var(--body);margin-bottom:13px}
+.gutrow{display:flex;gap:8px;flex-wrap:wrap}
+.gut button{flex:1 1 56px;min-height:48px;font-family:var(--display);font-size:17px;font-weight:700;border-radius:3px;border:1px solid var(--rule2);background:var(--surface);color:var(--body);cursor:pointer}
+.gut button[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#fff}
+
+.notes{margin-top:22px}
+.notes label{display:block;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:9px;font-weight:700}
+textarea{width:100%;min-height:100px;padding:14px;border-radius:3px;border:1px solid var(--rule2);background:var(--surface);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;resize:vertical}
+textarea:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+
+.dock{position:fixed;left:0;right:0;bottom:0;background:var(--deep);padding:13px 20px calc(13px + env(safe-area-inset-bottom));z-index:5}
+.dock .inner{max-width:820px;margin:0 auto;width:100%;display:flex;gap:12px 15px;align-items:center;flex-wrap:wrap}
+.dock .btn{flex:1 1 auto;min-width:130px}
+.dock .pct{font-size:33px;color:#fff}
+.dock .pct.g{color:#5FD3A2} .dock .pct.m{color:var(--gold)} .dock .pct.l{color:#FF8A90} .dock .pct.n{color:rgba(255,255,255,.5)}
+.dockmeta{font-size:11px;color:rgba(255,255,255,.62);line-height:1.5;flex:1 1 130px;min-width:0;letter-spacing:.04em}
+.dockmeta b{display:block;color:#fff;font-weight:700}
+
+.scroll{overflow-x:auto;margin-top:22px}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:540px}
+th{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-align:left;font-weight:900;padding:0 15px 11px 0;border-bottom:2px solid var(--gold)}
+td{padding:15px 15px 15px 0;border-bottom:1px solid var(--rule);vertical-align:top;font-variant-numeric:tabular-nums}
+td:first-child,th:first-child{padding-left:0}
+tr.win td{background:var(--goodbg)}
+.rank{font-size:12px;color:var(--muted);font-weight:700}
+.tname{font-family:var(--display);font-weight:700;font-size:18px;display:block;color:var(--ink)}
+.tsub{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+
+.btnrow{display:flex;gap:11px;margin-top:30px;flex-wrap:wrap}
+.btn{font-family:var(--sans);font-size:12.5px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;padding:15px 26px;min-height:50px;border-radius:2px;border:1px solid var(--rule2);background:var(--surface);color:var(--ink);cursor:pointer}
+.btn.primary{background:var(--red);color:#fff;border-color:var(--red)}
+.btn:hover{border-color:var(--gold);color:var(--gold-dk)}
+.btn.primary:hover{background:#9E1118;border-color:#9E1118;color:#fff}
+.note{margin-top:22px;padding:19px 21px;border-radius:3px;background:var(--alt);border-left:3px solid var(--gold);font-size:15.5px;color:var(--body);max-width:64ch;line-height:1.65}
+.note b{color:var(--ink);font-weight:700}
+.note+.note{margin-top:11px}
+.foot{margin-top:48px;padding-top:24px;border-top:1px solid var(--rule);font-size:11.5px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;letter-spacing:.06em}
+@media (max-width:470px){
+  .shot{flex-basis:90px}
+  .saddr{font-size:19px}
+  .pct{font-size:26px}
+  .dock .pct{font-size:27px}
+  .tab{padding:14px 13px;font-size:11.5px;letter-spacing:.1em}
+  .mark img{height:38px}
+  .mark .wm{font-size:10.5px;letter-spacing:.22em}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* two-person scoring */
+.row2{display:flex;gap:15px;align-items:flex-start;padding:15px 2px;border-bottom:1px solid var(--rule)}
+.row2.split{background:color-mix(in srgb,var(--gold) 9%,transparent);box-shadow:inset 3px 0 0 var(--gold);padding-left:13px;margin-inline:-13px 0}
+.row2 .lab{color:var(--ink);font-size:16px;line-height:1.5;padding-top:7px}
+.pair{display:flex;gap:7px;flex:0 0 auto}
+.ck2{width:44px;height:44px;border-radius:3px;border:1.5px solid var(--rule2);background:var(--surface);color:var(--muted);font-family:var(--sans);font-size:14px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.ck2[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.ck2.must[aria-pressed="true"]{background:var(--green-mid,var(--green));border-color:var(--green-mid,var(--green));color:#fff}
+.ck2:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+.ps{display:inline-flex;align-items:center;gap:6px;margin-right:6px}
+.pinit{font-size:10px;font-weight:900;letter-spacing:.06em;width:19px;height:19px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;color:#fff;flex:0 0 auto}
+.pinit.b{background:var(--ink)}
+.pinit.l{background:var(--gold-dk)}
+.flag.split{background:var(--goldbg);color:var(--gold-dk)}
+
+.gutp{display:flex;align-items:center;gap:12px;margin-top:10px}
+.gutp .gutrow{flex:1 1 auto}
+
+.splitaddr{font-family:var(--display);font-size:20px;font-weight:700;color:var(--ink);margin-top:24px}
+.splitlist{list-style:none;padding:0;margin:11px 0 0}
+.splitlist li{padding:13px 0;border-bottom:1px solid var(--rule);font-size:15.5px;color:var(--ink);line-height:1.45}
+.splitlist li span{display:block;font-size:13.5px;color:var(--muted);margin-top:4px}
+
+#dock-scores{display:flex;gap:16px;align-items:center;flex:0 0 auto}
+.dock .pinit.b{background:rgba(255,255,255,.26)}
+.dock .pinit.l{background:var(--gold)}
+.dock .pct{font-size:27px}
+@media (max-width:470px){
+  .ck2{width:40px;height:40px}
+  .row2 .lab{font-size:15px}
+  #dock-scores{gap:11px}
+  .dock .pct{font-size:22px}
+}
+
+/* condition and upgrades */
+.condrow{padding:16px 2px;border-bottom:1px solid var(--rule)}
+.condlab{display:block;font-size:16px;color:var(--ink);line-height:1.45;font-weight:400}
+.states{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
+.stbtn{flex:1 1 76px;min-height:44px;font-family:var(--sans);font-size:11.5px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;border-radius:3px;border:1px solid var(--rule2);background:var(--surface);color:var(--muted);cursor:pointer}
+.stbtn[aria-pressed="true"].g{background:var(--green-mid,var(--green));border-color:var(--green-mid,var(--green));color:#fff}
+.stbtn[aria-pressed="true"].m{background:var(--gold);border-color:var(--gold);color:#fff}
+.stbtn[aria-pressed="true"].l{background:var(--red);border-color:var(--red);color:#fff}
+.stbtn[aria-pressed="true"].n{background:var(--ink);border-color:var(--ink);color:#fff}
+.stbtn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+.condline{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:10px;font-size:11.5px;font-weight:700;letter-spacing:.04em}
+.cond.g{color:var(--green)} .cond.m{color:var(--gold-dk)} .cond.l{color:var(--red)} .cond.n{color:var(--muted)}
+.dot{color:var(--rule2)}
+.condcell{font-size:11.5px;font-weight:700;line-height:1.7}
+.condcell .cond{margin-right:5px}
+@media (max-width:470px){ .stbtn{flex:1 1 calc(50% - 4px);font-size:11px} }
+
+#sendbox{margin-top:14px;min-height:170px;font-size:16px;line-height:1.5;background:var(--alt)}
+
+.sendhint{margin-top:15px;font-size:15.5px;color:var(--ink);line-height:1.55;font-weight:700}
+.sendhint a{color:var(--red);text-decoration:underline;text-underline-offset:2px}
+
+/* B2: pressed fills are pastel in dark mode, so their label must be dark, not white */
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --on-fill:#14161F;
+}}
+:root[data-theme="dark"]{ --on-fill:#14161F; }
+:root{ --on-fill:#FFFFFF; }
+.btn.primary{color:var(--on-fill)}
+.ck2.must[aria-pressed="true"]{color:var(--on-fill)}
+.stbtn[aria-pressed="true"].g,.stbtn[aria-pressed="true"].m,.stbtn[aria-pressed="true"].l{color:var(--on-fill)}
+.gut button[aria-pressed="true"]{color:var(--on-fill)}
+.ck.must[aria-pressed="true"] .box::after{border-color:var(--on-fill)}
+</style>
+
+<div class="util"><div class="in">
+  <a href="tel:{{AGENT_PHONE_RAW}}">{{AGENT_PHONE}}</a>
+  <a href="mailto:{{AGENT_EMAIL}}">{{AGENT_EMAIL}}</a>
+</div></div>
+
+<div class="mast"><div class="in">
+  <span class="mark">{{LOGO_IMG}}<span class="wm">{{BUSINESS_NAME}}</span></span>
+  <span class="who">{{BUYER_NAMES}} &middot; {{TOUR_DATE}}</span>
+</div></div>
+
+<div class="hero"><div class="in">
+  <p class="kicker">Showing day scorecard</p>
+  <h1>{{HERO_LINE_1}} <em>{{HERO_LINE_2}}</em></h1>
+  <p class="lede">{{LEDE}}</p>
+  <div class="brief">
+{{BRIEF_CELLS}}
+  </div>
+</div></div>
+
+<div class="wrap">
+
+<div class="bar" role="tablist">
+  <button class="tab" role="tab" aria-selected="true" id="tab-stops">Today&rsquo;s stops</button>
+  <button class="tab" role="tab" aria-selected="false" id="tab-compare">Compare</button>
+</div>
+
+<main>
+  <section id="view-stops">
+    <h2 class="sechead">{{STOPS_HEADING}}</h2>
+    <div class="stops" id="stoplist"></div>
+    <p class="note"><b>How it scores.</b> A must-have is worth 10, a nice-to-have 4, and an easy-to-forget item 2. The percentage is what a place earned out of everything possible for it. Any must-have left unchecked gets flagged, because one missed must-have matters more than five nice extras.</p>
+    <p class="note"><b>Deal-breakers aren't scored.</b> Soft-story and mobile home were your two hard no's. If either turns out to be true, the place is out no matter how well it scored, and the card says so.</p>
+  </section>
+
+  <section id="view-detail" hidden>
+    <div class="head">
+      <button class="back" id="back">&larr; Stops</button>
+      <div>
+        <p class="snum" id="d-num"></p>
+        <h2 class="d-addr" id="d-addr"></h2>
+        <p class="sfacts" id="d-facts"></p>
+      </div>
+    </div>
+    <div id="groups"></div>
+    <div class="gut">
+      <p>Gut feel, each of you, before you talk each other into or out of it. Not scored, just written down.</p>
+      <div class="gutp"><span class="pinit b">B</span><div class="gutrow" id="gut-b"></div></div>
+      <div class="gutp"><span class="pinit l">L</span><div class="gutrow" id="gut-l"></div></div>
+    </div>
+    <div class="notes">
+      <label for="notes">What either of you would remember about this one</label>
+      <textarea id="notes" placeholder="The thing you'll have forgotten by the next stop."></textarea>
+    </div>
+  </section>
+
+  <section id="view-compare" hidden>
+    <h2 class="sechead">Side by Side</h2>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Rank</th><th>Property</th><th>Score</th><th>Split</th><th>Gut</th><th>Condition</th></tr></thead>
+        <tbody id="cmp"></tbody>
+      </table>
+    </div>
+    <div id="splitbox" hidden></div>
+    <div class="btnrow">
+      <button class="btn primary" id="send">Copy for {{AGENT_FIRST_NAME}}</button>
+      <button class="btn" id="copy">Copy full detail</button>
+      <button class="btn" id="reset">Clear this tour</button>
+    </div>
+    <p class="sendhint" id="sendhint" hidden></p>
+    <textarea id="sendbox" hidden readonly aria-label="Summary to send"></textarea>
+    <p class="note"><b>No home is going to score 100%.</b> The number isn't there to find a perfect one. It's to show you in writing which trade-offs you're actually making, so the decision is a clear one instead of a feeling on a Saturday afternoon.</p>
+    <p class="note"><b>Your answers stay on this phone.</b> Nobody else can see them and nothing is uploaded. (The page does load its fonts from Google, like most websites.) When you're done, tap <b>Copy for {{AGENT_FIRST_NAME}}</b> and then paste it into a text or an email yourself. This page cannot send anything on its own, so it is not with {{AGENT_FIRST_NAME}} until you press send in your own app.</p>
+  </section>
+</main>
+
+<p class="foot"><span>{{AGENT_FOOTER}}</span><span>Built from your buyer consultation</span></p>
+</div>
+
+<div class="dock" id="dock" hidden><div class="inner">
+  <span id="dock-scores"></span>
+  <span class="dockmeta"><b id="dock-pts">0 / 0 of 150 points</b><span id="dock-must">nothing checked yet</span></span>
+  <button class="btn primary" id="dock-done" style="margin-left:auto">Done here</button>
+</div></div>
+
+<script>
+var MUST=25, NICE=4, CONS=2;
+var P={b:{key:"b",initial:"{{P1_INITIAL}}",name:"{{P1_NAME}}"}, l:{key:"l",initial:"{{P2_INITIAL}}",name:"{{P2_NAME}}"}};
+
+var MUSTS=[
+{{MUSTS}}
+];
+
+var KILLS=[
+{{KILLS}}
+];
+
+var NICES=[
+{{NICES}}
+];
+
+var CONSIDER=[
+{{CONSIDER}}
+];
+
+
+var SYS_STATES=[["up","Updated","g"],["orig","Original","m"],["issue","Issue","l"],["ask","Ask","n"]];
+var WORK_STATES=[["yes","Yes","g"],["part","Partly","m"],["no","No","l"],["ask","Ask","n"]];
+
+var COND_SYS=[
+ ["Foundation","Is it bolted to the foundation? In LA that retrofit is the difference between insurable and not. Ask for the paperwork, and remember soft-story is a hard no for you."],
+ ["Roof","Ask the age, whether it was permitted, and whether any warranty transfers to you."],
+ ["Sewer line","Ask for a camera inspection. Clay pipe is common in older Los Angeles neighborhoods and replacing it runs five figures."],
+ ["Plumbing","Galvanized or copper and PEX? Galvanized means a repipe at some point, and you want to know that now."],
+ ["Electrical","Ask the panel amperage and whether there is knob-and-tube left. 100 amps is thin once you add central AC."],
+ ["HVAC","Central AC is on your must-have list. If it isn't already in, ask what adding it to this house actually costs."],
+ ["Termite and pest","Ask whether there's a report, and who is paying for Section 1 clearance."]
+];
+
+var COND_WORK=[
+ ["Pre-inspections already done","If the seller has them, ask for them today. Having them changes what you'd offer and what you'd ask for."],
+ ["Kitchen remodeled",""],
+ ["Bathrooms remodeled",""]
+];
+
+function condCount(p){
+  var s=st(p.id), c={up:0,orig:0,issue:0,ask:0,yes:0,part:0,no:0,unset:0,total:COND_SYS.length+COND_WORK.length};
+  COND_SYS.forEach(function(t,i){ var v=s.cond["s"+i]; if(!v) c.unset++; else c[v]++; });
+  COND_WORK.forEach(function(t,i){ var v=s.cond["w"+i]; if(!v) c.unset++; else c[v]++; });
+  c.good=c.up+c.yes; c.mid=c.orig+c.part; c.bad=c.issue+c.no; c.asked=c.ask;
+  c.touched = c.unset < c.total;
+  return c;
+}
+function condLine(p){
+  var c=condCount(p);
+  if(!c.touched) return '<span class="cond n">condition not checked</span>';
+  var bits=[];
+  if(c.good) bits.push('<span class="cond g">'+c.good+' updated</span>');
+  if(c.mid) bits.push('<span class="cond m">'+c.mid+' original</span>');
+  if(c.bad) bits.push('<span class="cond l">'+c.bad+' needs work</span>');
+  if(c.asked) bits.push('<span class="cond n">'+c.asked+' to ask</span>');
+  if(c.unset) bits.push('<span class="cond n">'+c.unset+' blank</span>');
+  return bits.join('<span class="dot">&middot;</span>');
+}
+
+var TOUR=[
+{{TOUR}}
+];
+
+var KEY="{{STORAGE_KEY}}", state=load(), current=null;
+
+function load(){ try{ var r=localStorage.getItem(KEY); if(r) return JSON.parse(r); }catch(e){} return {}; }
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
+function st(id){
+  var s=state[id]; if(!s) s=state[id]={};
+  if(!s.b) s.b={}; if(!s.l) s.l={}; if(!s.shared) s.shared={};
+  if(!s.cond) s.cond={};
+  if(typeof s.gutB!=="number") s.gutB=0;
+  if(typeof s.gutL!=="number") s.gutL=0;
+  if(typeof s.notes!=="string") s.notes="";
+  return s;
+}
+function esc(s){ var d=document.createElement("div"); d.textContent=s; return d.innerHTML; }
+
+var POSS = MUSTS.length*MUST + NICES.length*NICE + CONSIDER.length*CONS;
+
+function score(p){
+  var s=st(p.id), out={poss:POSS};
+  var sharedGot=0, sharedTouched=false;
+  CONSIDER.forEach(function(t,i){ if(s.shared["c"+i]){ sharedGot+=CONS; sharedTouched=true; } });
+  var killed=[];
+  KILLS.forEach(function(t,i){ if(s.shared["k"+i]) killed.push(t[0]); });
+  out.killed=killed;
+
+  var killedTouched = killed.length>0;
+  ["b","l"].forEach(function(k){
+    var got=sharedGot, missed=[], touched=false;
+    MUSTS.forEach(function(t,i){ if(s[k]["m"+i]){ got+=MUST; touched=true; } else missed.push(t[0]); });
+    NICES.forEach(function(t,i){ if(s[k]["n"+i]){ got+=NICE; touched=true; } });
+    out[k]={got:got,pct:Math.round(got/POSS*100),missed:missed,touched:touched||killedTouched,gut:(k==="b"?s.gutB:s.gutL)};
+  });
+
+  var dis=[];
+  MUSTS.forEach(function(t,i){ if(!!s.b["m"+i]!==!!s.l["m"+i]) dis.push(t[0]); });
+  NICES.forEach(function(t,i){ if(!!s.b["n"+i]!==!!s.l["n"+i]) dis.push(t[0]); });
+  out.split=dis;
+  out.touched=out.b.touched||out.l.touched;
+  out.hasData=out.touched||sharedTouched||Object.keys(s.cond||{}).some(function(k){return s.cond[k]});
+  out.avg=Math.round((out.b.got+out.l.got)/2/POSS*100);
+  return out;
+}
+function band(sc,k){
+  if(sc.killed.length) return "l";
+  var one=sc[k];
+  if(!one.touched) return "n";
+  if(one.missed.length) return one.pct>=55?"m":"l";
+  return one.pct>=70?"g":"m";
+}
+
+function glyph(p){
+  if(p.type==="house"){
+    return '<svg viewBox="0 0 68 104" aria-hidden="true">'+
+    '<rect x="0" y="86" width="68" height="18" fill="hsl(96 22% 44% / .28)"/>'+
+    '<path d="M6 46 L34 25 L62 46 Z" fill="hsl(22 34% 42% / .55)"/>'+
+    '<rect x="11" y="46" width="46" height="40" fill="hsl(24 52% 58% / .55)"/>'+
+    '<rect x="11" y="46" width="46" height="40" fill="none" stroke="hsl(24 34% 38% / .5)" stroke-width="1.1"/>'+
+    '<rect x="28" y="60" width="12" height="26" rx="1" fill="hsl(168 22% 78% / .85)"/>'+
+    '<rect x="16" y="56" width="9" height="9" rx="1" fill="hsl(44 60% 82% / .8)"/>'+
+    '<rect x="44" y="56" width="9" height="9" rx="1" fill="hsl(44 60% 82% / .8)"/>'+
+    '<circle cx="9" cy="80" r="7" fill="hsl(128 24% 40% / .45)"/>'+
+    '<circle cx="60" cy="78" r="9" fill="hsl(128 24% 40% / .4)"/>'+
+    '</svg>';
+  }
+  var cells="";
+  for(var r=0;r<7;r++) for(var c=0;c<4;c++){
+    var on=((r*5+c*3)%4)!==0;
+    cells+='<rect x="'+(11+c*11)+'" y="'+(24+r*11)+'" width="7" height="8" rx="1" fill="hsl(214 42% '+(on?"64%":"38%")+' / '+(on?".95":".35")+')"/>';
+  }
+  return '<svg viewBox="0 0 68 104" aria-hidden="true"><rect x="6" y="14" width="56" height="90" rx="3" fill="hsl(214 26% 30% / .22)" stroke="hsl(214 30% 42% / .5)" stroke-width="1.2"/>'+cells+'</svg>';
+}
+
+function twoScore(sc){
+  if(sc.killed.length) return '<span class="flag">out &middot; '+esc(sc.killed[0])+'</span>';
+  if(!sc.touched) return '<span class="pct n">&mdash;</span><span class="pl">'+(sc.hasData?'notes only, nobody scored it yet':'not scored yet')+'</span>';
+  var h='';
+  ["b","l"].forEach(function(k){
+    h+='<span class="ps"><span class="pinit '+k+'">'+P[k].initial+'</span><span class="pct '+band(sc,k)+'">'+sc[k].pct+'%</span></span>';
+  });
+  h+= sc.split.length
+    ? '<span class="flag split">'+sc.split.length+' disagreement'+(sc.split.length>1?"s":"")+'</span>'
+    : '<span class="flag ok">you agree on everything</span>';
+  return h;
+}
+
+function renderStops(){
+  var el=document.getElementById("stoplist"); el.innerHTML="";
+  TOUR.forEach(function(p,i){
+    var sc=score(p);
+    var btn=document.createElement("button");
+    btn.className="stop"+(sc.killed.length?" dead":""); btn.type="button";
+    btn.innerHTML=
+      '<span class="shot">'+glyph(p)+'</span>'+
+      '<span class="sbody">'+
+        '<span class="snum">Stop '+(i+1)+'</span>'+
+        '<span class="saddr">'+esc(p.n)+'</span>'+
+        '<span class="sfacts">'+p.facts+'</span>'+
+        '<span class="sscore">'+twoScore(sc)+'</span>'+
+        '<span class="condline">'+condLine(p)+'</span>'+
+      '</span>';
+    btn.addEventListener("click",function(){ openStop(p.id); });
+    el.appendChild(btn);
+  });
+}
+
+function renderDetail(){
+  var p=TOUR.filter(function(x){ return x.id===current; })[0]; if(!p) return;
+  var s=st(p.id);
+  document.getElementById("d-num").textContent="Stop "+(TOUR.indexOf(p)+1);
+  document.getElementById("d-addr").textContent=p.n;
+  document.getElementById("d-facts").innerHTML=p.facts;
+
+  var groups=[
+    {key:"k", store:"shared", two:false, title:"Deal-breakers", sub:"Check one only if it's true of the place. Any check here takes it out of the running for both of you.", w:"not scored", items:KILLS, cls:" kill", gcls:" kill"},
+    {key:"m", store:null, two:true, title:"Must-haves", sub:"From your consultation. Each of you taps your own initial, so you can see where you don't agree.", w:MUST+" pts each", items:MUSTS, cls:" must", gcls:""},
+    {key:"n", store:null, two:true, title:"Nice to have", sub:"", w:NICE+" pts each", items:NICES, cls:"", gcls:""},
+    {key:"c", store:"shared", two:false, title:"Easy to forget", sub:"Facts about the place rather than opinions, so one check covers you both.", w:CONS+" pts each", items:CONSIDER, cls:"", gcls:""},
+    {key:"s", cond:SYS_STATES, title:"The big systems", sub:"None of this changes the score above. It changes what the house costs you after you own it, which is a separate question and usually the more expensive one.", w:"not scored", items:COND_SYS},
+    {key:"w", cond:WORK_STATES, title:"Work already done", sub:"", w:"not scored", items:COND_WORK}
+  ];
+
+  var g=document.getElementById("groups"); g.innerHTML="";
+  groups.forEach(function(grp){
+    var sec=document.createElement("div"); sec.className="grp"+grp.gcls;
+    var h='<div class="gh"><h3>'+grp.title+'</h3><span class="gw">'+grp.w+'</span>'+(grp.sub?'<span class="sub">'+grp.sub+'</span>':"")+'</div><div class="list">';
+    grp.items.forEach(function(it,i){
+      var k=grp.key+i;
+      var label='<span class="lab">'+esc(it[0])+(it[1]?'<span class="hint">'+esc(it[1])+'</span>':"")+'</span>';
+      if(grp.cond){
+        var cur=s.cond[k]||"";
+        h+='<div class="condrow"><span class="condlab">'+esc(it[0])+(it[1]?'<span class="hint">'+esc(it[1])+'</span>':"")+'</span><span class="states">'+
+           grp.cond.map(function(stt){
+             var on=cur===stt[0];
+             return '<button type="button" class="stbtn '+stt[2]+'" aria-pressed="'+on+'" data-cond="'+k+'" data-v="'+stt[0]+'">'+stt[1]+'</button>';
+           }).join('')+'</span></div>';
+      } else if(grp.two){
+        var split = (!!s.b[k]!==!!s.l[k]);
+        h+='<div class="row2'+(split?" split":"")+'">'+
+           '<span class="pair">'+
+             ['b','l'].map(function(pk){
+               var on=!!s[pk][k];
+               return '<button type="button" class="ck2'+grp.cls+' '+pk+'" aria-pressed="'+on+'" data-p="'+pk+'" data-k="'+k+'" aria-label="'+P[pk].name+': '+esc(it[0])+'">'+P[pk].initial+'</button>';
+             }).join('')+
+           '</span>'+label+'</div>';
+      } else {
+        var on2=!!s.shared[k];
+        h+='<button type="button" class="ck'+grp.cls+'" aria-pressed="'+on2+'" data-shared="1" data-k="'+k+'"><span class="box"></span>'+label+'</button>';
+      }
+    });
+    sec.innerHTML=h+"</div>"; g.appendChild(sec);
+  });
+
+  g.querySelectorAll(".ck2").forEach(function(b){
+    b.addEventListener("click",function(){
+      var pk=b.getAttribute("data-p"), k=b.getAttribute("data-k"), on=b.getAttribute("aria-pressed")==="true";
+      s[pk][k]=!on; b.setAttribute("aria-pressed",String(!on)); save();
+      var row=b.closest(".row2");
+      if(row) row.classList.toggle("split", !!s.b[k]!==!!s.l[k]);
+      dock();
+    });
+  });
+  g.querySelectorAll(".stbtn").forEach(function(b){
+    b.addEventListener("click",function(){
+      var k=b.getAttribute("data-cond"), v=b.getAttribute("data-v");
+      s.cond[k] = (s.cond[k]===v) ? "" : v;
+      save();
+      var row=b.closest(".condrow");
+      row.querySelectorAll(".stbtn").forEach(function(x){
+        x.setAttribute("aria-pressed",String(x.getAttribute("data-v")===s.cond[k]));
+      });
+    });
+  });
+  g.querySelectorAll(".ck[data-shared]").forEach(function(b){
+    b.addEventListener("click",function(){
+      var k=b.getAttribute("data-k"), on=b.getAttribute("aria-pressed")==="true";
+      s.shared[k]=!on; b.setAttribute("aria-pressed",String(!on)); save(); dock();
+    });
+  });
+
+  ["b","l"].forEach(function(pk){
+    var gr=document.getElementById("gut-"+pk); gr.innerHTML="";
+    ["1","2","3","4","5"].forEach(function(v){
+      var cur = pk==="b" ? s.gutB : s.gutL;
+      var btn=document.createElement("button"); btn.type="button"; btn.textContent=v;
+      btn.setAttribute("aria-pressed",String(cur===+v));
+      btn.setAttribute("aria-label",P[pk].name+" gut feel "+v+" of 5");
+      btn.addEventListener("click",function(){
+        var now = pk==="b" ? s.gutB : s.gutL;
+        var nv = now===+v ? 0 : +v;
+        if(pk==="b") s.gutB=nv; else s.gutL=nv;
+        save();
+        gr.querySelectorAll("button").forEach(function(x){ x.setAttribute("aria-pressed",String(x.textContent===String(nv))); });
+      });
+      gr.appendChild(btn);
+    });
+  });
+
+  var n=document.getElementById("notes"); n.value=s.notes||"";
+  n.oninput=function(){ s.notes=n.value; save(); };
+  dock();
+}
+
+function dock(){
+  var p=TOUR.filter(function(x){ return x.id===current; })[0]; if(!p) return;
+  var sc=score(p);
+  var box=document.getElementById("dock-scores"); box.innerHTML="";
+  if(!sc.touched && !sc.killed.length){
+    box.innerHTML='<span class="pct n">&mdash;</span>';
+    document.getElementById("dock-pts").textContent="nobody has scored this one yet";
+    document.getElementById("dock-must").textContent="tap your initial on the items that are true";
+    return;
+  }
+  if(sc.killed.length){
+    box.innerHTML='<span class="pct l">OUT</span>';
+    document.getElementById("dock-pts").textContent="scored "+sc.b.pct+"% / "+sc.l.pct+"% before this";
+  } else {
+    ["b","l"].forEach(function(k){
+      var sp=document.createElement("span"); sp.className="ps";
+      sp.innerHTML='<span class="pinit '+k+'">'+P[k].initial+'</span><span class="pct '+band(sc,k)+'">'+sc[k].pct+'%</span>';
+      box.appendChild(sp);
+    });
+    document.getElementById("dock-pts").textContent=sc.b.got+" / "+sc.l.got+" of "+sc.poss+" points";
+  }
+  document.getElementById("dock-must").textContent = sc.killed.length
+    ? "deal-breaker: "+sc.killed.join(", ")
+    : (sc.split.length ? sc.split.length+" thing"+(sc.split.length>1?"s":"")+" you see differently"
+                       : (sc.b.missed.length||sc.l.missed.length ? sc.b.missed.length+" / "+sc.l.missed.length+" must-haves not met" : "you both have every must-have"));
+}
+
+function ranked(){
+  return TOUR.map(function(p,i){ return {p:p,i:i,sc:score(p)}; })
+    .sort(function(a,b){
+      var av=a.sc.killed.length?-2:(a.sc.touched?a.sc.avg:-1);
+      var bv=b.sc.killed.length?-2:(b.sc.touched?b.sc.avg:-1);
+      return bv-av;
+    });
+}
+
+function renderCompare(){
+  var t=document.getElementById("cmp"); t.innerHTML="";
+  ranked().forEach(function(r,idx){
+    var tr=document.createElement("tr");
+    if(idx===0&&r.sc.touched&&!r.sc.killed.length&&!r.sc.b.missed.length&&!r.sc.l.missed.length) tr.className="win";
+    var sco = r.sc.killed.length ? '<span class="flag">out</span>'
+      : (r.sc.touched
+         ? '<span class="ps"><span class="pinit b">B</span><span class="pct '+band(r.sc,"b")+'" style="font-size:18px">'+r.sc.b.pct+'%</span></span> <span class="ps"><span class="pinit l">L</span><span class="pct '+band(r.sc,"l")+'" style="font-size:18px">'+r.sc.l.pct+'%</span></span>'
+         : '<span class="n">&mdash;</span>');
+    var agree = (!r.sc.touched || r.sc.killed.length)
+      ? '<span class="n">&mdash;</span>'
+      : (r.sc.split.length ? '<span class="flag split">'+r.sc.split.length+'</span>' : '<span class="g">agreed</span>');
+    var gut = (r.sc.b.gut||r.sc.l.gut) ? (r.sc.b.gut||"&mdash;")+" / "+(r.sc.l.gut||"&mdash;") : "&mdash;";
+    tr.innerHTML='<td class="rank">'+(r.sc.killed.length?"&mdash;":(r.sc.touched?idx+1:"&mdash;"))+'</td>'+
+      '<td><span class="tname">'+esc(r.p.n)+'</span><span class="tsub">Stop '+(r.i+1)+'</span></td>'+
+      '<td>'+sco+'</td><td>'+agree+'</td><td class="rank">'+gut+'</td>'+
+      '<td class="condcell">'+condLine(r.p)+'</td>';
+    t.appendChild(tr);
+  });
+
+  var sp=document.getElementById("splitbox");
+  var rows=ranked().filter(function(r){ return r.sc.touched && r.sc.split.length; });
+  if(!rows.length){ sp.hidden=true; return; }
+  sp.hidden=false;
+  var h='<h2 class="sechead" style="margin-top:34px">Where You Two Don\'t Agree</h2>'+
+        '<p class="note" style="border-left-color:var(--red)"><b>This is the useful part.</b> These are the things one of you counted and the other didn\'t. None of them are wrong. They\'re just worth saying out loud before you decide anything.</p>';
+  rows.forEach(function(r){
+    var s=st(r.p.id);
+    h+='<p class="splitaddr">'+esc(r.p.n)+'</p><ul class="splitlist">';
+    r.sc.split.forEach(function(label){
+      var who="";
+      MUSTS.concat(NICES).forEach(function(t,idx){
+        if(t[0]!==label) return;
+        var k=(idx<MUSTS.length?"m"+idx:"n"+(idx-MUSTS.length));
+        who = s.b[k] ? P.b.name+" counted it, "+P.l.name+" didn't" : P.l.name+" counted it, "+P.b.name+" didn't";
+      });
+      h+='<li>'+esc(label)+'<span>'+who+'</span></li>';
+    });
+    h+='</ul>';
+  });
+  sp.innerHTML=h;
+}
+
+
+function shortSummary(){
+  var out=["Showing scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:"")+" - {{TOUR_DATE}}",""];
+  ranked().forEach(function(r){
+    if(!r.sc.hasData) return;
+    out.push(r.p.n);
+    if(r.sc.killed.length){
+      out.push("OUT - deal-breaker: "+r.sc.killed.join("; "));
+    } else if(!r.sc.touched){
+      out.push("Nobody scored this one. Notes only.");
+    } else {
+      out.push(P.b.name+" "+r.sc.b.pct+"%"+(P.l.name?"  "+P.l.name+" "+r.sc.l.pct+"%":""));
+      var mline=function(nm,ms){ return ms.length ? nm+" missing: "+ms.slice(0,4).join("; ")+(ms.length>4?" +"+(ms.length-4)+" more":"") : ""; };
+      var lb=mline(P.b.name,r.sc.b.missed), ll=P.l.name?mline(P.l.name,r.sc.l.missed):"";
+      if(lb) out.push(lb);
+      if(ll) out.push(ll);
+      if(r.sc.split.length) out.push("Disagree: "+r.sc.split.join("; "));
+    }
+    var c=condCount(r.p);
+    if(c.touched){
+      var cb=[];
+      if(c.good) cb.push(c.good+" updated");
+      if(c.mid) cb.push(c.mid+" original");
+      if(c.bad) cb.push(c.bad+" needs work");
+      if(c.asked) cb.push(c.asked+" TO ASK");
+      out.push("Condition: "+cb.join(", "));
+    }
+    var nt=st(r.p.id).notes; if(nt&&nt.trim()) out.push("Note: "+nt.trim());
+    out.push("");
+  });
+  if(out.length<3) return "";
+  return out.join("\n");
+}
+
+function legacyCopy(text){
+  try{
+    var ta=document.createElement("textarea");
+    ta.value=text; ta.contentEditable=true;
+    ta.style.position="fixed"; ta.style.left="0"; ta.style.top="0";
+    ta.style.width="1px"; ta.style.height="1px"; ta.style.opacity="0";
+    ta.style.fontSize="16px";
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    if(ta.setSelectionRange) ta.setSelectionRange(0, text.length);
+    var ok=document.execCommand("copy");
+    document.body.removeChild(ta);
+    return ok;
+  }catch(e){ return false; }
+}
+function copyText(text, done){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){ done(true); },
+                                            function(){ done(legacyCopy(text)); });
+    return;
+  }
+  done(legacyCopy(text));
+}
+
+function summary(){
+  var out=["Showing day scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:""),"{{SUMMARY_SUBHEAD}}",""];
+  ranked().forEach(function(r){
+    if(!r.sc.hasData){ out.push(r.p.n+" - not scored"); out.push(""); return; }
+    out.push(r.p.n);
+    if(r.sc.killed.length) out.push("  *** OUT - deal-breaker: "+r.sc.killed.join("; ")+" ***");
+    if(!r.sc.touched) out.push("  Nobody scored this one. Notes only.");
+    else out.push("  "+P.b.name+" "+r.sc.b.pct+"% ("+r.sc.b.got+" of "+r.sc.poss+")"+(r.sc.b.gut?", gut "+r.sc.b.gut+"/5 on feel":""));
+    if(r.sc.touched && P.l.name) out.push("  "+P.l.name+" "+r.sc.l.pct+"% ("+r.sc.l.got+" of "+r.sc.poss+")"+(r.sc.l.gut?", gut "+r.sc.l.gut+"/5 on feel":""));
+    if(r.sc.touched) out.push("  "+P.b.name+" missing: "+(r.sc.b.missed.length?r.sc.b.missed.join("; "):"nothing"));
+    if(r.sc.touched && P.l.name) out.push("  "+P.l.name+" missing: "+(r.sc.l.missed.length?r.sc.l.missed.join("; "):"nothing"));
+    out.push(r.sc.split.length ? "  Don't agree on: "+r.sc.split.join("; ") : "  Agreed on everything");
+    var cs=st(r.p.id).cond, cl=[];
+    COND_SYS.forEach(function(t,i){ var v=cs["s"+i]; if(v) cl.push("    "+t[0]+": "+({up:"updated",orig:"original",issue:"needs work",ask:"still to ask"}[v])); });
+    COND_WORK.forEach(function(t,i){ var v=cs["w"+i]; if(v) cl.push("    "+t[0]+": "+({yes:"yes",part:"partly",no:"no",ask:"still to ask"}[v])); });
+    if(cl.length){ out.push("  Condition:"); cl.forEach(function(x){ out.push(x); }); }
+    var nt=st(r.p.id).notes; if(nt&&nt.trim()) out.push("  Notes: "+nt.trim());
+    out.push("");
+  });
+  return out.join("\n");
+}
+
+function show(v){
+  document.getElementById("view-stops").hidden = v!=="stops";
+  document.getElementById("view-detail").hidden = v!=="detail";
+  document.getElementById("view-compare").hidden = v!=="compare";
+  document.getElementById("dock").hidden = v!=="detail";
+  document.getElementById("tab-stops").setAttribute("aria-selected",String(v==="stops"));
+  document.getElementById("tab-compare").setAttribute("aria-selected",String(v==="compare"));
+  window.scrollTo(0,0);
+}
+function openStop(id){ current=id; renderDetail(); show("detail"); }
+
+document.getElementById("tab-stops").addEventListener("click",function(){ renderStops(); show("stops"); });
+document.getElementById("tab-compare").addEventListener("click",function(){ renderCompare(); show("compare"); });
+document.getElementById("back").addEventListener("click",function(){ renderStops(); show("stops"); });
+document.getElementById("dock-done").addEventListener("click",function(){ renderStops(); show("stops"); });
+
+
+document.getElementById("send").addEventListener("click",function(){
+  var btn=this, body=shortSummary();
+  var box=document.getElementById("sendbox"), hint=document.getElementById("sendhint");
+  if(!body){ btn.textContent="Score a home first"; setTimeout(function(){ btn.textContent="Copy for {{AGENT_FIRST_NAME}}"; },2200); return; }
+  if(box){ box.hidden=false; box.value=body; }
+  copyText(body,function(copied){
+    if(hint){
+      hint.hidden=false;
+      hint.innerHTML = copied
+        ? "Copied. Now paste it into a text to {{AGENT_FIRST_NAME}} at <a href=\"tel:{{AGENT_PHONE_RAW}}\">{{AGENT_PHONE}}</a> or an email to <a href=\"mailto:{{AGENT_SEND_EMAIL}}\">{{AGENT_SEND_EMAIL}}</a>. Nothing leaves this phone until you do."
+        : "Copy did not work on this phone. Select the text below, copy it, and send it to {{AGENT_FIRST_NAME}} at {{AGENT_PHONE}}.";
+    }
+    btn.textContent = copied ? "Copied, now paste it" : "Use the box below";
+    setTimeout(function(){ btn.textContent="Copy for {{AGENT_FIRST_NAME}}"; },5000);
+  });
+});
+
+document.getElementById("copy").addEventListener("click",function(){
+  var btn=this, text=summary(), box=document.getElementById("sendbox");
+  copyText(text,function(ok){
+    if(box){ box.hidden=false; box.value=text; }
+    btn.textContent = ok ? "Copied" : "Copy did not work, use the box below";
+    setTimeout(function(){ btn.textContent="Copy full detail"; },2800);
+  });
+});
+
+document.getElementById("reset").addEventListener("click",function(){
+  var btn=this;
+  if(btn.dataset.armed!=="1"){
+    btn.dataset.armed="1"; btn.textContent="Tap again to clear";
+    setTimeout(function(){ btn.dataset.armed="0"; btn.textContent="Clear this tour"; },3500);
+    return;
+  }
+  state={}; save(); btn.dataset.armed="0"; btn.textContent="Cleared";
+  renderCompare(); renderStops();
+  setTimeout(function(){ btn.textContent="Clear this tour"; },2000);
+});
+
+renderStops();
+</script>

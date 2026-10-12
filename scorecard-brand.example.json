@@ -1,0 +1,11 @@
+{
+  "business_name": "Example Realty",
+  "agent_first_name": "Dana",
+  "color_accent": "#1F4E79",
+  "color_action": "#B33A2B",
+  "logo_path": "",
+  "phone_display": "(555) 010-2030",
+  "phone_raw": "+15550102030",
+  "email": "dana@example.com",
+  "footer_line": "Example Realty · example.com"
+}
