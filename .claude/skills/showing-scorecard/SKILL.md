@@ -39,7 +39,7 @@ It does four things a paper checklist cannot:
 
 ---
 
-## Before any of that: what never becomes a scored criterion
+## Fair housing: what never becomes a scored criterion
 
 **Read this before you take a single must-have from anybody.** This skill's method is to
 transcribe what a buyer said and score homes against it. That is also the mechanism that

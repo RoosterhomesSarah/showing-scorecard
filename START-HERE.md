@@ -87,6 +87,17 @@ up holding proof of it.
 
 ---
 
+## Read this one thing first
+
+The fair housing rules this tool follows are written out in full, in plain English, with
+the exact phrases buyers actually say and what to write instead. Ten minutes, before your
+first scorecard.
+
+It is in `.claude/skills/showing-scorecard/SKILL.md`, the section headed
+**Fair housing: what never becomes a scored criterion**, near the top.
+
+---
+
 ## When you are ready
 
 > set me up
