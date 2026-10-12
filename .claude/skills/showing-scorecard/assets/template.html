@@ -342,7 +342,8 @@ tr.win td{background:var(--goodbg)}
 .routebtn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
 .routenote{font-size:13px;color:var(--muted)}
 .navrow{display:flex;gap:16px;margin-top:8px}
-.navrow a{font-size:12.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-dk);text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px}
+.navrow a{font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-dk);text-decoration:none;border:1px solid var(--rule2);border-radius:2px;padding:7px 12px;min-height:36px;display:inline-flex;align-items:center}
+.navrow a:hover{border-color:var(--gold-dk)}
 
 /* skipping a stop, reversibly */
 .stopwrap{position:relative}
@@ -388,6 +389,21 @@ tr.win td{background:var(--goodbg)}
   .closehint{border-left-color:#111}
   a[href^="http"]::after{content:" (" attr(href) ")";font-size:10px;color:#666}
 }
+
+.btn.dim{opacity:.5}
+.sendempty{margin-top:15px;padding:15px 17px;border-radius:3px;background:var(--alt);border-left:3px solid var(--gold);font-size:15px;color:var(--body);line-height:1.55;max-width:62ch}
+.sendempty em{font-style:normal;font-weight:700;color:var(--ink)}
+
+.routebar{align-items:center}
+.routebtn{text-decoration:none;gap:9px}
+.rb-pin{font-size:11px;opacity:.9}
+#routeapple{text-decoration:none}
+.routenote{flex:1 1 220px;min-width:0;line-height:1.5}
+@media (max-width:560px){
+  .routebar{gap:10px}
+  .routebtn{flex:1 1 100%}
+  .routenote{flex:1 1 100%}
+}
 </style>
 
 <div class="util"><div class="in">
@@ -420,8 +436,11 @@ tr.win td{background:var(--goodbg)}
   <section id="view-stops">
     <h2 class="sechead">{{STOPS_HEADING}}</h2>
     <div class="routebar">
-      <a class="btn routebtn" id="routeall" role="button">Open today&rsquo;s route</a>
-      <span class="routenote">Every stop, in order, in Google Maps.</span>
+      <a class="btn primary routebtn" id="routeall" role="button">
+        <span class="rb-pin" aria-hidden="true">&#9654;</span><span id="routelabel">Drive today&rsquo;s route</span>
+      </a>
+      <a class="btn routebtn" id="routeapple" role="button">Apple Maps</a>
+      <span class="routenote" id="routenote"></span>
     </div>
     <div class="stops" id="stoplist"></div>
     <p id="storewarn" hidden>This phone is not saving your answers, so they will be lost if you close or reload the page. Private browsing usually causes this. Copy your results before you leave each house.</p>
@@ -461,12 +480,13 @@ tr.win td{background:var(--goodbg)}
     </div>
     <div id="splitbox" hidden></div>
     <div class="btnrow">
-      <a class="btn primary" id="sendsms" role="button">Text it to {{AGENT_FIRST_NAME}}</a>
-      <a class="btn" id="sendmail" role="button">Email it to {{AGENT_FIRST_NAME}}</a>
+      <a class="btn primary" id="sendsms" role="button" href="sms:{{AGENT_PHONE_RAW}}">Text it to {{AGENT_FIRST_NAME}}</a>
+      <a class="btn" id="sendmail" role="button" href="mailto:{{AGENT_SEND_EMAIL}}">Email it to {{AGENT_FIRST_NAME}}</a>
       <button class="btn" id="send">Copy instead</button>
       <button class="btn" id="copy">Copy full detail</button>
       <button class="btn" id="reset">Clear this tour</button>
     </div>
+    <p class="sendempty" id="sendempty" hidden>Nothing is scored on <em>this</em> phone yet. Your ticks live on whichever phone you tap them into, so if you scored on a different one, send it from there. Otherwise open a house above and start ticking.</p>
     <p class="sendhint" id="sendhint" hidden></p>
     <textarea id="sendbox" hidden readonly aria-label="Summary to send"></textarea>
     <p class="note"><b>No home is going to score 100%.</b> The number isn't there to find a perfect one. It's to show you in writing which trade-offs you're actually making, so the decision is a clear one instead of a feeling on a Saturday afternoon.</p>
@@ -475,8 +495,8 @@ tr.win td{background:var(--goodbg)}
 </main>
 
 <section class="closing" id="closing">
-  <h2 class="sechead" style="margin-top:0">Where to from here</h2>
-  <p class="closenote">A tour is only useful if it ends in a decision. Tell {{AGENT_FIRST_NAME}} which of these it is and the next step happens today, not next week.</p>
+  <h2 class="sechead" style="margin-top:0">What happens next</h2>
+  <p class="closenote">You will never be clearer about today than you are right now, standing outside the last house, before the details start running together. Take a minute with it. Then tell {{AGENT_FIRST_NAME}} where you have landed and she will take it from there.</p>
   <div class="closerow" id="closerow"></div>
   <p class="closehint" id="closehint" hidden></p>
 </section>
@@ -680,7 +700,21 @@ function wireRoute(){
   a.href="https://www.google.com/maps/dir/?api=1&travelmode=driving&destination="+dest+
          (mid.length?"&waypoints="+mid.join("%7C"):"");
   a.target="_blank"; a.rel="noopener";
-  a.textContent = live.length===1 ? "Directions to this one" : "Open today\u2019s route, "+live.length+" stops";
+  var lbl=document.getElementById("routelabel");
+  if(lbl) lbl.textContent = live.length===1 ? "Drive to this one" : "Drive today\u2019s route";
+
+  var ap=document.getElementById("routeapple");
+  if(ap){
+    ap.href="https://maps.apple.com/?daddr="+live.map(function(p){
+      return encodeURIComponent(p.n+", "+(p.area||""));
+    }).join("+to:")+"&dirflg=d";
+    ap.target="_blank"; ap.rel="noopener";
+    ap.style.display = live.length?"":"none";
+  }
+  var note=document.getElementById("routenote");
+  if(note) note.textContent = live.length===1
+    ? "Opens in your maps app, ready to navigate."
+    : "Opens in your maps app with all "+live.length+" stops loaded in order, ready to navigate.";
 }
 
 function renderStops(){
@@ -974,10 +1008,14 @@ function copyText(text, done){
 }
 
 var CLOSERS=[
-  ["offer","We want to write on one of these","Good. {{AGENT_FIRST_NAME}} will pull the comps and the condition notes you logged today and have numbers to you within the day."],
-  ["second","We want to see one of them again","Say which, and {{AGENT_FIRST_NAME}} will set a second showing and bring the answers to everything you marked to ask."],
-  ["keep","None of these. Keep looking","That is a useful result, not a wasted day. Send this over and {{AGENT_FIRST_NAME}} will adjust what gets shown next time."],
-  ["think","We need to sit with it","Send it anyway. A week from now this page is the only accurate record of what you actually thought."]
+  ["offer","One of these is the one",
+   "Then let\u2019s move. {{AGENT_FIRST_NAME}} will pull the comparable sales and everything you flagged today, and have real numbers in front of you before the day is out. Send this across now so she is working from what you actually saw rather than what either of you remembers."],
+  ["second","We want a second look at one",
+   "Sensible, and most people should. Say which one and {{AGENT_FIRST_NAME}} will arrange it, and she will have answers to everything you marked to ask before you walk back through the door."],
+  ["keep","Not these. Keep looking",
+   "That is a real result and not a wasted Saturday. You now know, in writing, what does not work and why, and that is the thing that sharpens the next list. Send it over and {{AGENT_FIRST_NAME}} will change what you are shown next."],
+  ["think","We need to think about it",
+   "Take the time. Send it to {{AGENT_FIRST_NAME}} anyway, because in a week this page will be the honest record of what you thought today rather than what you remember thinking. There is no pressure attached to sending it."]
 ];
 function renderClosing(){
   var row=document.getElementById("closerow"); if(!row) return;
@@ -1048,10 +1086,19 @@ function sendBody(){
 function wireSendLinks(){
   var body=sendBody();
   var sms=document.getElementById("sendsms"), mail=document.getElementById("sendmail");
-  if(!body){
-    [sms,mail].forEach(function(a){ if(a){ a.removeAttribute("href"); a.setAttribute("aria-disabled","true"); } });
-    return;
-  }
+  var empty=!body;
+  // Always leave a working link on the button. A button that silently does nothing
+  // reads as broken, and the most common reason to have nothing scored is simply
+  // opening the page on a second phone, which is normal rather than an error.
+  if(empty) body="Showing scorecard for "+P.b.name+(P.l.name?" & "+P.l.name:"")+
+    "\n\n(Nothing scored on this phone yet.)";
+  [sms,mail].forEach(function(a){
+    if(!a) return;
+    a.classList.toggle("dim", empty);
+    a.setAttribute("aria-disabled", String(empty));
+  });
+  var note=document.getElementById("sendempty");
+  if(note) note.hidden=!empty;
   var enc=encodeURIComponent(body);
   // iOS wants sms:number&body=, Android wants sms:number?body=. This form works on both.
   if(sms) sms.href="sms:{{AGENT_PHONE_RAW}}"+(/(iPhone|iPad|Macintosh)/.test(navigator.userAgent)?"&":"?")+"body="+enc;
