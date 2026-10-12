@@ -59,18 +59,56 @@ words and text messages have both been held to be statements under this provisio
 
 So the transcription is filtered, always, and the filter is not optional.
 
+### This tool, done right, is a recommended practice
+
+Worth knowing before the rules, because it changes what you are building.
+
+The California Association of Realtors fair housing advisory (Form FHDA, rev. 12/24)
+lists examples of **positive** practices. The first one reads:
+
+> "Real estate licensees working with buyers or tenants should apply the same objective
+> property selection criteria, such as location/neighborhood, property features, and
+> price range and other considerations, to all prospects."
+
+That is a description of this scorecard. Objective criteria, written down, applied the
+same way to every property and every client. The filter below is not a disclaimer bolted
+onto a risky tool. The filter is what makes the tool an instance of the practice the
+advisory recommends. An agent who uses it properly has a written record of exactly that.
+
+The same list warns against the opposite: making any statement or advertisement that
+directly or indirectly implies a preference, a limitation or discrimination regarding a
+protected characteristic. A scored criterion is a statement.
+
+And one more, which is why the buyer's free-text notes matter: the advisory flags that
+asking for or accepting personal information or letters from a buyer can inadvertently
+reveal protected status, raising the risk of unconscious bias and of claims by buyers
+whose offers were rejected. A notes field is that kind of document.
+
 ### The protected classes
 
-HUD names seven under the federal Act: **race, color, national origin, religion, sex,
-familial status, and disability.** HUD's enforcement position since 2021 is that
-discrimination because of sex includes sexual orientation and gender identity.
+**Federal floor, seven.** HUD names race, color, national origin, religion, sex,
+familial status and disability. HUD's enforcement position since 2021 is that sex
+includes sexual orientation and gender identity.
 
-Most states and many cities add more. Source of income, age, marital status, veteran
-status and military status are common additions. The agent's own state is the floor they
-actually have to meet, and it is higher than this one.
+**States add a great deal, and the agent's state is what they are actually held to.**
+California is the author's state and a useful illustration of the gap. Its Realtor
+advisory lists twenty, and ends with a catch-all:
 
-Steering, which is directing buyers toward or away from neighborhoods on a protected
-basis, is separately prohibited and defined at 24 C.F.R. section 100.70.
+| | | | | |
+|---|---|---|---|---|
+| Race (and race traits) | Color | Ancestry | National Origin | Religion |
+| Age | Sex, Sexual Orientation | Gender, Gender Identity, Gender expression | Marital Status | Familial Status (a family with a child or children under 18) |
+| Citizenship | Immigration Status | Primary Language | Military/Veteran Status | Source of Income (e.g. a Section 8 voucher) |
+| Medical Condition | Disability (mental and physical) | Genetic Information | Criminal History (non-relevant convictions) | **Any Arbitrary Characteristic** or Intersectionality |
+
+The advisory adds that other classes, categories or restrictions may also apply.
+
+Read that last cell before you decide a criterion is fine because it is not on a list.
+In California the list is open-ended by design.
+
+**If the agent is not in California, get their state's own list** and work from that, not
+from this table and not from the federal seven. Their state association publishes it and
+their broker has it.
 
 ### Never score these, however the buyer phrases it
 
@@ -117,6 +155,9 @@ requires.
 
 Sources: HUD, Fair Housing Act overview, hud.gov/helping-americans/fair-housing-act-overview.
 Statutory text at 42 U.S.C. section 3604. Steering at 24 C.F.R. section 100.70.
+California Association of Realtors Form FHDA, Fair Housing and Discrimination Advisory,
+revised 12/24, for the state list, the positive practices and the buyer-letter warning.
+Every agent should be working from their own state's current advisory, not this summary.
 
 ## First run only: five questions
 
