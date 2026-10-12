@@ -10,7 +10,9 @@
     {{FONT_QUERY}}      Google Fonts query string. Neutral default:
                         family=Source+Serif+4:opsz,wght@8..60,400;8..60,700&family=Inter:wght@300;400;700;900
     {{FONT_DISPLAY}}    e.g. "Source Serif 4"      {{FONT_BODY}}  e.g. "Inter"
-    {{AGENT_FIRST_NAME}} {{AGENT_PHONE}} {{AGENT_PHONE_RAW}} {{AGENT_SEND_EMAIL}}
+    {{AGENT_FIRST_NAME}}  first name only, used in buttons and sentences
+    {{AGENT_FULL_NAME}}   full name, used on the sign-off card
+    {{AGENT_PHONE}} {{AGENT_PHONE_RAW}} {{AGENT_SEND_EMAIL}}
     {{ON_ACCENT}} {{ON_ACTION}}  #fff or #1A1A1A, whichever reads on that colour.
                         Compute it, do not guess: relative luminance above 0.45 takes
                         the dark label, below it takes white.
@@ -24,9 +26,13 @@
     {{P1_NAME}} {{P1_INITIAL}} {{P2_NAME}} {{P2_INITIAL}}   P2 empty = solo mode
     {{MUSTS}} {{KILLS}} {{NICES}} {{CONSIDER}}   ["Label","Hint or empty"],
     {{TOUR}}   {id:"slug", n:"123 Example St", facts:"Area &middot; 3 bd 2 ba &middot; listed $X",
-               area:"City, ST", type:"house"|"tower"},
-               area is what makes the maps links land on the right house. Include it.
-    {{STORAGE_KEY}}   MUST be unique per buyer per tour
+               area:"City, ST", type:"house"|"tower", date:"Sat 12 Oct"},
+               area makes the maps links land on the right house. Include it.
+               date groups the list when a search runs over several outings. Newest
+               first. Omit it only on a one-off tour.
+    {{STORAGE_KEY}}  one key PER CLIENT, never per tour. It is what makes their
+               shortlist accumulate across weeks. Changing it wipes everything they
+               have scored.
     {{SUMMARY_SUBHEAD}}
     {{KILLS_NOTE}}    one sentence naming THIS buyer's hard no's
     {{COND_SYS}}      the seven systems, written for YOUR market. Questions, never
@@ -404,6 +410,9 @@ tr.win td{background:var(--goodbg)}
   .routebtn{flex:1 1 100%}
   .routenote{flex:1 1 100%}
 }
+
+.daygroup{font-size:11px;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:26px;padding-bottom:9px;border-bottom:1px solid var(--rule)}
+.stops .daygroup:first-child{margin-top:4px}
 </style>
 
 <div class="util"><div class="in">
@@ -504,7 +513,7 @@ tr.win td{background:var(--goodbg)}
 <div class="agentcard">
   <div class="ac-mark">{{LOGO_IMG}}</div>
   <div class="ac-body">
-    <p class="ac-name">{{AGENT_FIRST_NAME}}</p>
+    <p class="ac-name">{{AGENT_FULL_NAME}}</p>
     <p class="ac-biz">{{BUSINESS_NAME}}</p>
     <p class="ac-lines">
       <a href="tel:{{AGENT_PHONE_RAW}}">{{AGENT_PHONE}}</a>
@@ -691,7 +700,10 @@ function twoScore(sc){
 
 function wireRoute(){
   var a=document.getElementById("routeall"); if(!a) return;
-  var live=TOUR.filter(function(p){ return !st(p.id).skipped; });
+  var today=tourDates()[0];
+  var live=TOUR.filter(function(p){
+    return !st(p.id).skipped && (!today || (p.date||"")===today);
+  });
   if(live.length<1){ a.style.display="none"; return; }
   a.style.display="";
   var addrs=live.map(function(p){ return encodeURIComponent(p.n+", "+(p.area||"")); });
@@ -712,18 +724,33 @@ function wireRoute(){
     ap.style.display = live.length?"":"none";
   }
   var note=document.getElementById("routenote");
-  if(note) note.textContent = live.length===1
+  var earlier=TOUR.length-live.length;
+  if(note) note.textContent = (live.length===1
     ? "Opens in your maps app, ready to navigate."
-    : "Opens in your maps app with all "+live.length+" stops loaded in order, ready to navigate.";
+    : "Opens in your maps app with today\u2019s "+live.length+" stops loaded in order, ready to navigate.")
+    + (earlier>0 ? " Homes you have already seen are not in the route." : "");
 }
 
+function tourDates(){
+  var seen=[], out=[];
+  TOUR.forEach(function(p){ var dt=p.date||""; if(seen.indexOf(dt)<0){ seen.push(dt); out.push(dt); } });
+  return out;
+}
 function renderStops(){
   var el=document.getElementById("stoplist"); el.innerHTML="";
   if(!TOUR.length){
     el.innerHTML='<p class="note">No stops on this tour yet. Ask '+esc(P.b.name?"{{AGENT_FIRST_NAME}}":"your agent")+' to add the addresses you are seeing today.</p>';
     return;
   }
+  var dates=tourDates(), multi=dates.length>1, lastDate=null;
   TOUR.forEach(function(p,i){
+    if(multi && (p.date||"")!==lastDate){
+      lastDate=p.date||"";
+      var h=document.createElement("p");
+      h.className="daygroup";
+      h.textContent = (i===0 ? "" : "") + (lastDate || "Earlier");
+      el.appendChild(h);
+    }
     var sc=score(p);
     var btn=document.createElement("button");
     btn.className="stop"+(sc.killed.length?" dead":""); btn.type="button";

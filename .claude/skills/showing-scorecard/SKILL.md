@@ -181,7 +181,9 @@ half-filled and never stop asking while a required field is blank, or the buyer'
 button ends up reading "Copy for " forever.
 
 1. **Your business name**, as it should read on the page.
-2. **Your first name**, as a client would say it. This goes on the button they tap.
+2. **Your first name**, as a client would say it, for the buttons and the sentences.
+   Also **your full name** as it should read on a signature, which is what goes on the
+   sign-off card at the bottom of every scorecard.
 3. **Two colors**, as hex codes. One for headings and accents, one for the single action
    button. Ask for **mid-tone** colors, not pastels and not near-black: the heading color
    sits on a dark band and on white, so an extreme at either end disappears on one of
@@ -209,6 +211,7 @@ Then compute two more and write them in. Do not ask for these:
 {
   "business_name": "",
   "agent_first_name": "",
+  "agent_full_name": "",
   "color_accent": "#1F6F8B",
   "color_action": "#B33A2B",
   "on_accent": "#FFFFFF",
@@ -222,7 +225,7 @@ Then compute two more and write them in. Do not ask for these:
 }
 ```
 
-Required before anything is built: `business_name`, `agent_first_name`, `color_accent`,
+Required before anything is built: `business_name`, `agent_first_name`, `agent_full_name`, `color_accent`,
 `color_action`, `phone_display`, `phone_raw`, `email`. The logo, the footer and the licence line are
 optional and the page handles their absence.
 
@@ -237,12 +240,42 @@ linked logo will not render.
 The skill produces one HTML file. Nothing about it is finished until the buyer can open
 it, so pick one of these and tell the agent which you used.
 
-**First, save it where it belongs.** Every scorecard goes to
+## One scorecard per client, not one per tour
+
+**This is the thing to get right and the easy thing to get wrong.**
+
+A buyer does not look at four houses once. They look at four this Saturday, three the
+next, two the week after, and by week three the question that actually matters is how
+this one compares to the eleven they have already seen. That comparison is the point of
+the tool, and it only exists if every outing writes into the same scorecard.
+
+So: **one living scorecard per client, rebuilt as the search goes.** Never a fresh one
+per tour.
+
+When the agent books another showing day with a client who already has one:
+
+1. Open their existing scorecard and read its `{{TOUR}}` list and its `{{STORAGE_KEY}}`.
+2. **Keep that storage key exactly.** It belongs to the client, not the tour. Everything
+   scored over weeks is stored against it, and a changed key erases all of it.
+3. **Keep every existing stop, with its existing `id`.** Scores are stored against those
+   ids, so a renamed id is a wiped house.
+4. Add the new stops at the **top**, each carrying this outing's `date`.
+5. Rebuild and give them the same link. Everything scored before is still there, and
+   Compare now ranks the whole search.
+
+The list groups by date on its own once there is more than one, newest first, so today
+sits at the top and earlier outings stay underneath. Compare ignores dates entirely and
+ranks every house they have walked. **That running shortlist is the deliverable**, and
+it is the thing a buyer cannot build for themselves after six weekends.
+
+Houses they have ruled out get skipped rather than removed, which takes them out of the
+ranking and the route while keeping the record that they were seen and rejected.
+
+**Where the file goes.** Every scorecard goes to
 `clients/<client-slug>/YYYY-MM-DD-scorecard.html`, under whichever `clients/` location
 the install check above settled on, and the criteria
-you worked from go beside it as `criteria.md`. The date in the filename means a second
-tour with the same buyer never overwrites the first, and a year later the agent can see
-how that buyer's list moved. Create the client folder if it is not there.
+you worked from go beside it as `criteria.md`. The date in the filename is a version stamp rather than a separate scorecard: the
+newest file is the live one and the earlier ones are history worth keeping. Create the client folder if it is not there.
 
 When the buyer sends their results back, save those too, as
 `YYYY-MM-DD-results.md` in the same folder.
@@ -481,8 +514,9 @@ takes `{id:"slug", n:"123 Example St", facts:"Area · 3 bd 2 ba · listed $X", a
 type:"house"|"tower"},`. **Always fill `area`**, because the route and the per-stop
 navigation links are built from the address plus the area, and an address alone sends
 the buyer to the wrong city.
-**The storage key must be unique per buyer per tour**, or two tours share one set of
-checkmarks.
+**The storage key is one per client and never changes.** Not per tour. It is what makes
+their shortlist accumulate across weeks, and changing it erases everything they have
+scored.
 
 Mobile first. It is used standing up, one-handed, in somebody else's house. Check it at
 phone width before handing it over, and open the finished link yourself once before
