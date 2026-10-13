@@ -418,3 +418,52 @@ translation of a 65KB file with no checks. Unverified and undesigned.
 
 **Status: DONE** for the two bugs. The divergence and the translation question are open.
 
+---
+
+## Slice: language skeleton, v1.7 (walking skeleton only, NOT shippable Spanish)
+
+**Working means:** the buyer taps a toggle in the header, every word on the page changes
+language, and nothing they have already scored is lost.
+
+**Ran the real thing:** the example built and served over HTTP, driven in a real browser.
+Scored a home, switched to Spanish, compared the stored state byte for byte, switched
+back, reloaded.
+
+**Design:** every string lives in one `STRINGS` table keyed by name, with a block per
+language. `data-t` and `data-th` mark the static text; `repaintAll()` redraws everything
+the script generated. Scores are stored against stop ids and criterion indexes, never
+against labels, which is why a language switch cannot disturb them. Adding a third
+language is adding a third block.
+
+Spanish is this market's Spanish, which is Mexican usage: cochera rather than garaje.
+
+**Verified:** start English, toggle to Spanish, tab reads "Las casas de hoy", compare
+heading reads "Cómo van las cosas", the `html lang` attribute follows, the button flips to
+EN, all four stops still render. Stored state identical before and after. Toggle back,
+English returns. Preference persists.
+
+### Break attempts
+
+1. **A half-filled table**, which is the real risk of shipping this in stages. A buyer
+   cannot tell which half of the page they are missing. Two guards now: a key check that
+   refuses any English key without a twin, and an explicit `ES_COMPLETE` flag that a
+   person flips only after reading both languages end to end on a phone. The key check
+   cannot catch a string that was never lifted into the table, which is why the flag is
+   human and not computed.
+2. **A stored Spanish preference with the flag off.** Resets to English on load and clears
+   the stale preference, so there is no route to a half-translated page.
+3. **A Spanish phone.** `navigator.language` is read on first open, so a Spanish-speaking
+   buyer would land in Spanish without touching anything. Currently inert behind the flag.
+
+**Tripwire:** `ES_COMPLETE` plus the key check. Both live in the template, so they travel
+with every scorecard built from it.
+
+**Status: NOT DONE.** The mechanism is proven and the table holds 11 of roughly 140
+strings. The toggle does not render and English is byte-identical to before, so this is
+safe to sit in the repo, but there is no usable Spanish yet. Remaining: lift the other
+~130 strings, translate, read both languages end to end at phone width, flip the flag.
+
+**Open question for Sarah:** whether she reads Spanish well enough for "show me both to
+check" to be a real review. If not, the client becomes the reviewer and the Spanish view
+carries a line inviting correction.
+

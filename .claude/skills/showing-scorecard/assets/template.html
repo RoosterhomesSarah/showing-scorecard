@@ -152,6 +152,9 @@ p{margin:0}
 .mark img{height:44px;width:auto;display:block;flex:0 0 auto}
 .mark .wm{font-family:var(--sans);font-size:12px;font-weight:900;letter-spacing:.3em;text-transform:uppercase;color:var(--ink);line-height:1.1;white-space:nowrap}
 .mast .who{margin-left:auto;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dk);font-weight:700}
+.langbtn{flex:none;min-width:42px;min-height:30px;padding:6px 11px;font-family:var(--sans);font-size:10.5px;font-weight:900;letter-spacing:.14em;border:1px solid var(--rule2);border-radius:2px;background:var(--surface);color:var(--body);cursor:pointer}
+.langbtn:hover{color:var(--ink);border-color:var(--gold)}
+.langbtn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
 /* hero, echoes the dark photo band on the site */
 .hero{background:var(--deep);color:#fff;padding-block:46px 40px}
@@ -549,6 +552,7 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
 <div class="mast"><div class="in">
   <span class="mark">{{LOGO_IMG}}<span class="wm">{{BUSINESS_NAME}}</span></span>
   <span class="who">{{BUYER_NAMES}} &middot; {{TOUR_DATE}}</span>
+  <button type="button" id="langtoggle" class="langbtn">ES</button>
 </div></div>
 
 <div class="hero"><div class="in">
@@ -563,13 +567,13 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
 <div class="wrap">
 
 <div class="bar" role="tablist">
-  <button class="tab" role="tab" aria-selected="true" id="tab-stops">Today&rsquo;s stops</button>
-  <button class="tab" role="tab" aria-selected="false" id="tab-compare">Compare</button>
+  <button class="tab" role="tab" aria-selected="true" id="tab-stops" data-t="tabStops">Today&rsquo;s stops</button>
+  <button class="tab" role="tab" aria-selected="false" id="tab-compare" data-t="tabCompare">Compare</button>
 </div>
 
 <main>
   <section id="view-stops">
-    <p class="onephone" id="onephone" hidden><b>Use one phone between you.</b> You each have your own column, so pass it back and forth and tap your own initial. Everything saves to the phone you tap it into, so two phones would leave you each with half the picture.</p>
+    <p class="onephone" id="onephone" data-th="onePhone" hidden><b>Use one phone between you.</b> You each have your own column, so pass it back and forth and tap your own initial. Everything saves to the phone you tap it into, so two phones would leave you each with half the picture.</p>
     <h2 class="sechead">{{STOPS_HEADING}}</h2>
     <div class="routebar">
       <a class="btn primary routebtn" id="routeall" role="button">
@@ -607,7 +611,7 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
   </section>
 
   <section id="view-compare" hidden>
-    <h2 class="sechead">Where Things Stand</h2>
+    <h2 class="sechead" data-t="compareHeading">Where Things Stand</h2>
     <div id="cmp"></div>
     <div id="splitbox" hidden></div>
     <div id="gridbox" hidden></div>
@@ -623,7 +627,7 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
     <textarea id="sendbox" hidden readonly aria-label="Summary to send"></textarea>
 
     <section id="backupbox" class="backup">
-      <h2 class="sechead">If You Lose This Phone</h2>
+      <h2 class="sechead" data-t="backupHeading">If You Lose This Phone</h2>
       <p class="note"><b>Everything you tap is saved on this phone and nowhere else.</b> A new phone, a cleared browser or a private window wipes it, and there is no way to get it back on our own. So the summary you send {{AGENT_FIRST_NAME}} ends with a short backup code. {{AGENT_FIRST_NAME}} keeps it. If anything happens to this phone, ask for it back, paste it below, and every home you have scored returns.</p>
       <div class="btnrow">
         <button class="btn" id="copycode">Copy my backup code</button>
@@ -737,7 +741,98 @@ var TOUR=[
 {{TOUR}}
 ];
 
+// Flip to true only when every word a buyer can see is in the table below and both
+// languages have been read end to end on a phone. The key check underneath catches a
+// missing twin; it cannot catch a string that was never lifted out of the page in the
+// first place, which is why this is a human switch and not a computed one.
+var ES_COMPLETE = false;
+
+var STRINGS = {
+  en: {
+    langName:        "ES",
+    langLabel:       "Ver en español",
+    tabStops:        "Today’s stops",
+    tabCompare:      "Compare",
+    onePhone:        "<b>Use one phone between you.</b> You each have your own column, so pass it back and forth and tap your own initial. Everything saves to the phone you tap it into, so two phones would leave you each with half the picture.",
+    compareHeading:  "Where Things Stand",
+    groupLive:       "Still in the running",
+    groupShort:      "Short on something you needed",
+    groupOut:        "Out",
+    groupCold:       "Not scored yet",
+    backupHeading:   "If You Lose This Phone"
+  },
+  es: {
+    langName:        "EN",
+    langLabel:       "View in English",
+    tabStops:        "Las casas de hoy",
+    tabCompare:      "Comparar",
+    onePhone:        "<b>Usen un solo teléfono entre los dos.</b> Cada uno tiene su propia columna, así que pásenselo y toquen su propia inicial. Todo se guarda en el teléfono donde lo tocaron, así que con dos teléfonos cada uno se quedaría con la mitad.",
+    compareHeading:  "Cómo van las cosas",
+    groupLive:       "Siguen en la carrera",
+    groupShort:      "Les falta algo que ustedes pidieron",
+    groupOut:        "Descartada",
+    groupCold:       "Sin calificar todavía",
+    backupHeading:   "Si pierden este teléfono"
+  }
+};
+
 var KEY="{{STORAGE_KEY}}", state=load(), current=null;
+
+/* ------------------------------------------------------------------
+   Language. Every word the buyer reads lives in STRINGS, keyed, with one entry per
+   language. The page ships English and Spanish and the buyer switches with the toggle in
+   the header, because a couple where one partner reads English and the other prefers
+   Spanish is normal here, and they are sharing one phone.
+
+   Spanish is the Spanish of this market, which is Mexican usage: cochera rather than
+   garaje, recámara rather than dormitorio.
+
+   Adding a third language is adding a third block to STRINGS. Nothing else changes.
+   ------------------------------------------------------------------ */
+var LANGS = ["en","es"];
+var LANG = (function(){
+  try{ var v=localStorage.getItem(KEY+"-lang"); if(LANGS.indexOf(v)>-1) return v; }catch(e){}
+  // An unset page follows the phone, so a Spanish-speaking buyer sees Spanish on open.
+  return (navigator.language||"").toLowerCase().indexOf("es")===0 ? "es" : "en";
+})();
+function setLang(v){
+  if(LANGS.indexOf(v)<0) return;
+  LANG=v;
+  try{ localStorage.setItem(KEY+"-lang", v); }catch(e){}
+  document.documentElement.setAttribute("lang", v);
+  paintText(); repaintAll();
+}
+// t("key") is the word. A key with no translation falls back to English rather than
+// showing a blank, so a half-filled table degrades instead of breaking.
+function t(k){
+  var L=STRINGS[LANG]||{};
+  return (L[k]!=null ? L[k] : (STRINGS.en[k]!=null ? STRINGS.en[k] : ""));
+}
+// Static text is marked in the HTML with data-t (plain words) or data-th (words with
+// tags inside), so one pass refills the whole page.
+function paintText(){
+  var i, els=document.querySelectorAll("[data-t]");
+  for(i=0;i<els.length;i++){ var v=t(els[i].getAttribute("data-t")); if(v) els[i].textContent=v; }
+  els=document.querySelectorAll("[data-th]");
+  for(i=0;i<els.length;i++){ var h=t(els[i].getAttribute("data-th")); if(h) els[i].innerHTML=h; }
+}
+// A criterion the agent supplied in both languages. Falls back to the English label.
+function cl(list, listEs, i){
+  if(LANG!=="en" && listEs && listEs[i] && listEs[i][0]) return listEs[i];
+  return list[i];
+}
+// Everything the script drew has to be drawn again in the new words. Scoring is untouched
+// because it lives in storage against ids, not against labels.
+function repaintAll(){
+  var b=document.getElementById("langtoggle");
+  if(b){ b.textContent=t("langName"); b.setAttribute("aria-label", t("langLabel")); b.title=t("langLabel"); }
+  if(typeof renderStops==="function") renderStops();
+  if(typeof wireRoute==="function") wireRoute();
+  if(typeof renderClosing==="function") renderClosing();
+  if(typeof renderCompare==="function") renderCompare();
+  if(typeof wireSendLinks==="function") wireSendLinks();
+  if(current && typeof renderDetail==="function") renderDetail();
+}
 
 function load(){
   try{
@@ -1693,6 +1788,27 @@ function legacyCopy(txt){
   try{ document.execCommand("copy"); }catch(e){}
   document.body.removeChild(t);
 }
+(function(){
+  var b=document.getElementById("langtoggle");
+  if(!b) return;
+  // A partly translated page is worse than an English one, because the buyer cannot tell
+  // which half they are missing. The toggle only exists once every English key has a
+  // twin, so an unfinished table hides itself instead of shipping.
+  var missing=[], k;
+  for(k in STRINGS.en){ if(STRINGS.en.hasOwnProperty(k) && !STRINGS.es[k]) missing.push(k); }
+  if(!ES_COMPLETE || missing.length){
+    b.remove();
+    if(LANG!=="en"){ LANG="en"; try{ localStorage.removeItem(KEY+"-lang"); }catch(e){} }
+    return;
+  }
+  b.addEventListener("click",function(){ setLang(LANG==="en" ? "es" : "en"); });
+  document.documentElement.setAttribute("lang", LANG);
+  b.textContent=t("langName");
+  b.setAttribute("aria-label", t("langLabel"));
+  b.title=t("langLabel");
+  paintText();
+})();
+
 document.getElementById("copycode").addEventListener("click",function(){
   var c=backupCode();
   if(!c){ this.textContent="Nothing scored yet"; var b=this;
