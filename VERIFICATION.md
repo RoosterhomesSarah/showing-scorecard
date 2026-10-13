@@ -467,3 +467,56 @@ safe to sit in the repo, but there is no usable Spanish yet. Remaining: lift the
 check" to be a real review. If not, the client becomes the reviewer and the Spanish view
 carries a line inviting correction.
 
+---
+
+## Slice: the script-tag break, v1.8 — PARTIAL, one bug open
+
+Vanessa, the first agent to install it, reported that a must-have containing the
+characters that close a script tag breaks the page. Reproduced, and worse than reported:
+the script dies entirely, no stops render, the hidden blocks spill into view, stylesheet
+text appears on screen, and the top of the page still looks finished.
+
+**Cause.** Yesterday I moved the names out of the script element for exactly this reason,
+called it "one escaping rule", and left all seven lists behind. Criteria, hints, addresses
+and facts were still being written into JavaScript arrays inside the script element, where
+termination happens at HTML parse time before any code runs. Nothing inside the page could
+defend against it.
+
+**Fixed.** All seven lists now live in a hidden HTML block and the script reads them back
+out. Verified with her exact case: a must-have reading `A garage </script> and a yard`.
+Page alive, four stops, seven must-haves, one script element, console clean, the hostile
+text intact as a label.
+
+### The hostile grid, run for the first time — and it found the next one
+
+Built two scorecards with one payload in every field a person can type into: buyer name,
+partner name, agent name, business name, subhead, date, lede, footer, every list's label
+and hint, and the first stop's address, facts and area. Payload:
+`A" \ </script> <b>x</b> & café 🏠 'q'`, built once correctly HTML-escaped and once raw.
+
+**Both fail the same way: the page survives, every list comes back empty, and the error
+banner shows.** Strictly better than a dead page, and still a broken scorecard.
+
+**Cause, and it is the same mistake again in a new place.** The lists are read as JSON.
+HTML escaping and JSON escaping are not the same rule: `&quot;` decodes to a bare `"`,
+which is exactly what JSON cannot have inside a string, and a backslash is the same story.
+I said "one rule" and then built a second one an hour later.
+
+**The real fix, not yet made.** Stop using JSON for the lists. One item per element, label
+as text and hint as an attribute, and for the tour one element per stop with a data
+attribute per field. HTML escaping then governs everything with nothing layered on top,
+and a quote or a backslash is just a character. That is a token-format change across
+SKILL.md and the rebuild tooling, so it is the first job of the next session rather than a
+rushed one at the end of this.
+
+**Open risk, stated plainly:** today a buyer criterion containing a double quote or a
+backslash empties the lists and shows the error. An apostrophe, an ampersand, an accent,
+an emoji and a script tag are all safe.
+
+**Fresh-eyes review:** none. The grid above is the builder's own, which `app-blueprint`
+now says in writing is the weaker option. The two findings that mattered most in this
+whole build both came from Vanessa, who did not build it.
+
+**Status: NOT DONE.** The reported bug is closed and verified. The grid found a second one
+in the same class and it is open.
+
