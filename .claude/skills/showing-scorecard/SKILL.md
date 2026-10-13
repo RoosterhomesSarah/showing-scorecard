@@ -485,9 +485,22 @@ double-clicked and never viewed in a pane.
 >   the same address forever.
 > - Go to **netlify.com/drop** and drag the whole folder onto the page.
 > - It hands you back a link. That is the client's scorecard.
-> - **Check it says the site is public.** A site dropped while signed in starts out
->   visible to your team only, and a buyer who opens it gets a login screen with none of
->   their scorecard behind it. If the panel offers a **Make public** button, press it.
+> - **Press Make public.** A site dropped while signed in starts out visible to your team
+>   only, and a buyer who opens it gets a login screen with none of their scorecard behind
+>   it. The dropdown saying "Public" is a choice, not a state; the button is what applies
+>   it. If you cannot find it, it is at
+>   `app.netlify.com/projects/<site-name>/agent-runs/new`.
+
+**If the agent asks why it has to be public, and they should:** because the buyer has no
+account and never will, so the host has to serve the page to whoever holds the link.
+Public here means openable, not listed. Nobody can browse to it or search it up: the page
+carries noindex, nofollow, noarchive and nosnippet, and a no-referrer rule so the link
+does not leak into the logs of anything the buyer taps through to. The word for it is
+unlisted.
+
+**Netlify's "keep it private and invite people" is not an option for a client.** That
+invites them to the agent's Netlify team and makes them create an account to log in. No
+buyer is doing that in somebody's kitchen.
 
 Then ask them to paste that link back to you.
 
@@ -516,9 +529,28 @@ work out on their own:
 
 Say plainly that the agent sends it, not you.
 
-**4. Say what happens next tour.** One line: *"When you book another day with them, say
-add the new addresses to the Hendersons' scorecard. I rebuild it, you drag the folder onto
-the same Netlify site, and their link never changes."*
+**4. Say what happens next tour, and give them the rule.** This is the first thing they
+will ask once they have a second buyer, so answer it before they ask:
+
+> **One site per client.** A new buyer gets a new site; the same buyer keeps theirs
+> forever.
+>
+> - **New client:** netlify.com/drop, and name the site after them.
+> - **Same client, next week:** open *their* site, go to the **Deploys** tab, and drag the
+>   updated folder onto the drop area at the bottom of that list. Same link, new contents,
+>   and the bookmark they saved still works.
+>
+> Do not drop an update at netlify.com/drop. That makes a second site with a second random
+> address, and the client is still looking at the old one.
+
+One site per client rather than one site with a folder per client, because dragging the
+wrong thing then costs you one buyer instead of all of them. Three or four live sites is
+normal; delete one when that client closes.
+
+**Name it before sending it, never after.** The random name Netlify gives out looks like
+junk in a text message, and the name is part of the link, so changing it later breaks a
+bookmark the buyer already saved. The name has to be unique across all of Netlify, so
+plain `janedoe` will be taken: use the business too, like `janedoe-roosterhomes`.
 
 **If they will not set up hosting at all,** email or text the file as an attachment
 instead. It works, the buyer opens it from their mail app, and the cost is a new
