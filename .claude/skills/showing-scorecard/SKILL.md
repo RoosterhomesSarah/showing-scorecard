@@ -485,12 +485,17 @@ double-clicked and never viewed in a pane.
 >   the same address forever.
 > - Go to **netlify.com/drop** and drag the whole folder onto the page.
 > - It hands you back a link. That is the client's scorecard.
+> - **Check it says the site is public.** A site dropped while signed in starts out
+>   visible to your team only, and a buyer who opens it gets a login screen with none of
+>   their scorecard behind it. If the panel offers a **Make public** button, press it.
 
 Then ask them to paste that link back to you.
 
-**Then open that live link yourself, on a phone-width screen, before anybody sends it.**
-A file that worked on their laptop is not a link that works on a phone until you have
-looked.
+**Then open that live link yourself, in a private or incognito window, before anybody
+sends it.** Signed in, a team-only site looks perfectly fine to the person who made it;
+the login wall appears only for everyone else. A private window is the only way the agent
+sees what their buyer sees. Check it at phone width while you are there, because a file
+that worked on a laptop is not a link that works on a phone until somebody has looked.
 
 **If the agent already has a website or a page builder**, it goes there instead, under
 their own domain, and that is better still.
