@@ -66,6 +66,26 @@ scorecard. Nothing collides.
 
 ---
 
+## Getting it to your client
+
+You will not be left holding a file. At the end of every build it walks you through
+turning the scorecard into a link, which takes about two minutes the first time:
+
+1. It opens the finished scorecard so you can see your own colors and your own name.
+2. It tells you to make a free account at **netlify.com**, then drag the client's folder
+   onto **netlify.com/drop**. That hands you back a link.
+3. You paste the link back, and it writes the text message to your buyer for you, ready
+   to send.
+
+**That link is what your client gets.** Not the GitHub address, which is for other agents
+only. One link per client, and if you keep dropping updates onto the same site, it is the
+same link for their whole search. They bookmark it once.
+
+If you would rather not set up hosting at all, it will tell you how to email the file
+instead. That works too, it is just a new attachment every tour.
+
+---
+
 ## A thing worth knowing before your first one
 
 The whole method is to take what your buyer said and score houses against it. A scorecard

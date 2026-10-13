@@ -217,33 +217,6 @@ the section below.
 
 ---
 
-## Getting the finished page onto the buyer's phone
-
-The skill produces one HTML file, and nothing about it is finished until the buyer can
-open it. Pick one of these and tell the agent which you used.
-
-**A permanent link. Do this one.** Netlify Drop, Cloudflare Pages or GitHub Pages all
-take a single HTML file and hand back a URL, free, no card, no account hoops. Walk the
-agent through it once and every tour after that is a drag and a drop onto the same site,
-so **the buyer keeps one link that never changes and never needs re-sending.** That
-matters more than it sounds: a buyer who has bookmarked one address will still have their
-whole search in week six, and the agent has one less thing to remember on a Friday night.
-
-**The file itself, if the agent will not set anything up.** Email or text it as an
-attachment. Works everywhere, needs nothing, and the buyer opens it from their mail app
-and it behaves like a page. The cost is a new attachment every tour, and a buyer who has
-to find the newest one.
-
-**Wherever they already publish.** If the agent has a website or a page builder, it goes
-there, under their own domain. Same benefit as the permanent link, with their name on it.
-
-**Then make it a QR code**, because half of this is handing a phone to somebody standing
-next to you. Any free QR generator takes the URL.
-
-Open the finished link yourself, on a phone, before the agent sends it to anybody.
-
----
-
 ## One phone between two buyers
 
 **The page saves to whichever phone the tap happened on, and nothing syncs.** With two
@@ -473,6 +446,63 @@ said. If a bucket is thin, say it is thin.
 **Never say it is sent when it is copied.** The page cannot send anything. The button
 copies and the page tells the buyer to paste it. Any wording that implies otherwise will
 have a client believing their agent has the results while the agent has nothing.
+
+---
+
+## Finish the handoff. Never stop at a file.
+
+**A built file is not a delivered scorecard, and this is where a new agent gives up.** Do
+not end a build by naming a path. Walk them all the way to a link their buyer can open,
+and then hand them the words to send. Every build, including the first one.
+
+**1. Show them it works.** Open the finished file in their browser yourself, so they see
+their own colors and their own name before anyone else does. Then tell them where it is,
+and offer to reveal it in Finder or Explorer so they can find it to drag.
+
+**2. Turn it into a link.** Say these steps in this order:
+
+> - Make a new folder and name it after the client, like `hendersons`.
+> - Put the scorecard inside it and rename the file `index.html`. That one rename is what
+>   gives you a clean link instead of a long one.
+> - Go to **netlify.com** and make a free account. It takes a minute and no card. Do this
+>   first, because a site made while signed in stays yours and you can drop updates onto
+>   the same address forever.
+> - Go to **netlify.com/drop** and drag the whole folder onto the page.
+> - It hands you back a link. That is the client's scorecard.
+
+Then ask them to paste that link back to you.
+
+**Then open that live link yourself, on a phone-width screen, before anybody sends it.**
+A file that worked on their laptop is not a link that works on a phone until you have
+looked.
+
+**If the agent already has a website or a page builder**, it goes there instead, under
+their own domain, and that is better still.
+
+**Make it a QR code too.** Half of this is handing a phone to somebody standing next to
+you. Any free QR generator takes the link.
+
+**3. Write the message.** With the link in hand, draft the text to the buyer, in the
+agent's own voice, ready to send. It has to carry the three things the buyer will not
+work out on their own:
+
+> Hi Jo and Pat, here's your scorecard for Saturday. Open it on one phone between the
+> two of you and keep that phone handy as we walk through each house. You'll each have
+> your own column, so tap your own initial. At the end there's a button to send me the
+> results, and please send the whole thing including the code at the bottom. That code is
+> your backup if anything ever happens to your phone. Bookmark the link, it's the same
+> one all the way through your search.
+
+Say plainly that the agent sends it, not you.
+
+**4. Say what happens next tour.** One line: *"When you book another day with them, say
+add the new addresses to the Hendersons' scorecard. I rebuild it, you drag the folder onto
+the same Netlify site, and their link never changes."*
+
+**If they will not set up hosting at all,** email or text the file as an attachment
+instead. It works, the buyer opens it from their mail app, and the cost is a new
+attachment every tour and a buyer hunting for the newest one. Offer it as the fallback,
+not the first answer.
 
 ---
 
