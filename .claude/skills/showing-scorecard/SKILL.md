@@ -577,14 +577,22 @@ not the first answer.
 
 `.claude/skills/showing-scorecard/assets/template.html` carries the whole page: scoring, two-person columns, deal-breaker
 logic, the disagreement panel, the condition section, and the copy handoff. Replace every
-`{{TOKEN}}`. **Every token lands in HTML, so there is one escaping rule and not two:
+`{{TOKEN}}`. **Every token lands in HTML, including all seven lists, so there is one
+escaping rule and not two:
 write `&amp;` for an ampersand, `&middot;` for a separator dot, `&rsquo;` for a curly
 apostrophe, exactly as you would anywhere else on the page.** Names, the agent's first
 name, the tour date and the summary subhead sit in a hidden block at the top of the body
 and the script reads them back out of the page, decoded, so `Sam &amp; Riley` reaches the
 buyer's text message as `Sam & Riley` rather than as the raw code.
 
-Two things this replaced, both of which shipped. A quote inside a name used to end the
+The lists are the reason this matters most. A criterion, a hint or an address containing
+the characters that close a script tag used to end the page's script where it sat: no
+stops, the hidden blocks spilling into view, stylesheet text on screen, and the top of the
+page still looking finished so nobody noticed. Written as HTML they are just characters.
+A list that will not parse says so on the page rather than scoring the buyer against
+nothing.
+
+Three things this replaced, all of which shipped. A quote inside a name used to end the
 JavaScript string it sat in and kill the entire page. And the subhead, which goes into the
 plain-text summary the buyer sends their agent, arrived carrying literal `&middot;`
 because it had been written for HTML and then used as text.

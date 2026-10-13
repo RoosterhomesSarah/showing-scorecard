@@ -82,6 +82,50 @@
   <span data-k="subhead">Example Heights · up to $1.3M · 3 bed 2 bath</span>
   <span data-k="agent">Alex</span><span data-k="date">18 Oct</span>
 </div>
+<div id="lists" hidden>
+  <b data-k="musts">["Price at or under $1.2 million",""],
+["3 bedrooms",""],
+["2 bathrooms",""],
+["Single family home",""],
+["Plenty of natural light","Check the rooms you will use most"],
+["A garage",""],
+["In Los Feliz",""]</b>
+  <b data-k="kills">["Flat roof",""],
+["Shared driveway",""],
+["No sidewalk on the street",""],</b>
+  <b data-k="nices">["Walkable from the front door","Something you would actually walk to"],
+["A kitchen you would enjoy cooking in",""],
+["A spot for the TV that works",""],
+["A room that works as a home office","Door, light, quiet"]</b>
+  <b data-k="consider">["Which way it faces and the light at 6pm",""],
+["Street parking after 6pm",""],
+["Where a garden would go and its sun hours",""],
+["Whether outdoor space is private or overlooked",""],
+["Noise from the nearest main street",""],
+["Whether any addition or conversion was permitted",""],
+["Roof age and visible patching",""],
+["Whether the electrical panel can carry central air",""],
+["Water pressure",""],
+["Foundation, and where water goes in a storm",""],
+["Shared driveway or lot, and who controls what",""],
+["Cell signal in the back room",""],
+["How close the neighbors' windows are",""],
+["The commute at 8am",""]</b>
+  <b data-k="cond_sys">["Foundation","Any cracks, and is it bolted?"],
+["Roof","How old, and any patching?"],
+["Sewer line","Has it been scoped?"],
+["Plumbing","What are the pipes made of?"],
+["Electrical","What size is the panel?"],
+["Heating and cooling","What is there, and how old?"],
+["Termite and pest","Is there a report?"]</b>
+  <b data-k="cond_work">["Pre-inspections already done",""],
+["Kitchen remodeled",""],
+["Bathrooms remodeled",""]</b>
+  <b data-k="tour">{id:"e1", n:"1923 Mayview Dr", facts:"Example Heights &middot; 3 bd 2 ba &middot; listed $1.25M", area:"Example City, ST", type:"house", date:"Sat 18 Oct"},
+{id:"e2", n:"1325 Talmadge St", facts:"Example Heights &middot; 3 bd 2 ba &middot; listed $1.149M", area:"Example City, ST", type:"house", date:"Sat 18 Oct"},
+{id:"e3", n:"4100 Sunset Blvd #512", facts:"Example Heights &middot; 2 bd 2 ba &middot; listed $949K", area:"Example City, ST", type:"condo", date:"Sat 18 Oct"},
+{id:"e4", n:"3911 De Longpre Ave", facts:"Example Heights &middot; 4 bd 3 ba &middot; listed $1.299M", area:"Example City, ST", type:"house", date:"Sat 18 Oct"},</b>
+</div>
 <style>
 :root{
   --page:#FFFFFF; --alt:#F6F7FB; --sunk:#ECEEF4; --surface:#FFFFFF;
@@ -557,7 +601,7 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
 
 <div class="hero"><div class="in">
   <p class="kicker">Showing day scorecard</p>
-  <h1>Sam &amp; Riley     <em>Home Search</em></h1>
+  <h1>Sam &amp; Riley      <em>Home Search</em></h1>
   <p class="lede">Four homes today. Tap a house when you walk in, tick what is actually true, and Compare ranks everything you have seen against your own list.</p>
   <div class="brief">
 <div class="bi"><b>Up to $1.3M</b><span>Range</span></div>
@@ -668,7 +712,7 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
   </div>
 </div>
 
-<p class="foot"><span><span><span><span><span>Your Business &middot; example.com</span><span>Built from your buyer consultation</span></span><span>Built from your buyer consultation</span></span><span>Built from your buyer consultation</span></span><span>Built from your buyer consultation</span></span><span>Built from your buyer consultation</span></p>
+<p class="foot"><span><span><span><span><span><span>Your Business &middot; example.com</span><span>Built from your buyer consultation</span></span><span>Built from your buyer consultation</span></span><span>Built from your buyer consultation</span></span><span>Built from your buyer consultation</span></span><span>Built from your buyer consultation</span></span><span>Built from your buyer consultation</span></p>
 </div>
 
 <div class="dock" id="dock" hidden><div class="inner">
@@ -691,66 +735,22 @@ var SOLO = !P.l.name;
 if(SOLO) document.documentElement.setAttribute("data-solo","1");
 else { var op=document.getElementById("onephone"); if(op) op.hidden=false; }
 
-var MUSTS=[
-["Price at or under $1.2 million",""],
-["3 bedrooms",""],
-["2 bathrooms",""],
-["Single family home",""],
-["Plenty of natural light","Check the rooms you will use most"],
-["A garage",""],
-["In Los Feliz",""]
-];
+var MUSTS=readList("musts");
 
-var KILLS=[
-["Flat roof",""],
-["Shared driveway",""],
-["No sidewalk on the street",""],
-];
+var KILLS=readList("kills");
 
-var NICES=[
-["Walkable from the front door","Something you would actually walk to"],
-["A kitchen you would enjoy cooking in",""],
-["A spot for the TV that works",""],
-["A room that works as a home office","Door, light, quiet"]
-];
+var NICES=readList("nices");
 
-var CONSIDER=[
-["Which way it faces and the light at 6pm",""],
-["Street parking after 6pm",""],
-["Where a garden would go and its sun hours",""],
-["Whether outdoor space is private or overlooked",""],
-["Noise from the nearest main street",""],
-["Whether any addition or conversion was permitted",""],
-["Roof age and visible patching",""],
-["Whether the electrical panel can carry central air",""],
-["Water pressure",""],
-["Foundation, and where water goes in a storm",""],
-["Shared driveway or lot, and who controls what",""],
-["Cell signal in the back room",""],
-["How close the neighbors' windows are",""],
-["The commute at 8am",""]
-];
+var CONSIDER=readList("consider");
 
 
 var SYS_STATES=[["up","Updated","g"],["orig","Original","m"],["issue","Issue","l"],["ask","Ask","n"]];
 var WORK_STATES=[["yes","Yes","g"],["part","Partly","m"],["no","No","l"],["ask","Ask","n"]];
 
-var COND_SYS=[
-["Foundation","Any cracks, and is it bolted?"],
-["Roof","How old, and any patching?"],
-["Sewer line","Has it been scoped?"],
-["Plumbing","What are the pipes made of?"],
-["Electrical","What size is the panel?"],
-["Heating and cooling","What is there, and how old?"],
-["Termite and pest","Is there a report?"]
-];
+var COND_SYS=readList("cond_sys");
 var COND_DISCLAIMER = "These are your own impressions on the day, not an inspection, and not anything your agent is telling you about the property. Only a licensed inspector can tell you the condition of a home.";
 
-var COND_WORK=[
-["Pre-inspections already done",""],
-["Kitchen remodeled",""],
-["Bathrooms remodeled",""]
-];
+var COND_WORK=readList("cond_work");
 
 function condCount(p){
   var s=st(p.id), c={up:0,orig:0,issue:0,ask:0,yes:0,part:0,no:0,unset:0,total:COND_SYS.length+COND_WORK.length};
@@ -772,12 +772,7 @@ function condLine(p){
   return bits.join('<span class="dot">&middot;</span>');
 }
 
-var TOUR=[
-{id:"e1", n:"1923 Mayview Dr", facts:"Example Heights &middot; 3 bd 2 ba &middot; listed $1.25M", area:"Example City, ST", type:"house", date:"Sat 18 Oct"},
-{id:"e2", n:"1325 Talmadge St", facts:"Example Heights &middot; 3 bd 2 ba &middot; listed $1.149M", area:"Example City, ST", type:"house", date:"Sat 18 Oct"},
-{id:"e3", n:"4100 Sunset Blvd #512", facts:"Example Heights &middot; 2 bd 2 ba &middot; listed $949K", area:"Example City, ST", type:"condo", date:"Sat 18 Oct"},
-{id:"e4", n:"3911 De Longpre Ave", facts:"Example Heights &middot; 4 bd 3 ba &middot; listed $1.299M", area:"Example City, ST", type:"house", date:"Sat 18 Oct"},
-];
+var TOUR=readList("tour");
 
 // Flip to true only when every word a buyer can see is in the table below and both
 // languages have been read end to end on a phone. The key check underneath catches a
@@ -814,6 +809,42 @@ var STRINGS = {
   }
 };
 
+/* ------------------------------------------------------------------
+   Every list a buyer or an agent wrote lives in HTML, not in this script.
+
+   A criterion containing the characters that close a script tag used to end this element
+   where it sat, killing the whole page: no stops, the hidden blocks spilling into view,
+   stylesheet text on screen. It failed quietly, because the top of the page still looked
+   finished. In HTML those characters are just characters.
+
+   The text is read back decoded and parsed, so the token format did not change: the same
+   comma-separated rows, trailing comma or not.
+   ------------------------------------------------------------------ */
+function readList(k){
+  var el=document.querySelector('#lists [data-k="'+k+'"]');
+  if(!el) return [];
+  var raw=(el.textContent||"").trim().replace(/,\s*$/,"");
+  if(!raw) return [];
+  // The tour rows are written the way a person writes them, with bare keys. Quote the
+  // known key names, and only where a key can actually sit, so a comma inside a sentence
+  // is left alone.
+  raw = raw.replace(/([{,][ \t\n]*)(id|n|facts|area|type|date|photo)[ \t]*:/g, '$1"$2":');
+  try{ return JSON.parse("["+raw+"]"); }
+  catch(e){ listBroken(k); return []; }
+}
+// A list that will not parse is said out loud. Silently scoring against an empty list
+// would look like a working page and give the buyer a meaningless result.
+function listBroken(k){
+  if(document.getElementById("listerr")) return;
+  var p=document.createElement("p");
+  p.id="listerr"; p.className="note"; p.style.borderLeftColor="var(--red)";
+  p.innerHTML="<b>One of your lists did not load.</b> Tell "+
+    (typeof AGENT!=="undefined"&&AGENT?esc(AGENT):"your agent")+
+    " that the <b>"+esc(k)+"</b> list needs rebuilding. Everything else on this page still works.";
+  var host=document.getElementById("view-stops")||document.body;
+  host.insertBefore(p, host.firstChild);
+}
+
 var KEY="example-sam-riley", state=load(), current=null;
 
 /* ------------------------------------------------------------------
@@ -822,8 +853,11 @@ var KEY="example-sam-riley", state=load(), current=null;
    the header, because a couple where one partner reads English and the other prefers
    Spanish is normal here, and they are sharing one phone.
 
-   Spanish is the Spanish of this market, which is Mexican usage: cochera rather than
-   garaje, recámara rather than dormitorio.
+   Spanish is Latin American and conversational, not Castilian and not formal-stiff:
+   ustedes rather than vosotros, and the widely understood word rather than the regional
+   one, so garaje rather than cochera. It addresses a couple as ustedes throughout. A
+   single buyer is addressed as usted, which in Latin American business is respectful
+   without being cold; the phrasing around it stays plain and spoken.
 
    Adding a third language is adding a third block to STRINGS. Nothing else changes.
    ------------------------------------------------------------------ */
