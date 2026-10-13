@@ -2,12 +2,46 @@
 
 **Built by Sarah Arlington, Rooster Homes.**
 
-Your buyer walks four houses on a Saturday. By Tuesday they remember the kitchen from the
-second one and the yard from the fourth, and then they decide.
+A page for your buyer's phone that they open standing inside a house, and score that
+house against what *they* told you they wanted. Not a generic checklist. Their list, in
+their words.
 
-This is a skill for Claude Code that builds that buyer a page for their phone, scored
-against what *they* told you they wanted. Not a generic checklist. Their list, in their
-words.
+---
+
+## Get it
+
+**Paste this one line into the Claude Code chat you already have open.** The whole line,
+link included.
+
+```
+Install the Showing Scorecard for me from https://github.com/RoosterhomesSarah/showing-scorecard
+```
+
+Then say:
+
+```
+set up my showing scorecard
+```
+
+Seven questions, about three minutes, and it builds your first scorecard with you in your
+own colors and your own name. You never touch GitHub again and you never leave your chat.
+
+After that, for any buyer:
+
+```
+build a tour scorecard for the Hendersons
+```
+
+**Forgot the words?** You do not need them exactly. Once it is installed, say what you are
+actually doing, like *"I'm showing houses to the Hendersons on Saturday, make them a
+scorecard"*, and it will know. If you are stuck, ask *"how do I use my showing
+scorecard?"* and it will tell you.
+
+**Already installed and want the newest version?** Say **update my showing scorecard**.
+Your settings and your clients are left alone. Nothing updates on its own.
+
+**Prefer it as its own folder?** Clone this repo, open that folder in Claude Code, and say
+**set up my showing scorecard**. Both doors are in [INSTALL.md](INSTALL.md).
 
 ---
 
@@ -39,23 +73,6 @@ listing agent, and every **disagreement**, which is a conversation that otherwis
 six weeks later during inspection, badly.
 
 ---
-
-## Get it
-
-**Most people:** paste this into the Claude chat you already have open.
-
-> Install the Showing Scorecard for me from
-> https://github.com/RoosterhomesSarah/showing-scorecard
-
-Then say **set up my showing scorecard**. Seven questions, three minutes, and it builds
-your first one with you. You never touch GitHub and you never leave your chat.
-
-After that, for every buyer:
-
-> build a tour scorecard for the Hendersons
-
-**Prefer it as its own folder?** `git clone` it and open it, and say **set me up**.
-Both doors and the update steps are in [INSTALL.md](INSTALL.md).
 
 ## You do not need to run buyer consultations to use this
 

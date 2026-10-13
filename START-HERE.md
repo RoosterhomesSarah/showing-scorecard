@@ -4,7 +4,7 @@ You have this folder open. That is the whole setup.
 
 Say this and it will take it from there:
 
-> set me up
+> set up my showing scorecard
 
 It asks seven questions about your business, takes about three minutes, and then builds
 your first scorecard with you. You will not need to open another file.
@@ -106,7 +106,7 @@ and neither is anything in it.
 
 ## When you are ready
 
-> set me up
+> set up my showing scorecard
 
 ---
 

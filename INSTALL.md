@@ -48,7 +48,7 @@ read it before trusting it.
 
 Clone the repository, open that folder in Claude Code, and say:
 
-> set me up
+> set up my showing scorecard
 
 Everything lives in the folder: the engine, your brand answers, and a folder per client.
 
