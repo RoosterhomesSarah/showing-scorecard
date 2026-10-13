@@ -56,7 +56,7 @@
 
   DOCUMENT SHELL: this file is a complete standalone HTML document, which is what you
   want when you save it, host it, or hand someone the file. If you publish it through
-  something that supplies its own <!doctype>, <head> and <body> (some hosted artifact
+  something that supplies its own doctype, head and body tags (some hosted artifact
   and preview tools do), delete the eight lines below this comment and the two at the
   very bottom, and paste the rest.
 -->
@@ -76,6 +76,12 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,700&family=Inter:wght@300;400;700;900&display=swap">
 </head>
 <body>
+<div id="people" hidden>
+  <span data-k="b-initial">S</span><span data-k="b-name">Sam</span>
+  <span data-k="l-initial">R</span><span data-k="l-name">Riley</span>
+  <span data-k="subhead">Example Heights · up to $1.3M · 3 bed 2 bath</span>
+  <span data-k="agent">Alex</span><span data-k="date">18 Oct</span>
+</div>
 <style>
 :root{
   --page:#FFFFFF; --alt:#F6F7FB; --sunk:#ECEEF4; --surface:#FFFFFF;
@@ -542,18 +548,18 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
 
 <div class="mast"><div class="in">
   <span class="mark"><span class="wm">Your Business</span></span>
-  <span class="who">Sam &amp; Riley &middot; 18 Oct</span>
+  <span class="who">Sam &amp; Riley · 18 Oct</span>
 </div></div>
 
 <div class="hero"><div class="in">
   <p class="kicker">Showing day scorecard</p>
-  <h1>Sam &amp; Riley <em>Home Search</em></h1>
+  <h1>Sam &amp; Riley  <em>Home Search</em></h1>
   <p class="lede">Four homes today. Tap a house when you walk in, tick what is actually true, and Compare ranks everything you have seen against your own list.</p>
   <div class="brief">
-    <div class="bi"><b>Up to $1.3M</b><span>Range</span></div>
+<div class="bi"><b>Up to $1.3M</b><span>Range</span></div>
     <div class="bi"><b>3 bed &middot; 2 bath</b><span>Size</span></div>
     <div class="bi"><b>Example Heights</b><span>Area</span></div>
-    <div class="bi"><b>4 today</b><span>Stops</span></div>
+    <div class="bi"><b>4 today</b><span>Stops</span>
   </div>
 </div></div>
 
@@ -594,8 +600,8 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
     <div id="groups"></div>
     <div class="gut">
       <p>Gut feel, each of you, before you talk each other into or out of it. Not scored, just written down.</p>
-      <div class="gutp"><span class="pinit b" data-solo-hide>S</span><div class="gutrow" id="gut-b"></div></div>
-      <div class="gutp" data-solo-hide><span class="pinit l">R</span><div class="gutrow" id="gut-l"></div></div>
+      <div class="gutp"><span class="pinit b" data-solo-hide></span><div class="gutrow" id="gut-b"></div></div>
+      <div class="gutp" data-solo-hide><span class="pinit l"></span><div class="gutrow" id="gut-l"></div></div>
     </div>
     <div class="notes">
       <label for="notes">What either of you would remember about this one</label>
@@ -648,17 +654,17 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
 <div class="agentcard">
   <div class="ac-mark"></div>
   <div class="ac-body">
-    <p class="ac-name">Alex Rivera</p>
+    <p class="ac-name"></p>
     <p class="ac-biz">Your Business</p>
     <p class="ac-lines">
       <a href="tel:+15550100100">(555) 010-0100</a>
       <a href="mailto:alex@example.com">alex@example.com</a>
     </p>
-    <p class="ac-lic">License #0000000</p>
+    <p class="ac-lic"></p>
   </div>
 </div>
 
-<p class="foot"><span>Your Business &middot; example.com</span><span>Built from your buyer consultation</span></p>
+<p class="foot"><span><span>Your Business &middot; example.com</span><span>Built from your buyer consultation</span></span><span>Built from your buyer consultation</span></p>
 </div>
 
 <div class="dock" id="dock" hidden><div class="inner">
@@ -668,7 +674,15 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
 </div></div>
 
 <script>
-var P={b:{key:"b",initial:"S",name:"Sam"}, l:{key:"l",initial:"R",name:"Riley"}};
+// Read from the DOM, which hands back the decoded text: "Sam & Riley", never "Sam &amp;
+// Riley", and a name holding a quote cannot end a string that no longer exists.
+function person(k){
+  var el=document.querySelector('#people [data-k="'+k+'"]');
+  return el ? el.textContent.trim() : "";
+}
+var P={b:{key:"b",initial:person("b-initial"),name:person("b-name")},
+       l:{key:"l",initial:person("l-initial"),name:person("l-name")}};
+var SUBHEAD=person("subhead"), AGENT=person("agent"), TDATE=person("date");
 var SOLO = !P.l.name;
 if(SOLO) document.documentElement.setAttribute("data-solo","1");
 else { var op=document.getElementById("onephone"); if(op) op.hidden=false; }
@@ -1113,7 +1127,7 @@ function tourDates(){
 function renderStops(){
   var el=document.getElementById("stoplist"); el.innerHTML="";
   if(!TOUR.length){
-    el.innerHTML='<p class="note">No stops on this tour yet. Ask '+esc(P.b.name?"Alex":"your agent")+' to add the addresses you are seeing today.</p>';
+    el.innerHTML='<p class="note">No stops on this tour yet. Ask '+esc(AGENT||"your agent")+' to add the addresses you are seeing today.</p>';
     return;
   }
   var dates=tourDates(), multi=dates.length>1, lastDate=null;
@@ -1504,7 +1518,7 @@ function renderGrid(){
 }
 
 function shortSummary(){
-  var out=["Showing scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:"")+" - 18 Oct",""];
+  var out=["Showing scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:"")+" - "+TDATE,""];
   ranked().forEach(function(r){
     if(!r.sc.hasData) return;
     out.push(r.p.n);
@@ -1596,7 +1610,7 @@ function renderClosing(){
 var DECISION=(function(){ try{ return localStorage.getItem(KEY+"-decision")||""; }catch(e){ return ""; } })();
 
 function summary(){
-  var out=["Showing day scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:""),"Example Heights &middot; up to $1.3M &middot; 3 bed 2 bath",""];
+  var out=["Showing day scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:""),SUBHEAD,""];
   ranked().forEach(function(r){
     if(!r.sc.hasData){ out.push(r.p.n+" - not scored"); out.push(""); return; }
     out.push(r.p.n);
@@ -1668,18 +1682,18 @@ function wireSendLinks(){
 document.getElementById("send").addEventListener("click",function(){
   var btn=this, body=shortSummary();
   var box=document.getElementById("sendbox"), hint=document.getElementById("sendhint");
-  if(!body){ btn.textContent="Score a home first"; setTimeout(function(){ btn.textContent="Copy for Alex"; },2200); return; }
+  if(!body){ btn.textContent="Score a home first"; setTimeout(function(){ btn.textContent="Copy for "+AGENT; },2200); return; }
   if(box){ box.hidden=false; box.value=body; }
   copyText(body,function(copied){
     if(hint){
       hint.hidden=false;
       hint.innerHTML = copied
-        ? "Copied. Now paste it into a text to Alex at <a href=\"tel:+15550100100\">(555) 010-0100</a> or an email to <a href=\"mailto:alex@example.com\">alex@example.com</a>. Nothing leaves this phone until you do."
+        ? "Copied. Now paste it into a text to "+AGENT+" at <a href=\"tel:+15550100100\">(555) 010-0100</a> or an email to <a href=\"mailto:alex@example.com\">alex@example.com</a>. Nothing leaves this phone until you do."
         : "Copy did not work on this phone. Select the text below, copy it, and send it to Alex at (555) 010-0100.";
     }
     wireSendLinks();
     btn.textContent = copied ? "Copied, now paste it" : "Use the box below";
-    setTimeout(function(){ btn.textContent="Copy for Alex"; },5000);
+    setTimeout(function(){ btn.textContent="Copy for "+AGENT; },5000);
   });
 });
 

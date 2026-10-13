@@ -577,7 +577,19 @@ not the first answer.
 
 `.claude/skills/showing-scorecard/assets/template.html` carries the whole page: scoring, two-person columns, deal-breaker
 logic, the disagreement panel, the condition section, and the copy handoff. Replace every
-`{{TOKEN}}`. The list below is in the template's own header comment, where the names are
+`{{TOKEN}}`. **Every token lands in HTML, so there is one escaping rule and not two:
+write `&amp;` for an ampersand, `&middot;` for a separator dot, `&rsquo;` for a curly
+apostrophe, exactly as you would anywhere else on the page.** Names, the agent's first
+name, the tour date and the summary subhead sit in a hidden block at the top of the body
+and the script reads them back out of the page, decoded, so `Sam &amp; Riley` reaches the
+buyer's text message as `Sam & Riley` rather than as the raw code.
+
+Two things this replaced, both of which shipped. A quote inside a name used to end the
+JavaScript string it sat in and kill the entire page. And the subhead, which goes into the
+plain-text summary the buyer sends their agent, arrived carrying literal `&middot;`
+because it had been written for HTML and then used as text.
+
+The list below is in the template's own header comment, where the names are
 written WITHOUT braces on purpose. Leave them that way. A token inside its own
 documentation gets filled by the same replace that fills the real one, which quietly
 writes a second copy of every list, the whole tour and the logo into that comment, and

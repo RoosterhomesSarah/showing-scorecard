@@ -369,3 +369,52 @@ against the generated summary text.
 **Status: DONE** for these findings. The first real test found a shipped bug in forty
 minutes, which is the argument for the rest of the field test.
 
+---
+
+## Slice: what the friend test found, v1.6
+
+An agent installed it overnight and reported their AI had caught "a name-display issue"
+and "a symbol that could break the page" and fixed them locally. Those fixes exist only on
+that machine. Rather than wait to hear what they were, I went looking for the class and
+found two, both shipped, both reproducible on the live site.
+
+**Entities reaching plain text.** `SUMMARY_SUBHEAD` is written for HTML and was being used
+as text. The buyer's Copy full detail produced, verbatim from the live site:
+
+    Showing day scorecard - Jane
+    Los Feliz &middot; up to $1.3M &middot; 3 bed 2 bath
+
+The raw code went in the message to the agent.
+
+**A quote in a name killed the page.** Every name token sat inside a double-quoted
+JavaScript string: `name:"{{P1_NAME}}"`. A buyer called `Bob "Buzz" Smith` ended the
+string, broke the script and left a blank white page with no error anyone would see.
+
+Both were the same root cause, which is why fixing one at a time would have missed the
+other: the template had **two escaping rules**, HTML in most places and JavaScript in a
+few, and nothing said which was which. Now there is one. Every token lands in HTML, the
+names, agent, date and subhead sit in a hidden block at the top of the body, and the
+script reads them back out decoded. `Sam &amp; Riley` is written once and arrives as
+`Sam & Riley` everywhere, on screen and in the message.
+
+Verified with a deliberately hostile build: a buyer named `Bob "Buzz" O'Brien-Smith`, a
+partner `María José & Co`, a subhead of `O'Hara & Sons · 100% <best>`. Page alive, all
+four stops rendered, export correct, console clean. Before the change that was a dead
+page.
+
+**The same trap bit me while fixing it.** My first edit anchored on `<body>` and landed
+inside the header comment, which mentions the tag in prose, so the block was commented out
+and every name came back empty. Identical in shape to the token-inside-its-own-
+documentation bug from v1.1. The comment no longer spells the tag with angle brackets, and
+the anchor is now the tag at the start of a line.
+
+**Open, not fixed:** the friend's copy has diverged from the repo. Whatever their AI
+changed is local, and an `update my showing scorecard` would overwrite it. Sarah needs to
+ask what it found.
+
+**Also open:** they built a Spanish version for a Saturday tour. The template is English
+throughout and the skill says nothing about other languages, so an AI improvised a
+translation of a 65KB file with no checks. Unverified and undesigned.
+
+**Status: DONE** for the two bugs. The divergence and the translation question are open.
+

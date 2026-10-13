@@ -56,7 +56,7 @@
 
   DOCUMENT SHELL: this file is a complete standalone HTML document, which is what you
   want when you save it, host it, or hand someone the file. If you publish it through
-  something that supplies its own <!doctype>, <head> and <body> (some hosted artifact
+  something that supplies its own doctype, head and body tags (some hosted artifact
   and preview tools do), delete the eight lines below this comment and the two at the
   very bottom, and paste the rest.
 -->
@@ -76,6 +76,12 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?{{FONT_QUERY}}&display=swap">
 </head>
 <body>
+<div id="people" hidden>
+  <span data-k="b-initial">{{P1_INITIAL}}</span><span data-k="b-name">{{P1_NAME}}</span>
+  <span data-k="l-initial">{{P2_INITIAL}}</span><span data-k="l-name">{{P2_NAME}}</span>
+  <span data-k="subhead">{{SUMMARY_SUBHEAD}}</span>
+  <span data-k="agent">{{AGENT_FIRST_NAME}}</span><span data-k="date">{{TOUR_DATE}}</span>
+</div>
 <style>
 :root{
   --page:#FFFFFF; --alt:#F6F7FB; --sunk:#ECEEF4; --surface:#FFFFFF;
@@ -665,7 +671,15 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
 </div></div>
 
 <script>
-var P={b:{key:"b",initial:"{{P1_INITIAL}}",name:"{{P1_NAME}}"}, l:{key:"l",initial:"{{P2_INITIAL}}",name:"{{P2_NAME}}"}};
+// Read from the DOM, which hands back the decoded text: "Sam & Riley", never "Sam &amp;
+// Riley", and a name holding a quote cannot end a string that no longer exists.
+function person(k){
+  var el=document.querySelector('#people [data-k="'+k+'"]');
+  return el ? el.textContent.trim() : "";
+}
+var P={b:{key:"b",initial:person("b-initial"),name:person("b-name")},
+       l:{key:"l",initial:person("l-initial"),name:person("l-name")}};
+var SUBHEAD=person("subhead"), AGENT=person("agent"), TDATE=person("date");
 var SOLO = !P.l.name;
 if(SOLO) document.documentElement.setAttribute("data-solo","1");
 else { var op=document.getElementById("onephone"); if(op) op.hidden=false; }
@@ -1075,7 +1089,7 @@ function tourDates(){
 function renderStops(){
   var el=document.getElementById("stoplist"); el.innerHTML="";
   if(!TOUR.length){
-    el.innerHTML='<p class="note">No stops on this tour yet. Ask '+esc(P.b.name?"{{AGENT_FIRST_NAME}}":"your agent")+' to add the addresses you are seeing today.</p>';
+    el.innerHTML='<p class="note">No stops on this tour yet. Ask '+esc(AGENT||"your agent")+' to add the addresses you are seeing today.</p>';
     return;
   }
   var dates=tourDates(), multi=dates.length>1, lastDate=null;
@@ -1466,7 +1480,7 @@ function renderGrid(){
 }
 
 function shortSummary(){
-  var out=["Showing scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:"")+" - {{TOUR_DATE}}",""];
+  var out=["Showing scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:"")+" - "+TDATE,""];
   ranked().forEach(function(r){
     if(!r.sc.hasData) return;
     out.push(r.p.n);
@@ -1558,7 +1572,7 @@ function renderClosing(){
 var DECISION=(function(){ try{ return localStorage.getItem(KEY+"-decision")||""; }catch(e){ return ""; } })();
 
 function summary(){
-  var out=["Showing day scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:""),"{{SUMMARY_SUBHEAD}}",""];
+  var out=["Showing day scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:""),SUBHEAD,""];
   ranked().forEach(function(r){
     if(!r.sc.hasData){ out.push(r.p.n+" - not scored"); out.push(""); return; }
     out.push(r.p.n);
@@ -1630,18 +1644,18 @@ function wireSendLinks(){
 document.getElementById("send").addEventListener("click",function(){
   var btn=this, body=shortSummary();
   var box=document.getElementById("sendbox"), hint=document.getElementById("sendhint");
-  if(!body){ btn.textContent="Score a home first"; setTimeout(function(){ btn.textContent="Copy for {{AGENT_FIRST_NAME}}"; },2200); return; }
+  if(!body){ btn.textContent="Score a home first"; setTimeout(function(){ btn.textContent="Copy for "+AGENT; },2200); return; }
   if(box){ box.hidden=false; box.value=body; }
   copyText(body,function(copied){
     if(hint){
       hint.hidden=false;
       hint.innerHTML = copied
-        ? "Copied. Now paste it into a text to {{AGENT_FIRST_NAME}} at <a href=\"tel:{{AGENT_PHONE_RAW}}\">{{AGENT_PHONE}}</a> or an email to <a href=\"mailto:{{AGENT_SEND_EMAIL}}\">{{AGENT_SEND_EMAIL}}</a>. Nothing leaves this phone until you do."
+        ? "Copied. Now paste it into a text to "+AGENT+" at <a href=\"tel:{{AGENT_PHONE_RAW}}\">{{AGENT_PHONE}}</a> or an email to <a href=\"mailto:{{AGENT_SEND_EMAIL}}\">{{AGENT_SEND_EMAIL}}</a>. Nothing leaves this phone until you do."
         : "Copy did not work on this phone. Select the text below, copy it, and send it to {{AGENT_FIRST_NAME}} at {{AGENT_PHONE}}.";
     }
     wireSendLinks();
     btn.textContent = copied ? "Copied, now paste it" : "Use the box below";
-    setTimeout(function(){ btn.textContent="Copy for {{AGENT_FIRST_NAME}}"; },5000);
+    setTimeout(function(){ btn.textContent="Copy for "+AGENT; },5000);
   });
 });
 
