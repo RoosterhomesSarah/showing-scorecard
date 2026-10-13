@@ -1036,13 +1036,22 @@ function wireRoute(){
   var lbl=document.getElementById("routelabel");
   if(lbl) lbl.textContent = live.length===1 ? "Drive to this one" : "Drive today\u2019s route";
 
+  // Apple's multi-stop form, daddr=A+to:B+to:C, is honored only by the Maps app on an
+  // iPhone or iPad. Apple's web Maps rewrites the whole chain into one destination and
+  // sends you to a nonsense address, so the button is hidden anywhere it would lie.
+  // Google's route works on every platform and is the one that is always offered.
   var ap=document.getElementById("routeapple");
   if(ap){
-    ap.href="https://maps.apple.com/?daddr="+live.map(function(p){
-      return encodeURIComponent(p.n+", "+(p.area||""));
-    }).join("+to:")+"&dirflg=d";
-    ap.target="_blank"; ap.rel="noopener";
-    ap.style.display = live.length?"":"none";
+    var appleApp = /iPhone|iPad|iPod/.test(navigator.userAgent) ||
+                   (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+    if(!appleApp || !live.length){ ap.style.display="none"; }
+    else {
+      ap.style.display="";
+      ap.href="https://maps.apple.com/?daddr="+live.map(function(p){
+        return encodeURIComponent(p.n+", "+(p.area||""));
+      }).join("+to:")+"&dirflg=d";
+      ap.target="_blank"; ap.rel="noopener";
+    }
   }
   var note=document.getElementById("routenote");
   var earlier=TOUR.length-live.length;

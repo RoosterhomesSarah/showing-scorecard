@@ -455,9 +455,17 @@ have a client believing their agent has the results while the agent has nothing.
 not end a build by naming a path. Walk them all the way to a link their buyer can open,
 and then hand them the words to send. Every build, including the first one.
 
-**1. Show them it works.** Open the finished file in their browser yourself, so they see
-their own colors and their own name before anyone else does. Then tell them where it is,
-and offer to reveal it in Finder or Explorer so they can find it to drag.
+**1. Show them it works, in a real browser.** Open the finished file in their actual
+browser, so they see their own colors and their own name before anyone else does. Then
+tell them where it is, and offer to reveal it in Finder or Explorer so they can find it
+to drag.
+
+**Say this out loud, because it will otherwise cost them an hour:** a preview pane inside
+a chat app or an editor is not a browser. It cannot follow a maps link, a text link or an
+email link, and it will look like the scorecard is broken when the scorecard is fine. If
+they are testing, they open it in Chrome or Safari, or better, they finish step 2 first
+and test the real link on a real phone. Those buttons hand off to the phone's own maps,
+messages and mail apps, and only a real browser on a real device can do that.
 
 **2. Turn it into a link.** Say these steps in this order:
 

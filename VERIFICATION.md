@@ -330,3 +330,42 @@ divider is gone.
 
 **Status: DONE** for this slice. Still no buyer has used any of it.
 
+---
+
+## Slice: the first stranger test, v1.5
+
+Sarah ran the scorecard herself in a fresh chat and reported four things. Three had one
+cause and one was a real bug nobody had hit because nobody had clicked that button on a
+laptop before.
+
+**The preview pane is not a browser.** She opened the finished file in the Claude desktop
+app's file viewer, which says so itself: *"This tab shows a single file and can't follow
+links."* Every handoff failed there: the maps buttons opened an empty directions page, and
+the text and email buttons did nothing. The page was fine the whole time.
+
+Verified by serving her exact file over HTTP and reading the generated hrefs: all three
+addresses present, correctly encoded. Then loaded the Google URL itself, which resolved to
+*"Your location to 4100 W Sunset Blvd #512"* with both waypoints and the map centred on
+Los Feliz. The link was always right.
+
+Fixed by naming the trap in the handoff section, because an agent who hits it will think
+the product is broken and never say so.
+
+**Apple Maps multi-stop is a real bug, on every non-Apple device.** The form
+`daddr=A+to:B+to:C` is honored only by the Maps app on an iPhone or iPad. Apple's web Maps
+silently rewrote the whole chain into a single destination,
+`destination=2240 Ronda Vista Dr, Los Angeles, CA to:1842 N Edgemont St...`, and dropped
+her into Huntington Park, nowhere near any of it. It would have done that for every agent
+on a laptop since the button shipped.
+
+The button now renders only on a device whose Maps app honors it, and Google carries the
+route everywhere else. Verified both ways by swapping the user agent and re-wiring: hidden
+on desktop, shown with the full chain on iPhone, Google keeping all three stops throughout.
+
+**The decision block was not a bug.** Clicking one records it, shows the line underneath,
+and carries it into the summary as `WHERE WE LANDED: One of these is the one`. Confirmed
+against the generated summary text.
+
+**Status: DONE** for these findings. The first real test found a shipped bug in forty
+minutes, which is the argument for the rest of the field test.
+
