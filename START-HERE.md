@@ -68,33 +68,19 @@ scorecard. Nothing collides.
 
 ## A thing worth knowing before your first one
 
-The whole method is to take what your buyer said and score houses against it. That is
-also how a stray remark becomes a written, scored, branded document.
+The whole method is to take what your buyer said and score houses against it. A scorecard
+scores properties, so anything they said that describes the people in an area rather than
+the house itself gets converted before it lands on the page.
 
-"Good schools." "A safe neighborhood." "A family area." Buyers say these constantly and
-none of them know it is a problem. Under fair housing law it does not matter whether
-anyone meant anything by it, and it does not matter that the buyer said it first. Once it
-is on a page with your name on it and an email in your sent folder, you made the
-statement.
+"Good schools." "A safe neighborhood." "A family area." Buyers say these constantly.
+"Good schools" becomes the named attendance boundary. "Safe" becomes a link to the city's
+own crime map rather than a score. The tool tells you what it changed and why, each time,
+so after a few tours you catch them yourself.
 
-So the tool converts them. "Good schools" becomes the named attendance boundary. "Safe"
-becomes a link to the city's own crime map rather than a score. It tells you what it
-changed and why, each time, so after a few tours you catch them yourself.
-
-Done this way, your state's own Realtor advisory lists what you are doing as a **positive
-practice**: the same objective criteria, applied to every client, written down. You end
-up holding proof of it.
-
----
-
-## Read this one thing first
-
-The fair housing rules this tool follows are written out in full, in plain English, with
-the exact phrases buyers actually say and what to write instead. Ten minutes, before your
-first scorecard.
-
-It is in `.claude/skills/showing-scorecard/SKILL.md`, the section headed
-**Fair housing: what never becomes a scored criterion**, near the top.
+What you end up with is the same objective criteria, written down, applied to every
+client and every property. Run your criteria past your broker before your first one, and
+work from your own state association's current advisory. This tool is not legal advice
+and neither is anything in it.
 
 ---
 

@@ -38,94 +38,28 @@ It does four things a paper checklist cannot:
 
 ---
 
-## Fair housing: what never becomes a scored criterion
+## What never becomes a scored criterion
 
-**Read this before you take a single must-have from anybody.** This skill's method is to
-transcribe what a buyer said and score homes against it. That is also the mechanism that
-turns an offhand remark into a written, branded, scored record of homes rejected on an
-illegal basis.
+**Read this before you take a single must-have from anybody.**
 
-The exposure is not only that an agent might steer somebody. It is that **the document
-itself is a statement.** Under the Fair Housing Act, 42 U.S.C. section 3604(c), it is
-unlawful to make, print or publish any notice, statement or advertisement about the sale
-of a dwelling that indicates a preference, a limitation or discrimination on a protected
-basis. Two things about that provision decide how this skill has to behave:
+A scorecard scores properties. The moment a criterion describes the people in an area
+rather than the house itself, it stops being a property criterion, and it is now written
+down, scored and emailed on a page carrying the agent's name.
 
-**Intent does not matter.** The test is whether an ordinary reader would take the
-statement to prefer or disfavor a protected group. Not whether anyone meant it that way.
+So the transcription is filtered, every time, including a list the agent hands over
+already written. Buyers say these constantly and almost none of them hear a problem in
+it. Convert, never score.
 
-**"The buyer said it" is not a defense.** The agent made, printed and published it the
-moment it went on a page carrying their brand and got emailed back and forth. Spoken
-words and text messages have both been held to be statements under this provision.
-
-So the transcription is filtered, always, and the filter is not optional.
-
-### This tool, done right, is a recommended practice
-
-Worth knowing before the rules, because it changes what you are building.
-
-The California Association of Realtors fair housing advisory (Form FHDA, rev. 12/24)
-lists examples of **positive** practices. The first one reads:
-
-> "Real estate licensees working with buyers or tenants should apply the same objective
-> property selection criteria, such as location/neighborhood, property features, and
-> price range and other considerations, to all prospects."
-
-That is a description of this scorecard. Objective criteria, written down, applied the
-same way to every property and every client. The filter below is not a disclaimer bolted
-onto a risky tool. The filter is what makes the tool an instance of the practice the
-advisory recommends. An agent who uses it properly has a written record of exactly that.
-
-The same list warns against the opposite: making any statement or advertisement that
-directly or indirectly implies a preference, a limitation or discrimination regarding a
-protected characteristic. A scored criterion is a statement.
-
-And one more, which is why the buyer's free-text notes matter: the advisory flags that
-asking for or accepting personal information or letters from a buyer can inadvertently
-reveal protected status, raising the risk of unconscious bias and of claims by buyers
-whose offers were rejected. A notes field is that kind of document.
-
-### The protected classes
-
-**Federal floor, seven.** HUD names race, color, national origin, religion, sex,
-familial status and disability. HUD's enforcement position since 2021 is that sex
-includes sexual orientation and gender identity.
-
-**States add a great deal, and the agent's state is what they are actually held to.**
-California is the author's state and a useful illustration of the gap. Its Realtor
-advisory lists twenty, and ends with a catch-all:
-
-| | | | | |
-|---|---|---|---|---|
-| Race (and race traits) | Color | Ancestry | National Origin | Religion |
-| Age | Sex, Sexual Orientation | Gender, Gender Identity, Gender expression | Marital Status | Familial Status (a family with a child or children under 18) |
-| Citizenship | Immigration Status | Primary Language | Military/Veteran Status | Source of Income (e.g. a Section 8 voucher) |
-| Medical Condition | Disability (mental and physical) | Genetic Information | Criminal History (non-relevant convictions) | **Any Arbitrary Characteristic** or Intersectionality |
-
-The advisory adds that other classes, categories or restrictions may also apply.
-
-Read that last cell before you decide a criterion is fine because it is not on a list.
-In California the list is open-ended by design.
-
-**If the agent is not in California, get their state's own list** and work from that, not
-from this table and not from the federal seven. Their state association publishes it and
-their broker has it.
-
-### Never score these, however the buyer phrases it
-
-Anything about **who lives there** rather than **what the property is**. The phrases
-buyers actually use, which almost never sound illegal to the buyer saying them:
-
-| What they say | Why it cannot be scored | What to write instead |
+| What they say | Why we convert it | What to write instead |
 |---|---|---|
-| "a safe neighborhood", "low crime" | long-established race proxy | nothing. Point them at the local police department's or city's own public crime map and let them read it themselves |
-| "good schools", "a good school district" | the most common race proxy in the industry | the named attendance boundary as a boundary: "inside the Lincoln Elementary attendance area". Never a rating, never "good" |
-| "a family neighborhood", "family friendly" | familial status | the property facts they actually want: a fenced yard, a second bedroom, a park within a ten minute walk |
-| "near our church" / "near our temple" / "near our mosque" | religion, national origin | a drive time to one specific address they give you: "under 15 minutes to 412 Oak Street" |
-| "not a lot of renters", "mostly owners" | source of income and familial status proxy | nothing. Owner-occupancy rate is not a property feature |
-| "people like us", "somewhere we'd fit in", "our kind of area" | several at once | ask what the home needs to have, and write that |
-| "up and coming", "an established area", "the right side of town" | race proxy | the specific thing underneath it: new construction nearby, a commute time, a price trend they can look up |
-| "quiet, no kids around" | familial status | the property fact: not backing a playground, a corner lot, double glazing |
+| "a safe neighborhood", "low crime" | describes people, not the property | nothing. Point them at the city's or police department's own public crime map and let them read it themselves |
+| "good schools", "a good school district" | a reputation, not a property fact | the named attendance boundary as a boundary: "inside the Lincoln Elementary attendance area". Never a rating, never "good" |
+| "a family neighborhood", "family friendly" | describes who lives there | the property facts they actually want: a fenced yard, a second bedroom, a park within a ten minute walk |
+| "near our church" / "temple" / "mosque" | describes the household, not the home | a drive time to one specific address they give you: "under 15 minutes to 412 Oak Street" |
+| "not a lot of renters", "mostly owners" | describes the neighbors | nothing. Who owns the homes nearby is not a feature of this one |
+| "people like us", "somewhere we'd fit in" | describes residents | ask what the home needs to have, and write that |
+| "up and coming", "the right side of town" | describes an area's people | the specific thing underneath it: new construction nearby, a commute time, a price trend they can look up |
+| "quiet, no kids around" | describes the neighbors | the property fact: not backing a playground, a corner lot, double glazing |
 | "a walkable, diverse area" | sounds positive, still describes residents | walk score, a named amenity, a drive time |
 
 ### How to handle it in the moment
@@ -134,31 +68,26 @@ Do not lecture the agent and do not refuse to build. Convert, then say one line 
 learn it too:
 
 > "I left 'good schools' off the scored list and put 'inside the Lincoln Elementary
-> attendance boundary' instead. A school's reputation is a fair housing problem on a
-> written record; a boundary is a fact. If they meant something else by it, tell me."
+> attendance boundary' instead. A reputation is not a property fact; a boundary is. If
+> they meant something else by it, tell me."
 
-If a stated criterion has no lawful property-fact equivalent, say so plainly and leave it
-off. A short list that can be defended beats a long one that cannot.
+If a stated criterion has no property-fact equivalent, say so plainly and leave it off. A
+short list that can be defended beats a long one that cannot.
 
-### The same filter applies to
+### The same filter runs on
 
 The eight-question interview, especially question six. The starter sets. The hint text
 under any item. The brief line at the top of the page. And the buyer's own free-text
-notes, which arrive in the summary: if that language comes back, tell the agent before
-it goes into a file or a CRM.
+notes, which arrive in the summary: if that language comes back, tell the agent before it
+goes into a file or a CRM.
 
-### This is a floor, not advice
+### Your broker is the authority
 
-These are common cases, not the whole of the law, and state and local rules add to them.
-Nothing here is legal advice. The agent is responsible for everything that goes out under
-their license, and their broker and state association are the authority on what that
-requires.
-
-Sources: HUD, Fair Housing Act overview, hud.gov/helping-americans/fair-housing-act-overview.
-Statutory text at 42 U.S.C. section 3604. Steering at 24 C.F.R. section 100.70.
-California Association of Realtors Form FHDA, Fair Housing and Discrimination Advisory,
-revised 12/24, for the state list, the positive practices and the buyer-letter warning.
-Every agent should be working from their own state's current advisory, not this summary.
+This is how the tool behaves. It is not advice about the law, and nothing here is legal
+advice. Fair housing rules differ by state and most brokerages have their own on top of
+them, so run your criteria past your broker and work from your own state association's
+current advisory. The agent is responsible for everything that goes out under their
+license.
 
 ## First run only: seven questions
 
@@ -230,6 +159,12 @@ optional and the page handles their absence.
 A logo is embedded directly into the page as a data URI, resized to roughly 200px on its
 long edge first. A published page can only display an image that ships inside it, so a
 linked logo will not render.
+
+**Say this once, at the end of setup, and never again.** An installed copy is a copy on
+their computer; it does not change when the original does. So in one line: *"This is
+yours now and it stays as it is. When you hear there is a new version, say **update my
+showing scorecard** and I will pull it. Your answers here and your client folders are
+never touched."* Then stop and build their first scorecard.
 
 ---
 
@@ -510,7 +445,7 @@ generic answer.
 
 Four things stop a build. Each one has cost somebody something.
 
-**Never score who lives somewhere.** The fair housing filter above runs on every list,
+**Never score who lives somewhere.** The criterion filter above runs on every list,
 every time, including lists that arrive already written. An intake sheet handed to you is
 not pre-cleared.
 
@@ -629,10 +564,18 @@ build your first one.
 
 ## Updating an installed copy
 
+**Nothing updates on its own.** An installed copy is a copy on that agent's computer. The
+original moving does not move it, and there is no phoning home, on purpose: this skill
+makes no network request of its own and never reports that it is being used.
+
 On **update my showing scorecard**: clone the repo fresh to a temporary folder, copy
 `SKILL.md` and `assets/` over the installed ones, and delete the temporary folder. Never
 touch `your-brand.json` or `clients/`. Say in one line what changed, reading the repo's
 own recent history rather than guessing.
+
+Scorecards already built and already sent are finished files and do not change either. An
+update reaches a client only the next time their scorecard is rebuilt, which is what a new
+showing day does anyway.
 
 ## Credit
 

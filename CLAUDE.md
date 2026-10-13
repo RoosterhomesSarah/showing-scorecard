@@ -24,12 +24,12 @@ re-ask anything that file already answers.
 
 `.claude/skills/showing-scorecard/SKILL.md` is the engine. It loads automatically because
 it sits in this project. Read it before building anything. It carries the method, the
-fair housing filter, the scoring model and the template tokens.
+criterion filter, the scoring model and the template tokens.
 
-**Read the fair housing section every time, not once.** It is not boilerplate. It is the
-part that decides what is allowed on the page, and the whole method of this tool is to
-transcribe what a buyer said, which is exactly how a protected-class proxy ends up on a
-branded document.
+**Read "What never becomes a scored criterion" every time, not once.** It is not
+boilerplate. It is the part that decides what is allowed on the page, and the whole method
+of this tool is to transcribe what a buyer said, which is exactly how a line about the
+people in an area ends up on a branded document.
 
 ## Where things go
 
