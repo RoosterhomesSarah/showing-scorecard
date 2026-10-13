@@ -460,12 +460,20 @@ browser, so they see their own colors and their own name before anyone else does
 tell them where it is, and offer to reveal it in Finder or Explorer so they can find it
 to drag.
 
-**Say this out loud, because it will otherwise cost them an hour:** a preview pane inside
-a chat app or an editor is not a browser. It cannot follow a maps link, a text link or an
-email link, and it will look like the scorecard is broken when the scorecard is fine. If
-they are testing, they open it in Chrome or Safari, or better, they finish step 2 first
-and test the real link on a real phone. Those buttons hand off to the phone's own maps,
-messages and mail apps, and only a real browser on a real device can do that.
+**Say this out loud, because it will otherwise cost them an hour.** The maps, text and
+email buttons hand off to the device's own apps, and a handoff only works from a real page
+in a real browser.
+
+A preview pane inside a chat app or an editor is not a browser. Several of them render a
+local file as a `data:` snapshot, which has no real origin, so the browser strips the link
+on its way out: the maps app opens with nothing in it and the text button does nothing.
+The scorecard is fine and it looks broken.
+
+**So do not test these buttons from a local file at all.** Finish step 2, put it on a real
+link, and open that link on a real phone. That is also the only configuration a buyer will
+ever be in, so it is the only one worth testing. If they insist on checking the file first,
+it has to be opened in Chrome or Safari directly, through Finder's **Open With**, never
+double-clicked and never viewed in a pane.
 
 **2. Turn it into a link.** Say these steps in this order:
 
