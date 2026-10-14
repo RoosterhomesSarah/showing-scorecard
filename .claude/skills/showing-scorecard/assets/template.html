@@ -10,7 +10,7 @@
   Google Fonts stylesheet below, which the page discloses to the buyer.
 
   BRAND, from your-brand.json
-    BUSINESS_NAME   LOGO_IMG         an <img src="data:..."> tag, or empty
+    BUSINESS_NAME   LOGO_SRC         the logo as a data:image/... address (text, not a tag), or empty
     COLOR_ACCENT    headings, rules, the gold-role accent
     COLOR_ACTION    the one primary button, and deal-breakers
     FONT_QUERY      Google Fonts query string. Neutral default:
@@ -27,7 +27,9 @@
 
   THIS BUYER, THIS TOUR
     TITLE BUYER_NAMES TOUR_DATE HERO_LINE_1 HERO_LINE_2 LEDE
-    BRIEF_CELLS  two to four <div class="bi"><b>value</b><span>label</span></div>
+    BRIEF_CELLS  two to four <li data-label="Range">Up to $1.3M</li> (the label is the small
+               caption, the text is the big number or phrase). Text, not finished markup:
+               a missing closing tag here cannot break the page.
     STOPS_HEADING
     P1_NAME P1_INITIAL P2_NAME P2_INITIAL   P2 empty = solo mode
     MUSTS KILLS NICES CONSIDER COND_SYS COND_WORK
@@ -85,7 +87,7 @@
   <span data-k="l-initial">{{P2_INITIAL}}</span><span data-k="l-name">{{P2_NAME}}</span>
   <span data-k="subhead">{{SUMMARY_SUBHEAD}}</span>
   <span data-k="agent">{{AGENT_FIRST_NAME}}</span><span data-k="date">{{TOUR_DATE}}</span>
-  <span data-k="phone-raw">{{AGENT_PHONE_RAW}}</span><span data-k="phone">{{AGENT_PHONE}}</span><span data-k="email">{{AGENT_SEND_EMAIL}}</span><span data-k="key">{{STORAGE_KEY}}</span><span data-k="lang">{{DEFAULT_LANG}}</span>
+  <span data-k="phone-raw">{{AGENT_PHONE_RAW}}</span><span data-k="phone">{{AGENT_PHONE}}</span><span data-k="email">{{AGENT_SEND_EMAIL}}</span><span data-k="key">{{STORAGE_KEY}}</span><span data-k="logo">{{LOGO_SRC}}</span><span data-k="lang">{{DEFAULT_LANG}}</span>
 </div>
 <div id="lists" hidden>
   <ol data-k="musts">{{MUSTS}}</ol>
@@ -95,6 +97,7 @@
   <ol data-k="cond_sys">{{COND_SYS}}</ol>
   <ol data-k="cond_work">{{COND_WORK}}</ol>
   <ol data-k="tour">{{TOUR}}</ol>
+  <ol data-k="brief">{{BRIEF_CELLS}}</ol>
 </div>
 <style>
 :root{
@@ -564,7 +567,7 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
 </div></div>
 
 <div class="mast"><div class="in">
-  <span class="mark">{{LOGO_IMG}}<span class="wm">{{BUSINESS_NAME}}</span></span>
+  <span class="mark"><span class="logoslot"></span><span class="wm">{{BUSINESS_NAME}}</span></span>
   <span class="who">{{BUYER_NAMES}} &middot; {{TOUR_DATE}}</span>
   <button type="button" id="langtoggle" class="langbtn">ES</button>
 </div></div>
@@ -573,9 +576,7 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
   <p class="kicker" data-t="kicker">Showing day scorecard</p>
   <h1>{{HERO_LINE_1}} <em>{{HERO_LINE_2}}</em></h1>
   <p class="lede">{{LEDE}}</p>
-  <div class="brief">
-{{BRIEF_CELLS}}
-  </div>
+  <div class="brief" id="brief"></div>
 </div></div>
 
 <div class="wrap">
@@ -631,6 +632,12 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
     <div id="cmp"></div>
     <div id="splitbox" hidden></div>
     <div id="gridbox" hidden></div>
+    <section class="closing" id="closing">
+  <h2 class="sechead" style="margin-top:0" data-t="closingHead">What happens next</h2>
+  <p class="closenote" data-t="closeNote">You will never be clearer about today than you are right now, standing outside the last house, before the details start running together. Take a minute with it. Then tell {{AGENT_FIRST_NAME}} where you have landed and you can both take it from there.</p>
+  <div class="closerow" id="closerow"></div>
+  <p class="closehint" id="closehint" hidden></p>
+</section>
     <div class="btnrow">
       <a class="btn primary" id="sendsms" data-t="btnSms" role="button" href="sms:{{AGENT_PHONE_RAW}}">Text it to {{AGENT_FIRST_NAME}}</a>
       <a class="btn" id="sendmail" data-t="btnMail" role="button" href="mailto:{{AGENT_SEND_EMAIL}}">Email it to {{AGENT_FIRST_NAME}}</a>
@@ -661,15 +668,9 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
   </section>
 </main>
 
-<section class="closing" id="closing">
-  <h2 class="sechead" style="margin-top:0" data-t="closingHead">What happens next</h2>
-  <p class="closenote" data-t="closeNote">You will never be clearer about today than you are right now, standing outside the last house, before the details start running together. Take a minute with it. Then tell {{AGENT_FIRST_NAME}} where you have landed and you can both take it from there.</p>
-  <div class="closerow" id="closerow"></div>
-  <p class="closehint" id="closehint" hidden></p>
-</section>
 
 <div class="agentcard">
-  <div class="ac-mark">{{LOGO_IMG}}</div>
+  <div class="ac-mark"><span class="logoslot"></span></div>
   <div class="ac-body">
     <p class="ac-name">{{AGENT_FULL_NAME}}</p>
     <p class="ac-biz">{{BUSINESS_NAME}}</p>
@@ -707,6 +708,29 @@ var SOLO = !P.l.name;
 ["b","l"].forEach(function(k){ PE[k].name=esc(P[k].name); PE[k].initial=esc(P[k].initial); });
 if(SOLO) document.documentElement.setAttribute("data-solo","1");
 else { var op=document.getElementById("onephone"); if(op) op.hidden=false; }
+
+// The header brief and the logo are built here from text, never taken as finished markup.
+// They used to be raw HTML the agent wrote by hand, and one missing closing tag left the
+// header open so the whole page rendered inside it, on a dark background in light mode.
+(function(){
+  var host=document.getElementById("brief"), src=document.querySelector('#lists [data-k="brief"]');
+  if(host && src){
+    for(var i=0;i<src.children.length;i++){
+      var li=src.children[i], v=(li.textContent||"").trim(), l=li.getAttribute("data-label")||"";
+      if(!v && !l) continue;
+      var d=document.createElement("div"); d.className="bi";
+      var b=document.createElement("b"); b.textContent=v; d.appendChild(b);
+      var sp=document.createElement("span"); sp.textContent=l; d.appendChild(sp);
+      host.appendChild(d);
+    }
+    if(!host.children.length) host.style.display="none";
+  }
+  var logo=person("logo").replace(/\s+/g,"");
+  if(/^data:image\/(png|jpe?g|gif|webp);base64,[A-Za-z0-9+\/=]+$/i.test(logo)){
+    var slots=document.querySelectorAll(".logoslot");
+    for(var j=0;j<slots.length;j++){ var im=document.createElement("img"); im.src=logo; im.alt=""; slots[j].appendChild(im); }
+  }
+})();
 
 var MUSTS=readList("musts");
 
@@ -2064,7 +2088,7 @@ var CLOSERS=[
 function renderClosing(){
   var row=document.getElementById("closerow"); if(!row) return;
   row.innerHTML="";
-  var any=TOUR.some(function(p){ return score(p).touched; });
+  var any=TOUR.some(function(p){ return !st(p.id).skipped && score(p).touched; });
   document.getElementById("closing").hidden=!any;
   CLOSERS.forEach(function(c){
     var b=document.createElement("button");
@@ -2108,6 +2132,8 @@ function summary(){
     var nt=st(r.p.id).notes; if(nt&&nt.trim()) out.push("  Notes: "+nt.trim());
     out.push("");
   });
+  var dec=CLOSERS.filter(function(c){ return c[0]===DECISION; })[0];
+  if(dec) out.push("WHERE WE LANDED: "+dec[1]);
   return out.join("\n");
 }
 

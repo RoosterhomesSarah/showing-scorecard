@@ -37,7 +37,7 @@ def build(solo):
       COND_WORK=li(2,"ww"),TOUR=stops,P1_NAME="Alfa",P1_INITIAL="A",P2_NAME="" if solo else "Beta",P2_INITIAL="" if solo else "B",
       COLOR_ACCENT="#B8860B",COLOR_ACTION="#B22222",ON_ACCENT="#fff",ON_ACTION="#fff",FONT_QUERY="family=Inter",
       FONT_DISPLAY="Inter",FONT_BODY="Inter",AGENT_FIRST_NAME="Zorro",AGENT_PHONE_RAW="5551234567",AGENT_PHONE="555",
-      AGENT_SEND_EMAIL="z@z.zz",DEFAULT_LANG=("" if solo else "es"),BRIEF_CELLS="",LOGO_IMG="",STORAGE_KEY="spanish-test-"+("s" if solo else "c")))
+      AGENT_SEND_EMAIL="z@z.zz",DEFAULT_LANG=("" if solo else "es"),BRIEF_CELLS='<li data-label="Zxq">Zxq\n<li data-label="Zxq">Zxq',LOGO_SRC="",STORAGE_KEY="spanish-test-"+("s" if solo else "c")))
     for k,v in vals.items(): s=s.replace("{{%s}}"%k,v)
     return s
 
@@ -91,6 +91,9 @@ try{
   R.pending=true;
   restoreScored(); R.summaryText=summary();
   DECISION="offer"; try{ localStorage.setItem(KEY+"-decision","offer"); }catch(e){}
+  R.sumHasDec=summary().indexOf("WHERE WE LANDED")>-1; R.shortHasDec=shortSummary().indexOf("WHERE WE LANDED")>-1;
+  (function(){ var c=document.getElementById("closing"), g=document.getElementById("gridbox"), b=document.getElementById("sendsms");
+    R.order=[!!(g.compareDocumentPosition(c)&4), !!(c.compareDocumentPosition(b)&4)]; })();
 
   document.getElementById("send").click();
   document.getElementById("showrestore").click(); if(document.getElementById("restorewrap").hidden) document.getElementById("showrestore").click();
@@ -158,6 +161,8 @@ for solo in (False,True):
     if r.get("initialLang")!=want: problems.append("opened in %r, expected %r (DEFAULT_LANG %s)"%(r.get("initialLang"),want,"es" if not solo else "empty, phone is en"))
     if r.get("decisionAfterClear")!="|": problems.append("Clear this tour left the decision behind: %r"%r.get("decisionAfterClear"))
     if "Agreed on everything" in r.get("summaryText","") and (solo or "Nobody scored" in r.get("summaryText","")): problems.append("summary claims agreement with no basis")
+    if not (r.get("sumHasDec") and r.get("shortHasDec")): problems.append("the decision is missing from a report to the agent")
+    if r.get("order")!=[True,True]: problems.append("'What happens next' is not between the grid and the send buttons: %s"%r.get("order"))
     if "traducida" not in r["views"]["es"]["stops"]: problems.append("the correction line is missing from the Spanish view")
     if "traducida" in r["views"]["en1"]["stops"] or "translated into Spanish" in r["views"]["en1"]["stops"]: problems.append("the correction line shows in English")
     if r["views"]["es"]["stops"]==r["views"]["en1"]["stops"]: problems.append("Spanish identical to English (toggle did nothing)")

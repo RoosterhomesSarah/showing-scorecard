@@ -731,3 +731,51 @@ pushed, and the first update on any existing install runs on the old text). Whet
 permission settings allow `curl` and `tar`. The refusal path is documented, not exercised.
 
 **Status: DONE for the commands; the AI-led run of the new text is UNTESTED.**
+
+---
+
+## Slice: "What happens next" above the send buttons, and the open-header bug it exposed
+
+**Asked for by Sarah** after she scored a whole scorecard herself and sent the report without
+noticing the section, which sat below Text, Email, Copy and Clear.
+
+**Changed.** The section now sits in Compare, after "Every Home, Every Line" and before the
+send buttons. The decision is in the text, email and copy report (it already was) and now also
+in "Copy full detail". Spanish unchanged.
+
+**Found while looking at it.** In light mode the section was unreadable: dark gray on a navy
+page. Cause, present before this change: the last header cell in the example and in the 10-12
+Jane scorecard was missing its closing `</div>`, so the header stayed open and the entire page
+rendered inside it. In dark mode nobody notices. The header cells and the logo were raw HTML the
+AI writes by hand, the same class as the lists. Both are now text (`BRIEF_CELLS` as list items,
+`LOGO_SRC` as a data address) that the page turns into elements itself, so a mistake can only
+produce a wrong word. The earlier reviewer's note that BRIEF_CELLS and LOGO_IMG were never
+filled in the tests was right and was not acted on; they are filled now, with malformed values.
+
+**Tripwires.** `hostile.py` fills the brief (deliberately unclosed) and the logo and fails if
+the header swallows the page or the brief or logos do not build. `spanish.py` fails if the
+section is not between the grid and the send buttons, or if the decision is missing from either
+report. All watched failing on the previous template.
+
+**Verified.** Light-mode screenshot at 390 px: readable, in the right order. Rebuild test on
+the four real Jane scorecards still passes.
+
+**Not covered.** No separate reviewer has looked at this change; only the builder has. The real
+Jane 10-12 scorecard still has the open header (it is a finished client file and was not edited).
+
+**Status: BUILT, tested by the builder, NOT independently reviewed.**
+
+**Fresh-eyes review of this slice** (a separate reviewer; no page-breaking bug found, but
+real gaps). Fixed: SKILL.md said a header mistake "can only produce a wrong word", false for a
+raw `<script>`/`<img>` (now says to escape like every list); rebuilding an old scorecard lost
+its header strip silently and `rebuild_old.py` could not notice (SKILL.md now says to carry the
+cells forward; the test now compares them and was watched failing); the decision section stayed
+visible when the only scored home was skipped (now hidden); a logo with line breaks in its
+base64 was rejected silently (whitespace is stripped; SKILL.md says one line); the example's
+header comment still documented the old tokens.
+Left, by choice: the section is now on the Compare tab only, so a buyer who taps "Done here"
+reaches it only through Compare; a solo buyer's report line uses the couple wording ("We
+want"); the "Copy full detail" box does not refresh if the decision changes after copying.
+Not edited: the real Jane 10-12 scorecard still has its open header.
+
+**Status: DONE, independently reviewed.**

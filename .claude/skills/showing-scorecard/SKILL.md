@@ -182,7 +182,7 @@ per tour.
 
 When the agent books another showing day with a client who already has one:
 
-1. Open their existing scorecard and read its tour list (the `<ol data-k="tour">` block) and its storage key (the `<span data-k="key">` value). A scorecard built before the list format changed holds them either as comma-separated rows inside `<b data-k=...>` elements, or as `var TOUR=[ ... ];` and `var KEY="..."` inside the script. Read the ids and the key from whichever it is, keep them exactly, and write the stops out in the `<li>` form below. Write `&middot;` once in `data-facts`; do not escape it again.
+1. Open their existing scorecard and read its tour list (the `<ol data-k="tour">` block) and its storage key (the `<span data-k="key">` value). A scorecard built before the list format changed holds them either as comma-separated rows inside `<b data-k=...>` elements, or as `var TOUR=[ ... ];` and `var KEY="..."` inside the script. Read the ids and the key from whichever it is, keep them exactly, and write the stops out in the `<li>` form below. Write `&middot;` once in `data-facts`; do not escape it again. **Carry the header strip forward too:** an old scorecard has it as `<div class="bi"><b>value</b><span>label</span></div>` cells; write each as `<li data-label="label">value</li>` in `BRIEF_CELLS`. The logo comes from `your-brand.json`, not from the old file.
 2. **Keep that storage key exactly.** It belongs to the client, not the tour. Everything
    scored over weeks is stored against it, and a changed key erases all of it.
 3. **Keep every existing stop, with its existing `id`.** Scores are stored against those
@@ -597,7 +597,7 @@ one criterion emptied all seven lists. There is no second rule now.
 `agent_first_name` to AGENT_FIRST_NAME, `agent_full_name` to AGENT_FULL_NAME, `phone_display`
 to AGENT_PHONE, `phone_raw` to AGENT_PHONE_RAW, `email` to AGENT_SEND_EMAIL, `footer_line` to
 AGENT_FOOTER, `license_line` to AGENT_LICENSE, the colours and fonts to COLOR_ACCENT,
-COLOR_ACTION, FONT_*, and `logo_path` to LOGO_IMG (as an `<img>` tag). For this buyer:
+COLOR_ACTION, FONT_*, and `logo_path` to LOGO_SRC (read the image file and write it as one `data:image/png;base64,...` address on a single line, which is text and not a tag; png, jpeg, gif or webp; leave empty with no logo). For this buyer:
 TITLE is the browser tab title; HERO_LINE_1 and HERO_LINE_2 are the two lines of the
 heading (the second is set in italics); LEDE is two sentences to the buyer about what the
 page is for; STOPS_HEADING is the heading over the list of homes; SUMMARY_SUBHEAD is one
@@ -614,10 +614,9 @@ buyer's phone. For a buyer who prefers Spanish, always set `es`: otherwise a Spa
 speaker on an English-language phone gets Spanish text from you inside an English page.
 The buyer can still switch with the button, and their choice is remembered.
 
-**Three exceptions, because they are not text.** `FONT_DISPLAY`, `FONT_BODY` and the colour
+**One exception, because it is not text.** `FONT_DISPLAY`, `FONT_BODY` and the colour
 tokens sit inside CSS, so write them as CSS: `"Source Serif 4"` with real quote marks, not
-`&quot;`. `LOGO_IMG` and `BRIEF_CELLS` are finished HTML, written as tags. Everything else
-is text. Write an entity once (`&middot;`) and never run an escape over text that already
+`&quot;`. Everything else is text, including the logo and the brief. Write an entity once (`&middot;`) and never run an escape over text that already
 contains one, or the buyer sees the letters `&middot;`.
 
 The token list is in the template's own header comment, written WITHOUT braces on
@@ -634,6 +633,20 @@ is one, as an attribute:
 <li>3 bedrooms</li>
 <li data-hint="Check the rooms you will use most">Plenty of natural light</li>
 ```
+
+`BRIEF_CELLS` takes two to four list items for the strip under the heading. The text is the big
+number or phrase and `data-label` is the small caption under it:
+
+```html
+<li data-label="Range">Up to $1.3M</li>
+<li data-label="Size">3 bed &middot; 2 bath</li>
+```
+
+They used to be finished `<div>` tags written by hand. One missing closing tag left the header
+open, so the whole page rendered inside it, on a dark background that is invisible in dark
+mode and unreadable in light mode. As text the page builds them itself, so a forgotten closing
+tag can no longer break the page. Like every list, the values must still be HTML-escaped
+(`&amp;`, `&lt;`): a raw `<script>` or `<img>` written into one would be live.
 
 The tour token takes one element per stop, one attribute per field, no content:
 
@@ -709,7 +722,7 @@ Order the tour in `{{TOUR}}` the way the agent is actually driving it.
 grayed on the list, out of the ranking, out of the route, out of the summary, and
 reversible. The record that it was considered survives, which a delete would lose.
 
-**A decision.** The page closes by asking which of four things today was: write on one,
+**A decision.** On the Compare tab, just above the send buttons, the page asks which of four things today was: write on one,
 see one again, keep looking, or sit with it. Whichever they pick travels in the summary
 the agent receives. A tour that ends without a decision is the one that drifts into next
 month.

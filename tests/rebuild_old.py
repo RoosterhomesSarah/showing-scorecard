@@ -24,6 +24,7 @@ EXPORT=r"""<script>addEventListener("load",function(){setTimeout(function(){
 var R={};
 try{
  R.lists={musts:MUSTS,kills:KILLS,nices:NICES,consider:CONSIDER,cond_sys:COND_SYS,cond_work:COND_WORK};
+ R.brief=[].map.call(document.querySelectorAll(".brief .bi"),function(d){ return [d.querySelector("b")?d.querySelector("b").textContent:"", d.querySelector("span")?d.querySelector("span").textContent:""]; });
  R.tour=TOUR; R.key=KEY; R.p=[P.b.name,P.b.initial,P.l.name,P.l.initial]; R.solo=(typeof SOLO!=="undefined"?SOLO:false); R.agent=(typeof AGENT!=="undefined"?AGENT:"");
  // seed answers the way a buyer would have, against the OLD page
  TOUR.forEach(function(p,i){ var o=st(p.id);
@@ -46,6 +47,7 @@ document.title="OLD:"+JSON.stringify(R);
 CHECK=r"""<script>addEventListener("load",function(){setTimeout(function(){
 var R={}; var S=__STATE__, CODE=__CODE__;
 try{
+ R.briefAfter=[].map.call(document.querySelectorAll("#brief .bi"),function(d){ return [d.querySelector("b").textContent,d.querySelector("span").textContent]; });
  R.counts=[MUSTS.length,KILLS.length,NICES.length,CONSIDER.length,COND_SYS.length,COND_WORK.length,TOUR.length];
  R.key=KEY; R.ids=TOUR.map(function(p){return p.id;}); R.listerr=!!document.getElementById("listerr");
  // 1) the stored state the buyer already has, read by the NEW page
@@ -79,7 +81,7 @@ def rebuild(old):
       CONSIDER=li_list(old["lists"]["consider"]),COND_SYS=li_list(old["lists"]["cond_sys"]),COND_WORK=li_list(old["lists"]["cond_work"]),
       TOUR=li_tour(old["tour"]),STORAGE_KEY=e(old["key"]),P1_NAME=e(old["p"][0]),P1_INITIAL=e(old["p"][1]),P2_NAME=e(old["p"][2]),P2_INITIAL=e(old["p"][3]),
       AGENT_FIRST_NAME=e(old["agent"] or "Agent"),DEFAULT_LANG="",COLOR_ACCENT="#8A6A3B",COLOR_ACTION="#1F4E5F",ON_ACCENT="#fff",ON_ACTION="#fff",
-      FONT_QUERY="family=Inter",FONT_DISPLAY="Inter",FONT_BODY="Inter",AGENT_PHONE_RAW="5550100",BRIEF_CELLS="",LOGO_IMG=""))
+      FONT_QUERY="family=Inter",FONT_DISPLAY="Inter",FONT_BODY="Inter",AGENT_PHONE_RAW="5550100",BRIEF_CELLS="\n".join("<li data-label=\"%s\">%s</li>"%(e(l),e(v)) for v,l in old.get("brief",[])),LOGO_SRC=""))
     for k,v in vals.items(): s=s.replace("{{%s}}"%k,v)
     return s
 
@@ -98,6 +100,7 @@ for name in sorted(f for f in os.listdir(OLD_DIR) if f.endswith(".html")):
         if new["counts"]!=want: probs.append("counts %s != %s"%(new["counts"],want))
         if new["key"]!=old["key"]: probs.append("storage key changed %r -> %r"%(old["key"],new["key"]))
         if new["ids"]!=[p["id"] for p in old["tour"]]: probs.append("stop ids changed %s -> %s"%([p["id"] for p in old["tour"]],new["ids"]))
+        if new.get("briefAfter")!=old.get("brief"): probs.append("header strip changed or lost: %s -> %s"%(old.get("brief"),new.get("briefAfter")))
         if new["listerr"]: probs.append("list error banner")
         if new["scores"]!=old["scores"]: probs.append("SCORES DIFFER\n   old %s\n   new %s"%(old["scores"],new["scores"]))
         if new["code"]!=old["code"]: probs.append("backup code differs (old %s... new %s...)"%(old["code"][:40],new["code"][:40]))

@@ -25,7 +25,7 @@ def build(escape):
     vals.update(dict(MUSTS=li(3),KILLS=li(2),NICES=li(3),CONSIDER=li(2),COND_SYS=li(2),COND_WORK=li(2),
       TOUR=stop(1)+stop(2),P1_INITIAL="B",P2_INITIAL="L",COLOR_ACCENT="#B8860B",COLOR_ACTION="#B22222",
       ON_ACCENT="#fff",ON_ACTION="#fff",FONT_QUERY="family=Inter",FONT_DISPLAY="Inter",FONT_BODY="Inter",
-      AGENT_PHONE_RAW="5551234567",BRIEF_CELLS="",LOGO_IMG="",STORAGE_KEY="hostile-"+("e" if escape else "r")))
+      AGENT_PHONE_RAW="5551234567",BRIEF_CELLS='<li data-label="%s">%s\n<li data-label="%s">%s'%(e(BAD),e(BAD),e(BAD),e(BAD)),LOGO_SRC="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",STORAGE_KEY="hostile-"+("e" if escape else "r")))
     vals["P1_INITIAL"]=e(BAD); vals["P2_INITIAL"]=e(BAD)
     for k,v in vals.items(): s=s.replace("{{%s}}"%k,v)
     return s
@@ -47,6 +47,7 @@ try{
 }catch(e){ r.errs.push(String(e&&e.stack||e)); }
 r.ids=TOUR.map(function(p){return p.id;});
   var called=0; copyText("x",function(){called++;}); try{ var bc=backupCode(); var back=readCode(bc); r.roundtrip=!!back; }catch(e){ r.errs.push("backup:"+e); }
+r.frame={swallowed:!!document.querySelector(".hero .wrap, .hero main"), brief:document.querySelectorAll("#brief .bi").length, logos:document.querySelectorAll(".logoslot img").length};
 r.pwned=!!window.PWNED;
 r.listerr=!!document.getElementById("listerr");
 r.handlers=document.querySelectorAll("[onmouseover],[onerror],[onload],[onclick],[onfocus]").length;
@@ -74,7 +75,7 @@ for escape in (True,False):
     tag="escaped" if escape else "raw"
     if r is None: print(tag,"NO RESULT (page died before the probe ran)"); fail+=1; continue
     ok = (not r["errs"] and r["counts"]==[3,2,3,2,2,2,2] and not r["pwned"] and not r["listerr"]
-          and r["handlers"]==0 and r["copyCalled"]==1 and r["roundtrip"] and len(set(r["ids"]))==2 and all(__import__("re").fullmatch(r"[A-Za-z0-9_-]+",i) for i in r["ids"]) and r["injectedB"]==0 and r["scripts"]<=2 and not r["stray"])
+          and r["handlers"]==0 and r["frame"]=={"swallowed":False,"brief":2,"logos":2} and r["copyCalled"]==1 and r["roundtrip"] and len(set(r["ids"]))==2 and all(__import__("re").fullmatch(r"[A-Za-z0-9_-]+",i) for i in r["ids"]) and r["injectedB"]==0 and r["scripts"]<=2 and not r["stray"])
     # the raw build is a builder mistake, not a supported path; it only has to not crash the page
     if not escape: ok = (not r["errs"] and not r["pwned"])
     print(tag,"PASS" if ok else "FAIL",json.dumps({k:v for k,v in r.items() if k not in("summary","short","body")}))
