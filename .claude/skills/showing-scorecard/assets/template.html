@@ -43,6 +43,9 @@
                area makes the maps links land on the right house. Include it.
                date groups the list when a search runs over several outings. Newest
                first. Omit it only on a one-off tour.
+    ES_NOTE       "off" hides the line in Spanish mode that says the page was translated with a
+               tool. Anything else, or empty, keeps it. Turn it off only once a Spanish speaker has
+               read the Spanish.
     DEFAULT_LANG  "es" or "en" to open in that language, or empty to follow the buyer's phone.
                Use "es" for a buyer who prefers Spanish, whatever their phone is set to.
     STORAGE_KEY  one key PER CLIENT, never per tour. It is what makes their
@@ -87,7 +90,7 @@
   <span data-k="l-initial">{{P2_INITIAL}}</span><span data-k="l-name">{{P2_NAME}}</span>
   <span data-k="subhead">{{SUMMARY_SUBHEAD}}</span>
   <span data-k="agent">{{AGENT_FIRST_NAME}}</span><span data-k="date">{{TOUR_DATE}}</span>
-  <span data-k="phone-raw">{{AGENT_PHONE_RAW}}</span><span data-k="phone">{{AGENT_PHONE}}</span><span data-k="email">{{AGENT_SEND_EMAIL}}</span><span data-k="key">{{STORAGE_KEY}}</span><span data-k="logo">{{LOGO_SRC}}</span><span data-k="lang">{{DEFAULT_LANG}}</span>
+  <span data-k="phone-raw">{{AGENT_PHONE_RAW}}</span><span data-k="phone">{{AGENT_PHONE}}</span><span data-k="email">{{AGENT_SEND_EMAIL}}</span><span data-k="key">{{STORAGE_KEY}}</span><span data-k="logo">{{LOGO_SRC}}</span><span data-k="lang">{{DEFAULT_LANG}}</span><span data-k="esnote">{{ES_NOTE}}</span>
 </div>
 <div id="lists" hidden>
   <ol data-k="musts">{{MUSTS}}</ol>
@@ -1135,7 +1138,7 @@ var STRINGS = {
     dockBefore_1: "antes sacaba {b}%",
     close_second_t_1: "Quiero ver otra vez una de ellas",
     close_think_t_1: "Necesito pensarlo",
-    esCorrect: "Esta página está traducida al español con ayuda de una herramienta, y puede que algo suene raro o esté mal. Si lo nota, díganselo a {agent} y se corrige.",
+    esCorrect: "Esta página está traducida al español con ayuda de una herramienta, y puede que algo suene raro o esté mal. Si lo notan, díganselo a {agent} y se corrige.",
     esCorrect_1: "Esta página está traducida al español con ayuda de una herramienta, y puede que algo suene raro o esté mal. Si lo nota, dígaselo a {agent} y se corrige."
   }
 };
@@ -1276,7 +1279,9 @@ function repaintAll(){
   if(typeof repaintMsgs==="function") repaintMsgs();
   syncEsNote();
 }
-function syncEsNote(){ var n=document.getElementById("escorrect"); if(n) n.hidden = LANG!=="es"; }
+// The correction line shows in Spanish unless the agent set ES_NOTE to "off". Anything else, including
+// an unfilled token, leaves it on: the safe default is to tell the buyer it was machine-translated.
+function syncEsNote(){ var n=document.getElementById("escorrect"); if(n) n.hidden = LANG!=="es" || person("esnote").toLowerCase()==="off"; }
 
 function load(){
   try{

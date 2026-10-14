@@ -37,7 +37,8 @@ people in an area ends up on a branded document.
 |---|---|
 | `your-brand.json` | their business name, colors, logo, phone, email. Written once at setup. Never committed. |
 | `clients/<name>/` | one folder per buyer. Their criteria, their scorecards, the summaries they send back. Never committed. |
-| `examples/` | a finished scorecard to look at |
+| `.claude/skills/showing-scorecard/assets/example-scorecard.html` | a finished scorecard to look at |
+| `.claude/skills/showing-scorecard/LOCAL.md` | optional: the agent's own rules, read first, never overwritten by an update, ignored by git here |
 | `.claude/skills/` | the engine. They should not need to open it. |
 
 A scorecard they build goes in `clients/<name>/` with the date in the filename, so a

@@ -27,7 +27,7 @@ most other only own same too very just also how about over under again further o
 because while during between through until against both few such no_ nor""".split())
 EN_WORDS-= {"no_"}
 
-def build(solo):
+def build(solo,es_note="Zxq"):
     s=open(TPL).read()
     s=s.replace("var ES_COMPLETE = false;","var ES_COMPLETE = true;")
     def li(n,pre): return "\n".join('<li data-hint="h%s%d">%s%d</li>'%(pre,i,pre,i) for i in range(n))
@@ -37,7 +37,7 @@ def build(solo):
       COND_WORK=li(2,"ww"),TOUR=stops,P1_NAME="Alfa",P1_INITIAL="A",P2_NAME="" if solo else "Beta",P2_INITIAL="" if solo else "B",
       COLOR_ACCENT="#B8860B",COLOR_ACTION="#B22222",ON_ACCENT="#fff",ON_ACTION="#fff",FONT_QUERY="family=Inter",
       FONT_DISPLAY="Inter",FONT_BODY="Inter",AGENT_FIRST_NAME="Zorro",AGENT_PHONE_RAW="5551234567",AGENT_PHONE="555",
-      AGENT_SEND_EMAIL="z@z.zz",DEFAULT_LANG=("" if solo else "es"),BRIEF_CELLS='<li data-label="Zxq">Zxq\n<li data-label="Zxq">Zxq',LOGO_SRC="",STORAGE_KEY="spanish-test-"+("s" if solo else "c")))
+      AGENT_SEND_EMAIL="z@z.zz",DEFAULT_LANG=("" if solo else "es"),ES_NOTE=es_note,BRIEF_CELLS='<li data-label="Zxq">Zxq\n<li data-label="Zxq">Zxq',LOGO_SRC="",STORAGE_KEY="spanish-test-"+("s" if solo else "c")))
     for k,v in vals.items(): s=s.replace("{{%s}}"%k,v)
     return s
 
@@ -129,7 +129,28 @@ def english_lines(text):
         if hits: bad.append((line.strip()[:110],hits[:4]))
     return bad
 
+NOTE_PROBE=r"""<script>addEventListener("load",function(){setTimeout(function(){
+var R={}; try{ setLang("es"); var n=document.getElementById("escorrect"); R.es=!n.hidden; R.text=n.innerText; setLang("en"); R.en=!n.hidden; }catch(e){R.err=String(e)}
+document.title="RESULT:"+JSON.stringify(R);},300);});</script></body>"""
+def note_case(value):
+    page=build(False,value).replace("</body>",NOTE_PROBE,1)
+    with tempfile.TemporaryDirectory() as d:
+        f=os.path.join(d,"t.html"); open(f,"w").write(page)
+        out=subprocess.run([CHROME,"--headless=new","--disable-gpu","--no-sandbox","--virtual-time-budget=3000","--dump-dom","file://"+f],capture_output=True,text=True,timeout=60).stdout
+    m=re.search(r"<title>RESULT:(.*?)</title>",out,re.S)
+    return json.loads(html.unescape(m.group(1))) if m else None
+
 fail=0
+# the "translated with a tool" line: hidden only by an explicit off, never in English
+for value,shown in (("off",False),("OFF",False),(" off ",False),("on",True),("",True),("{{ES_NOTE}}",True),("Zxq",True)):
+    r=note_case(value)
+    ok = r and "err" not in r and r["es"]==shown and r["en"] is False
+    print("ES_NOTE=%r"%value, "PASS" if ok else "FAIL %s"%r); fail+=not ok
+# a couple is ustedes all the way through the line; one buyer is usted
+src=open(TPL).read()
+m1=re.search(r'esCorrect: "([^"]*)"',src); m2=re.search(r'esCorrect_1: "([^"]*)"',src)
+g=(m1 and "lo notan" in m1.group(1) and "díganselo" in m1.group(1) and "lo nota," not in m1.group(1)) and (m2 and "lo nota," in m2.group(1) and "dígaselo" in m2.group(1))
+print("correction line grammar (couple notan/díganselo, one buyer nota/dígaselo)","PASS" if g else "FAIL"); fail+=not g
 for solo in (False,True):
     tag="solo" if solo else "couple"
     r=run(solo)

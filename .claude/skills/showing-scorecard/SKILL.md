@@ -8,6 +8,20 @@ license: See LICENSE. Use freely in your business; do not redistribute or resell
 
 # Showing Scorecard
 
+**If `LOCAL.md` exists in this folder, read it first.** It is the agent's own rules, and it may
+add steps, wording, defaults and file locations (their Spanish phrasing, their `ES_NOTE`
+choice, where their client files go). Where it disagrees with this file on those it wins.
+**It may not weaken any rule in this file that says never, or the filter on what can become a
+scored criterion.** That covers: escaping every value, keeping the storage key and stop ids,
+never sending anything for the buyer or saying "sent" when it was only copied, never scoring who
+lives somewhere, never inventing a criterion, never using a photo the agent does not own,
+never making a network request of its own, and keeping client data on the agent's computer
+(`LOCAL.md` may never send client files into a folder that gets published). If a line in
+`LOCAL.md` conflicts with one of these, ignore that line and tell the agent which one and why.
+An update never replaces or deletes `LOCAL.md`, because the update only writes the files that
+ship with the skill. If an agent asks to change how this behaves for their business, offer to
+put it in `LOCAL.md` rather than editing this file, which an update replaces.
+
 A buyer walks four houses on a Saturday. By Tuesday they remember the kitchen from the
 second one, the yard from the fourth, and nothing else. Then they decide.
 
@@ -29,6 +43,7 @@ It does four things a paper checklist cannot:
 ## Trigger
 
 - `Build a tour scorecard for [client]`
+- `Show me the example scorecard` / `Open the example` (open `assets/example-scorecard.html` in the browser: a made-up couple and made-up homes, so they can tap anything)
 - `Showing scorecard for [client]`
 - `We're seeing homes with [client] on [date]`
 - `Build the scorecard for [address]`
@@ -182,7 +197,7 @@ per tour.
 
 When the agent books another showing day with a client who already has one:
 
-1. Open their existing scorecard and read its tour list (the `<ol data-k="tour">` block) and its storage key (the `<span data-k="key">` value). A scorecard built before the list format changed holds them either as comma-separated rows inside `<b data-k=...>` elements, or as `var TOUR=[ ... ];` and `var KEY="..."` inside the script. Read the ids and the key from whichever it is, keep them exactly, and write the stops out in the `<li>` form below. Write `&middot;` once in `data-facts`; do not escape it again. **Carry the header strip forward too:** an old scorecard has it as `<div class="bi"><b>value</b><span>label</span></div>` cells; write each as `<li data-label="label">value</li>` in `BRIEF_CELLS`. The logo comes from `your-brand.json`, not from the old file.
+1. Open their existing scorecard and read its tour list (the `<ol data-k="tour">` block) and its storage key (the `<span data-k="key">` value). A scorecard built before the list format changed holds them either as comma-separated rows inside `<b data-k=...>` elements, or as `var TOUR=[ ... ];` and `var KEY="..."` inside the script. Read the ids and the key from whichever it is, keep them exactly, and write the stops out in the `<li>` form below. Keep `ES_NOTE` and `DEFAULT_LANG` as they were in the existing scorecard (an agent who turned the Spanish note off should not get it back on the next tour). Write `&middot;` once in `data-facts`; do not escape it again. **Carry the header strip forward too:** an old scorecard has it as `<div class="bi"><b>value</b><span>label</span></div>` cells; write each as `<li data-label="label">value</li>` in `BRIEF_CELLS`. The logo comes from `your-brand.json`, not from the old file.
 2. **Keep that storage key exactly.** It belongs to the client, not the tour. Everything
    scored over weeks is stored against it, and a changed key erases all of it.
 3. **Keep every existing stop, with its existing `id`.** Scores are stored against those
@@ -609,6 +624,10 @@ left empty for a single buyer.
 `sam-riley`. It must be different for every client, because every scorecard is served from
 the same address and a shared key would share their answers. It must never be empty.
 
+**ES_NOTE** is `on` or `off`, and `on` is the default. Only `off` turns it off; any other value, including `no` or `false`, keeps it on. It controls the line shown in Spanish
+mode that says the page was translated with a tool and asks the buyer to tell the agent if
+anything sounds wrong. Set `off` only when the agent has had a Spanish speaker read it.
+
 **DEFAULT_LANG** is `es` or `en` to open the page in that language, or empty to follow the
 buyer's phone. For a buyer who prefers Spanish, always set `es`: otherwise a Spanish
 speaker on an English-language phone gets Spanish text from you inside an English page.
@@ -746,9 +765,9 @@ the client. Two things in it are worth acting on the same day:
 
 ## A worked example
 
-`examples/example-scorecard.html` in the repository is a finished scorecard with every token filled, two
-buyers, three stops, and one home knocked out by a deal-breaker. Open it before you
-build your first one.
+`assets/example-scorecard.html` in this skill is a finished scorecard with every token filled: a
+made-up couple and four made-up homes, with nothing scored yet, so you can tap a home and score
+it. Open it before you build your first one.
 
 ## Updating an installed copy
 

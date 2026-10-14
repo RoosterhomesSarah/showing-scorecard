@@ -47,6 +47,35 @@ scorecard?"* and it will tell you.
 
 ---
 
+## Questions people ask
+
+**How do my buyers get it?** Your AI walks you through it, one step at a time: a free Netlify
+account in your name, dragging one folder onto a web page, and making the link public so your
+buyer does not hit a login screen. You get back a link to text your buyer. Each buyer keeps the
+same link for their whole search.
+
+**What do I give my AI for a buyer?** The tour date, each home's address and city, beds, baths and
+list price, and whether each is a house or a condo. It uses what the buyer told you they want. If
+you do not have that written down, it asks you eight quick questions about the buyer.
+
+**Can I do it in Spanish?** Yes. Tell your AI the buyer prefers Spanish and the page opens in
+Spanish; buyers can switch with the ES / EN button at the top. The summary they send you stays in
+English. The page says the Spanish was translated with a tool; once a Spanish speaker has read it
+you can turn that line off (the `ES_NOTE` setting).
+
+**What does it look like?** Say **show me the example scorecard**. It has a made-up couple and
+made-up homes, so you can tap anything.
+
+**My system warns that the page "sends email".** That is the Text and Email buttons. They open the
+buyer's own messaging app with the summary filled in; the buyer is the one who presses send. The
+page cannot send anything on its own.
+
+**If I update it, do I lose my settings?** No. Your brand answers and your client files stay. If
+you want your own rules for how it works, put them in a file called `LOCAL.md` in the skill folder:
+it is read first, wins where it disagrees (it cannot weaken the safety rules), and an update never touches it.
+
+---
+
 ## What the buyer gets
 
 A link. No app, no account, no sign-in. They open it standing in the house.

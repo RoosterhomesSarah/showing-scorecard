@@ -65,6 +65,8 @@ Everything lives in the folder: the engine, your brand answers, and a folder per
 
 Say **update my showing scorecard**. Your brand file and your clients are left alone.
 
+Want your own rules for how it works? Put them in a file called `LOCAL.md` in the skill folder. It is read first and an update never touches it.
+
 ## If your setup vets incoming skills
 
 Good. It should, and this one is written to pass. It has no hooks, no scheduled jobs,

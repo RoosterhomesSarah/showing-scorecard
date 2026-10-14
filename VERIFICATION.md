@@ -810,3 +810,37 @@ folder, checked it by listing it, extracted only the skill, placed LICENSE insid
 nothing and was refused nothing. It flagged three wording gaps (says "zip" for a .tar.gz, did not
 say how to check the download, "beside" for LICENSE was ambiguous), now fixed. Not yet tested:
 an install into a setup whose skills folder already holds other skills (the usual case).
+
+---
+
+## Slice: Vanessa's feedback (LOCAL.md, ES_NOTE, the example, a Questions section)
+
+**Evaluated.** Her two fixes were sound and cheap: updates replace SKILL.md, and the Spanish note
+could not be turned off. Her group FAQ was mostly accurate, with one false claim: "ask your AI to
+open the example" would find nothing, because the example lived in `examples/` and an install
+only carries the skill folder. Context from Vanessa: many people who install this are not
+technical and get lost easily, so plain wording in README and in what the AI says matters most.
+
+**Changed.** `LOCAL.md` (read first, wins on preferences, cannot weaken any "never" rule or the
+fair-housing filter, never touched by an update, ignored by git in the original repo).
+`ES_NOTE` (only "off" hides the Spanish note; default on). Couple grammar fixed ("Si lo notan,
+díganselo"). The example now lives in `assets/` so an install and an update carry it, with a
+"show me the example scorecard" trigger. A Questions section in README.
+
+**Fresh-eyes review, a separate reviewer.** Found, and fixed: the LOCAL.md carve-out listed only
+three rules, so an AI could read a LOCAL.md line as overriding the fair-housing filter, the
+no-network rule and others (now covers all of them, bars sending client files to a published
+folder, and says to ignore a conflicting line and tell the agent); SKILL.md described the example
+as having three stops and a knocked-out home (it has four, nothing scored). Also fixed: ES_NOTE
+doc says false/no keep it on; a rebuild now keeps ES_NOTE and DEFAULT_LANG; INSTALL and CLAUDE.md
+mention LOCAL.md; the Netlify answer now mentions making the link public.
+
+**Tests.** `spanish.py` now checks every ES_NOTE value (off, OFF, " off ", on, empty, unfilled,
+garbage) and the couple/one-buyer grammar; watched failing on the previous template. The documented
+update commands were run on a scratch install holding a LOCAL.md: it survived, and the example
+arrived. The reviewer repeated this in a nested setup.
+
+**Not covered.** LOCAL.md in an agent's own git repo is committed unless they ignore it. The example
+page's English hero stays English when opened in Spanish.
+
+**Status: DONE, independently reviewed.**
