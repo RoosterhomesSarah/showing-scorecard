@@ -106,7 +106,8 @@ for name in sorted(f for f in os.listdir(OLD_DIR) if f.endswith(".html")):
         if new["code"]!=old["code"]: probs.append("backup code differs (old %s... new %s...)"%(old["code"][:40],new["code"][:40]))
         if "err" in new.get("restore",{}): probs.append("old backup code refused by new page: %s"%new["restore"]["err"])
         elif new["restore"]["known"]!=new["restore"]["houses"]: probs.append("restore held houses it cannot show: %s"%new["restore"])
-        norm=lambda t:[l for l in t.splitlines() if "Agreed on everything" not in l and l.strip() not in ("x","") and not l.startswith("Showing day scorecard") and "up to $1.3M" not in l]
+        # the first two lines are the title and the agent's own subhead, which a rebuild rewrites
+        norm=lambda t:[l for l in t.splitlines()[2:] if "Agreed on everything" not in l and l.strip()!=""]
         if norm(new["summary"])!=norm(old["summary"]):
             a,b=norm(old["summary"]),norm(new["summary"])
             probs.append("summary text differs: %r"%[(x,y) for x,y in zip(a,b) if x!=y][:2])
