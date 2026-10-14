@@ -6,7 +6,7 @@ Say this and it will take it from there:
 
 > set up my showing scorecard
 
-It asks seven questions about your business, takes about three minutes, and then builds
+It asks eight questions about your business, takes about three minutes, and then builds
 your first scorecard with you. You will not need to open another file.
 
 ---
@@ -27,18 +27,19 @@ At the end they tap one button and send you the whole thing.
 
 ---
 
-## The seven questions
+## The eight questions
 
 So you know what is coming. Nothing here is hard and none of it is permanent.
 
 1. Your business name, as it should read on the page
-2. Your first name, the way a client says it
+2. Your first name, the way a client says it, and your full name for the sign-off
 3. Two colors, as hex codes if you have them. Say "I don't know" and you get a sensible
    pair you can change later
 4. Your logo, if you have a file. Skip it if you don't
 5. The phone number a client should text you on
 6. The email a client should send results to
 7. One line for the footer, usually your business and your website
+8. The license line your broker or state requires, if there is one. Skip it if not
 
 Answers go in `your-brand.json`. It stays on your computer.
 

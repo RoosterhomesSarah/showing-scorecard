@@ -23,7 +23,7 @@ Then say:
 set up my showing scorecard
 ```
 
-Seven questions, about three minutes, and it builds your first scorecard with you in your
+Eight questions, about three minutes, and it builds your first scorecard with you in your
 own colors and your own name. You never touch GitHub again and you never leave your chat.
 
 After that, for any buyer:

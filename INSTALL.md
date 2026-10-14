@@ -21,7 +21,7 @@ Then say:
 
 > set up my showing scorecard
 
-Seven questions, about three minutes, and it builds your first one with you. It never
+Eight questions, about three minutes, and it builds your first one with you. It never
 asks again.
 
 After that, for every buyer:

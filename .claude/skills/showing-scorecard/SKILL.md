@@ -89,7 +89,7 @@ them, so run your criteria past your broker and work from your own state associa
 current advisory. The agent is responsible for everything that goes out under their
 license.
 
-## First run only: seven questions
+## First run only: eight questions
 
 **Where your files live depends on how this was installed, so work it out first.**
 
@@ -182,7 +182,7 @@ per tour.
 
 When the agent books another showing day with a client who already has one:
 
-1. Open their existing scorecard and read its `{{TOUR}}` list and its `{{STORAGE_KEY}}`.
+1. Open their existing scorecard and read its tour list (the `<ol data-k="tour">` block) and its storage key (the `<span data-k="key">` value). A scorecard built before the list format changed holds these as comma-separated rows inside `<b data-k=...>` elements. Read the ids and keep them, then write the stops out in the `<li>` form below.
 2. **Keep that storage key exactly.** It belongs to the client, not the tour. Everything
    scored over weeks is stored against it, and a changed key erases all of it.
 3. **Keep every existing stop, with its existing `id`.** Scores are stored against those
@@ -328,8 +328,8 @@ pending litigation. Nice: separate entrance; existing tenant in place; room to a
 
 **Relocation.** Must: commute they can live with on a real weekday; in budget; move-in
 ready; enough bedrooms for whoever is arriving. Breakers: anything needing work before
-they can move in; a commute over the number they named. Nice: furnished or partly;
-short-term flexibility; furnished or partly furnished.
+they can move in; a commute over the number they named. Nice: furnished or partly
+furnished; short-term flexibility.
 
 ---
 
@@ -580,41 +580,113 @@ logic, the disagreement panel, the condition section, and the copy handoff. Repl
 `{{TOKEN}}`. **Every token lands in HTML, including all seven lists, so there is one
 escaping rule and not two:
 write `&amp;` for an ampersand, `&middot;` for a separator dot, `&rsquo;` for a curly
-apostrophe, exactly as you would anywhere else on the page.** Names, the agent's first
-name, the tour date and the summary subhead sit in a hidden block at the top of the body
-and the script reads them back out of the page, decoded, so `Sam &amp; Riley` reaches the
-buyer's text message as `Sam & Riley` rather than as the raw code.
+apostrophe, `&quot;` for a double quote, exactly as you would anywhere else on the page.**
+Names, the agent's first name and contact details, the storage key, the tour date and
+the summary subhead sit in a hidden block at the top of the body and the script reads
+them back out of the page, decoded, so `Sam &amp; Riley` reaches the buyer's text message
+as `Sam & Riley` rather than as the raw code. No token is ever written inside the
+script itself.
 
-The lists are the reason this matters most. A criterion, a hint or an address containing
-the characters that close a script tag used to end the page's script where it sat: no
-stops, the hidden blocks spilling into view, stylesheet text on screen, and the top of the
-page still looking finished so nobody noticed. Written as HTML they are just characters.
-A list that will not parse says so on the page rather than scoring the buyer against
-nothing.
+**The lists are plain HTML, one element per item.** A criterion, a hint or an address is
+text in an element or a value in an attribute, so a quote, a backslash or the characters
+that close a script tag are just characters. They used to be JSON inside the page, and
+JSON escaping is a second rule on top of HTML escaping: a double quote or a backslash in
+one criterion emptied all seven lists. There is no second rule now.
 
-Three things this replaced, all of which shipped. A quote inside a name used to end the
-JavaScript string it sat in and kill the entire page. And the subhead, which goes into the
-plain-text summary the buyer sends their agent, arrived carrying literal `&middot;`
-because it had been written for HTML and then used as text.
+**Which value goes in which token.** From `your-brand.json`: `business_name` to BUSINESS_NAME,
+`agent_first_name` to AGENT_FIRST_NAME, `agent_full_name` to AGENT_FULL_NAME, `phone_display`
+to AGENT_PHONE, `phone_raw` to AGENT_PHONE_RAW, `email` to AGENT_SEND_EMAIL, `footer_line` to
+AGENT_FOOTER, `license_line` to AGENT_LICENSE, the colours and fonts to COLOR_ACCENT,
+COLOR_ACTION, FONT_*, and `logo_path` to LOGO_IMG (as an `<img>` tag). For this buyer:
+TITLE is the browser tab title; HERO_LINE_1 and HERO_LINE_2 are the two lines of the
+heading (the second is set in italics); LEDE is two sentences to the buyer about what the
+page is for; STOPS_HEADING is the heading over the list of homes; SUMMARY_SUBHEAD is one
+line that opens the summary sent to the agent; KILLS_NOTE is one sentence naming this
+buyer's hard no's. P1_INITIAL and P2_INITIAL are one letter each, and both P2 tokens are
+left empty for a single buyer.
 
-The list below is in the template's own header comment, where the names are
-written WITHOUT braces on purpose. Leave them that way. A token inside its own
-documentation gets filled by the same replace that fills the real one, which quietly
-writes a second copy of every list, the whole tour and the logo into that comment, and
-corrupts anything that later reads the file back.
+**STORAGE_KEY** is one short value per client, letters and hyphens, for example
+`sam-riley`. It must be different for every client, because every scorecard is served from
+the same address and a shared key would share their answers. It must never be empty.
 
-Array tokens take entries shaped `["Label","Hint, or an empty string"],`. The tour token
-takes `{id:"slug", n:"123 Example St", facts:"Area · 3 bd 2 ba · listed $X", area:"City, ST",
-type:"house"|"condo"},`. `type` draws the tile: both are the same hairline elevation,
-walls on an overhanging eave, and they differ at the roof, pitched for a house and flat
-with a parapet for anything stacked. That is what makes a condo read differently from a
-house before the buyer has read a word. Write the word you would say out loud; `condo`,
-`apartment`, `loft`, `high-rise`, `co-op` and `unit` all draw the stacked one, and
-`townhouse`, `bungalow`, `duplex` and anything unrecognized draw the house. An optional
-`photo:"data:image/jpeg;base64,..."` replaces the elevation, and is only ever a picture
-the agent took. **Always fill `area`**, because the route and the per-stop
+**DEFAULT_LANG** is `es` or `en` to open the page in that language, or empty to follow the
+buyer's phone. For a buyer who prefers Spanish, always set `es`: otherwise a Spanish
+speaker on an English-language phone gets Spanish text from you inside an English page.
+The buyer can still switch with the button, and their choice is remembered.
+
+**Three exceptions, because they are not text.** `FONT_DISPLAY`, `FONT_BODY` and the colour
+tokens sit inside CSS, so write them as CSS: `"Source Serif 4"` with real quote marks, not
+`&quot;`. `LOGO_IMG` and `BRIEF_CELLS` are finished HTML, written as tags. Everything else
+is text. Write an entity once (`&middot;`) and never run an escape over text that already
+contains one, or the buyer sees the letters `&middot;`.
+
+The token list is in the template's own header comment, written WITHOUT braces on
+purpose. Leave them that way. A token inside its own documentation gets filled by the
+same replace that fills the real one, which quietly writes a second copy of every list,
+the whole tour and the logo into that comment, and corrupts anything that later reads
+the file back.
+
+Each of the six criteria tokens (`MUSTS`, `KILLS`, `NICES`, `CONSIDER`, `COND_SYS`,
+`COND_WORK`) takes one item per line, the label as the text and the hint, only when there
+is one, as an attribute:
+
+```html
+<li>3 bedrooms</li>
+<li data-hint="Check the rooms you will use most">Plenty of natural light</li>
+```
+
+The tour token takes one element per stop, one attribute per field, no content:
+
+```html
+<li data-id="e1" data-n="1923 Mayview Dr"
+    data-facts="Example Heights &middot; 3 bd 2 ba &middot; listed $1.25M"
+    data-area="Example City, ST" data-type="house" data-date="Sat 18 Oct"></li>
+```
+
+`data-type` draws the tile: both are the same hairline elevation, walls on an overhanging
+eave, and they differ at the roof, pitched for a house and flat with a parapet for
+anything stacked. That is what makes a condo read differently from a house before the
+buyer has read a word. Write the word you would say out loud; `condo`, `apartment`,
+`loft`, `high-rise`, `co-op` and `unit` all draw the stacked one, and `townhouse`,
+`bungalow`, `duplex` and anything unrecognized draw the house. An optional `data-photo`
+holding a `data:image/jpeg;base64,...` value replaces the elevation, and is only ever a
+picture the agent took. **Always fill `data-area`**, because the route and the per-stop
 navigation links are built from the address plus the area, and an address alone sends
-the buyer to the wrong city.
+the buyer to the wrong city. `data-id` must be unique and must never change once the
+buyer has scored the stop, because their answers are stored against it. Use letters,
+digits, hyphens and underscores only. The page forces that, replaces anything else
+with a hyphen, numbers duplicates, and builds a missing id from the address, so a stop
+added at the top does not shift every saved answer.
+
+
+## Spanish
+
+The page ships with an English and a Spanish version and a toggle in the header, hidden
+until `var ES_COMPLETE = true;` is set in the template. Spanish is Latin American and
+conversational. A couple is addressed as ustedes, a single buyer as usted (the `_1` keys).
+Everything the page itself says is translated, including button states, messages and
+labels read by a screen reader. Counts are digits in Spanish, which sidesteps gender.
+
+**What is not translated, on purpose.** The text message and the summary the buyer sends
+the agent stay in English, because the agent reads them (the buyer's names and the criteria
+labels in it appear in whatever language they were written). Everything the agent fills in
+stays in whatever language the agent wrote it: the hero lines, lede, brief cells, stops
+heading, the deal-breaker sentence, every criterion and hint, the tour dates and stop
+facts. **For a Spanish-speaking buyer, write those in Spanish when you fill the tokens**,
+or the Spanish page will mix the two.
+
+**Adding or changing words.** Static text is tagged `data-t`, `data-th`, `data-tp` or
+`data-ta` and its English is read off the page itself. Text the script draws goes through
+`t("key", {vars}, asHtml)` with an entry in both tables. Run `python3 tests/spanish.py`
+after any change: it fails on visible English in Spanish mode, on English that changes
+after a round trip, on a message left in the wrong language after a switch, and on a key
+with no Spanish twin.
+
+**Run `python3 tests/hostile.py` after any change to the template.** It builds the page
+with a double quote, a backslash, a script terminator, a tag, an ampersand, an emoji and
+an attribute breakout in every field a person can type into, scores every stop, opens
+every view, and fails if any list comes back short or anything the payload carried
+becomes live markup.
 **The storage key is one per client and never changes.** Not per tour. It is what makes
 their shortlist accumulate across weeks, and changing it erases everything they have
 scored.

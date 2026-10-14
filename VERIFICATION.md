@@ -2,7 +2,7 @@
 
 ## Slice: the public skill repo, v1.0
 
-**Working means:** an agent who has never seen this installs it, answers seven questions
+**Working means:** an agent who has never seen this installs it, answers eight questions
 once, and gets a branded phone scorecard built from one buyer's own stated criteria,
 with nothing in it that could cost them their license.
 
@@ -520,3 +520,154 @@ whole build both came from Vanessa, who did not build it.
 **Status: NOT DONE.** The reported bug is closed and verified. The grid found a second one
 in the same class and it is open.
 
+
+---
+
+## Slice: scorecard build 2.0, the list format and Vanessa's five — DONE for these, Spanish still open
+
+**Changed.** The seven lists are no longer JSON. One `<li>` per item, label as text, hint as
+`data-hint`; one `<li>` per stop with a `data-*` attribute per field. Agent name, phone,
+email and storage key moved out of the script into the hidden block, so no token is written
+inside `<script>` at all. `esc()` now escapes quotes (it is used inside `aria-label="…"`).
+Names and initials have an HTML-safe twin (`PE`) for the places that build markup. Stop ids
+are held to `[A-Za-z0-9_-]`, de-duplicated, and derived from the address when absent.
+Vanessa's five: the copy button reads "Copy for [agent]"; no pronoun for the agent; no
+timeline promise; eight setup questions everywhere; the duplicated Relocation phrase.
+
+**Fresh-eyes review: a separate reviewer, told to assume it was broken, no access to my
+claims.** It found five must-fix items my own pass had missed:
+
+1. The example scorecard double-escaped `&middot;` and showed the letters on every stop.
+   Fixed; SKILL.md now says to write an entity once and never escape over one.
+2. **Both copy buttons never worked.** Two functions named `copyText` in one script; the
+   second silently replaced the first, so the callback never ran, the label never changed
+   and the "Copied, now paste it" line never appeared. Present before this session and
+   invisible to every earlier test, because none of them pressed the button. Renamed the
+   second to `copyWithLabel`.
+3. `data-photo` reached an `<img src="…">` unescaped. Now `esc()`.
+4. Stop ids: duplicates shared one state; a space, colon, tilde or quote in an id broke
+   the backup code or threw. Now sanitized and de-duplicated in `readTour`.
+5. SKILL.md told the AI to escape every token, which is wrong for font and colour tokens
+   (CSS) and for `LOGO_IMG`/`BRIEF_CELLS` (finished HTML). Carve-out added.
+
+**Tripwire.** `tests/hostile.py` now also covers `data-photo`, hostile duplicate ids, the
+copy callback and the backup-code round trip. Watched failing on purpose: quote escaping
+removed (fails), `PE` removed (fails), `data-photo` unescaped (fails), duplicate
+`copyText` restored (fails). Passes on the current template, escaped and raw.
+
+**Left open, logged not fixed (reviewer's nice-to-haves):** identical labels attribute
+wrongly in the disagreement panel; label whitespace is not collapsed (collapsing would
+change the backup fingerprint and invalidate old codes); an item with no label is dropped
+silently; empty lists still draw empty section headings; solo mode still shows some
+two-person copy; `sms:`/`mailto:` values are not URL-encoded; `your-brand.example.json`
+lacks `agent_full_name` and `license_line`; `hostile.py` hardcodes the macOS Chrome path
+and is not shipped with an installed copy.
+
+**Not covered by the test:** UI handlers beyond copy, solo mode, empty and identical-label
+cases. Those are the reviewer's, run once by hand.
+
+**Status: DONE** for jobs 1 and 2 (zero open must-fix after the reviewer's list). The
+Spanish (job 3) is NOT DONE.
+
+---
+
+## Slice: Spanish (job 3) — STARTED, NOT DONE, safe to leave
+
+**Done so far (stage 1).** The machinery and every piece of static text. `t(key, vars, html)` now
+substitutes `{agent}` and other placeholders, escapes in HTML mode, and uses a `key_1` variant
+when there is one buyer (usted) and the plain key for a couple (ustedes). English for anything
+marked in the HTML is read off the page itself into `STATIC_EN` before painting, so English is
+never stored twice. `count()` returns digits in Spanish to avoid gender agreement. About 40
+static strings are tagged (`data-t`, `data-th`, `data-tp`, `data-ta`) and translated in both forms.
+`ES_COMPLETE` is still false, so the toggle is hidden and English is unchanged. `tests/hostile.py`
+still passes.
+
+**Not done (stage 2, the strings the script draws).** Photo messages, tile flags, stop cards and
+skip, the six criteria groups and their subtitles, the condition state labels, gut-feel aria,
+the dock, all of Compare (missing, disagreements, grid, group headings), the four closing
+decisions, send and copy messages, and the restore messages. Each needs a `STRINGS` entry in
+both languages (with `_1` where the verb changes) and its call site changed to `t()`.
+Plurals use `count()` and two keys (one / many).
+
+**Decisions made.** The text message and summary the buyer sends the agent stay in English,
+because the agent reads them. Criteria, hero, lede and the deal-breaker sentence are the
+agent's own words and show in whatever language the agent wrote them.
+
+**Before flipping `ES_COMPLETE`.** Add `tests/spanish.py`: force Spanish, open every view, and
+fail on any visible English. Then a separate reviewer, and a read of both languages on a phone.
+
+---
+
+## Slice: Spanish (job 3) — BUILT AND REVIEWED, toggle still OFF pending a Spanish read
+
+**Built.** Every word the page itself says is now in both languages: about 170 phrases, each
+with a one-buyer (usted) form where the grammar differs. Static text is tagged in the HTML and
+its English is read off the page (never stored twice); text the script draws goes through
+`t()`. Counts are digits in Spanish. `ES_COMPLETE` is still false, so buyers see no toggle and
+English is unchanged.
+
+**Tripwires.** `tests/spanish.py` forces Spanish for a couple and for a single buyer, opens
+every view and presses every button that writes a message, and fails on: visible English
+(by word list AND by any Spanish line identical to its English line), English that changes
+after a Spanish round trip, a message or armed label left in the wrong language after a
+switch, and a key with no Spanish twin. Watched failing on purpose for: a skipped label left
+untranslated, an untranslated "Tap again to clear", and the message-redraw fix removed.
+`tests/hostile.py` still passes.
+
+**Fresh-eyes review: a separate reviewer, not told it worked.** It found, and these are fixed:
+a language switch left the copy and restore messages and the armed labels in the old
+language; a copy-code label could stick in the wrong language; a single buyer was addressed
+as ustedes in two headings; "parado" assumed a man; "las 1 del código" in the restore text;
+a doubled agent name when it contained `{agent}`; "factores descartantes" is not how anyone
+speaks (now "motivos para descartar"), plus several regional words ("fuentes", "fila",
+"Cancelar"). The solo dock no longer shows a partner's percentage.
+
+**Open, by design or deferred.**
+- Agent-supplied text (hero, lede, brief cells, stops heading, deal-breaker sentence,
+  criteria, dates, facts, page title) stays in the language the agent wrote. SKILL.md now says
+  to write them in Spanish for a Spanish-speaking buyer. Bilingual criteria are not wired.
+- The summary the buyer sends the agent is English on purpose. The page does not say so.
+- "teléfono" is used throughout; many Latin American buyers say "celular". Every stop is
+  "Casa N", including condos.
+- English closing messages also have no one-buyer wording ("We want a second look").
+
+**Before switching it on.** Someone who reads Spanish should read `tests/spanish-review-sheet.md`
+(every phrase, English beside Spanish), then the live page on a phone in both modes. Then set
+`var ES_COMPLETE = true;` in the template. If nobody can read it first, ship it on with the
+Spanish view carrying a line inviting the client to correct it.
+
+**Status: DONE as built, NOT LIVE.** Everything the tests and the reviewer could reach passes.
+No native-speaker read has happened.
+
+---
+
+## Slice: Spanish ON, with the correction line — final pass
+
+**Changed.** `ES_COMPLETE = true`. In Spanish mode a line under the tabs says the page was
+translated with a tool, may sound wrong, and to tell the agent. New `DEFAULT_LANG` token (`es`,
+`en` or empty) so an agent can open a Spanish buyer's page in Spanish whatever their phone is
+set to; the buyer's own choice still wins after that.
+
+**Verification.** Phone width checked in a 360 and a 390 px frame, both languages, three views:
+no horizontal overflow, no clipped button. Screenshots read by eye in Spanish. `tests/spanish.py`
+and `tests/hostile.py` pass.
+
+**Fresh-eyes review, a second separate reviewer** (told to build a scorecard from SKILL.md alone,
+then break it). It found, and these are fixed:
+1. "Clear this tour" left the buyer's last "where we landed" decision behind, and it was sent to
+   the agent on the next tour. Present before this session.
+2. The summary said "Agreed on everything" for a solo buyer and for an unscored stop.
+3. A Spanish-speaking buyer on an English phone got a half-English page, and nothing let the
+   agent prevent it (now `DEFAULT_LANG`).
+Also fixed: the print layout carried the language button and the correction line; the example
+brand file lacked `agent_full_name` and `license_line`; SKILL.md now maps every brand value to
+its token, defines STORAGE_KEY and DEFAULT_LANG, and says agent values reach the agent's message;
+"wasted Saturday" and "Saturday afternoon" no longer assume a day; the dead `cl()` is gone; the
+English one-buyer closing buttons read "I want / I need".
+Each of the three real defects now has a test that fails when the fix is removed (watched failing).
+
+**Not covered.** No native Spanish speaker has read it (`tests/spanish-review-sheet.md` is the
+sheet for that). The reviewer read the Spanish for English leaks, not for quality; the earlier
+reviewer did the quality pass. A real PDF print was read from the CSS, not rendered.
+
+**Status: DONE and LIVE** for jobs 1 to 3, with the correction line as the standing safeguard.

@@ -1,6 +1,7 @@
 {
   "business_name": "Example Realty",
   "agent_first_name": "Dana",
+  "agent_full_name": "Dana Example",
   "color_accent": "#1F6F8B",
   "color_action": "#B33A2B",
   "on_accent": "#FFFFFF",
@@ -9,8 +10,9 @@
   "phone_display": "(555) 010-2030",
   "phone_raw": "+15550102030",
   "email": "dana@example.com",
-  "footer_line": "Example Realty \u00b7 example.com",
+  "footer_line": "Example Realty · example.com",
   "font_query": "family=Source+Serif+4:opsz,wght@8..60,400;8..60,700&family=Inter:wght@300;400;700;900",
   "font_display": "\"Source Serif 4\"",
-  "font_body": "\"Inter\""
+  "font_body": "\"Inter\"",
+  "license_line": "DRE #00000000"
 }

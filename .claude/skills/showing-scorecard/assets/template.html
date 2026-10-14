@@ -9,7 +9,7 @@
   Replace every token before publishing. The only outbound request is the
   Google Fonts stylesheet below, which the page discloses to the buyer.
 
-  BRAND, from scorecard-brand.json
+  BRAND, from your-brand.json
     BUSINESS_NAME   LOGO_IMG         an <img src="data:..."> tag, or empty
     COLOR_ACCENT    headings, rules, the gold-role accent
     COLOR_ACTION    the one primary button, and deal-breakers
@@ -30,15 +30,19 @@
     BRIEF_CELLS  two to four <div class="bi"><b>value</b><span>label</span></div>
     STOPS_HEADING
     P1_NAME P1_INITIAL P2_NAME P2_INITIAL   P2 empty = solo mode
-    MUSTS KILLS NICES CONSIDER   ["Label","Hint or empty"],
-    TOUR   {id:"slug", n:"123 Example St", facts:"Area &middot; 3 bd 2 ba &middot; listed $X",
-               area:"City, ST", type:"house"|"condo", date:"Sat 12 Oct"},
-               type draws the tile's elevation: pitched roof, or flat with a parapet.
+    MUSTS KILLS NICES CONSIDER COND_SYS COND_WORK
+               one <li data-hint="Hint, or leave the attribute off">Label</li> per item.
+    TOUR   one <li data-id="slug" data-n="123 Example St"
+               data-facts="Area &middot; 3 bd 2 ba &middot; listed $X"
+               data-area="City, ST" data-type="house" data-date="Sat 12 Oct"></li> per stop.
+               data-photo is optional. type draws the tile's elevation: pitched roof, or flat with a parapet.
                Write the word you would say. condo, apartment, loft, high-rise, co-op
                and unit all draw the stacked one; anything else draws the house.
                area makes the maps links land on the right house. Include it.
                date groups the list when a search runs over several outings. Newest
                first. Omit it only on a one-off tour.
+    DEFAULT_LANG  "es" or "en" to open in that language, or empty to follow the buyer's phone.
+               Use "es" for a buyer who prefers Spanish, whatever their phone is set to.
     STORAGE_KEY  one key PER CLIENT, never per tour. It is what makes their
                shortlist accumulate across weeks. Changing it wipes everything they
                have scored.
@@ -81,15 +85,16 @@
   <span data-k="l-initial">{{P2_INITIAL}}</span><span data-k="l-name">{{P2_NAME}}</span>
   <span data-k="subhead">{{SUMMARY_SUBHEAD}}</span>
   <span data-k="agent">{{AGENT_FIRST_NAME}}</span><span data-k="date">{{TOUR_DATE}}</span>
+  <span data-k="phone-raw">{{AGENT_PHONE_RAW}}</span><span data-k="phone">{{AGENT_PHONE}}</span><span data-k="email">{{AGENT_SEND_EMAIL}}</span><span data-k="key">{{STORAGE_KEY}}</span><span data-k="lang">{{DEFAULT_LANG}}</span>
 </div>
 <div id="lists" hidden>
-  <b data-k="musts">{{MUSTS}}</b>
-  <b data-k="kills">{{KILLS}}</b>
-  <b data-k="nices">{{NICES}}</b>
-  <b data-k="consider">{{CONSIDER}}</b>
-  <b data-k="cond_sys">{{COND_SYS}}</b>
-  <b data-k="cond_work">{{COND_WORK}}</b>
-  <b data-k="tour">{{TOUR}}</b>
+  <ol data-k="musts">{{MUSTS}}</ol>
+  <ol data-k="kills">{{KILLS}}</ol>
+  <ol data-k="nices">{{NICES}}</ol>
+  <ol data-k="consider">{{CONSIDER}}</ol>
+  <ol data-k="cond_sys">{{COND_SYS}}</ol>
+  <ol data-k="cond_work">{{COND_WORK}}</ol>
+  <ol data-k="tour">{{TOUR}}</ol>
 </div>
 <style>
 :root{
@@ -514,7 +519,7 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
 /* an agent hands clients paper. Cmd-P should produce something, not a mess. */
 @media print{
   :root{--page:#fff;--surface:#fff;--alt:#fff;--ink:#111;--body:#333;--muted:#555;--deep:#fff}
-  .dock,.bar,.skipbtn,.photobtn,.routebar,.navrow,.btnrow,#sendbox,#sendhint,#storewarn,.closerow{display:none!important}
+  .dock,.bar,.langbtn,#escorrect,.skipbtn,.photobtn,.routebar,.navrow,.btnrow,#sendbox,#sendhint,#storewarn,.closerow{display:none!important}
   .hero{background:#fff!important;color:#111!important;padding-block:0 18px;border-bottom:2px solid #111}
   .hero h1,.hero h1 em,.kicker,.lede,.lede b,.bi b,.bi span{color:#111!important}
   .wrap{padding-block:0 0;max-width:100%}
@@ -565,7 +570,7 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
 </div></div>
 
 <div class="hero"><div class="in">
-  <p class="kicker">Showing day scorecard</p>
+  <p class="kicker" data-t="kicker">Showing day scorecard</p>
   <h1>{{HERO_LINE_1}} <em>{{HERO_LINE_2}}</em></h1>
   <p class="lede">{{LEDE}}</p>
   <div class="brief">
@@ -580,6 +585,8 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
   <button class="tab" role="tab" aria-selected="false" id="tab-compare" data-t="tabCompare">Compare</button>
 </div>
 
+<p class="note" id="escorrect" data-t="esCorrect" hidden>This page is translated into Spanish. If anything sounds wrong, tell {{AGENT_FIRST_NAME}} and it will be fixed.</p>
+
 <main>
   <section id="view-stops">
     <p class="onephone" id="onephone" data-th="onePhone" hidden><b>Use one phone between you.</b> You each have your own column, so pass it back and forth and tap your own initial. Everything saves to the phone you tap it into, so two phones would leave you each with half the picture.</p>
@@ -592,30 +599,30 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
       <span class="routenote" id="routenote"></span>
     </div>
     <div class="stops" id="stoplist"></div>
-    <p id="storewarn" hidden>This phone is not saving your answers, so they will be lost if you close or reload the page. Private browsing usually causes this. Copy your results before you leave each house.</p>
-    <p class="note"><b>How it scores.</b> A nice-to-have is worth 4 and an easy-to-forget item 2. A must-have is weighted to outrank every nice-to-have on your list put together, so no amount of small extras can cover for one you actually needed. The percentage is what a place earned out of everything possible for it, and any must-have left unchecked gets flagged on its own.</p>
-    <p class="note"><b>Deal-breakers aren't scored.</b> {{KILLS_NOTE}} If one turns out to be true, the place is out no matter how well it scored, and the card says so.</p>
+    <p id="storewarn" data-t="storeWarn" hidden>This phone is not saving your answers, so they will be lost if you close or reload the page. Private browsing usually causes this. Copy your results before you leave each house.</p>
+    <p class="note" data-th="noteScores"><b>How it scores.</b> A nice-to-have is worth 4 and an easy-to-forget item 2. A must-have is weighted to outrank every nice-to-have on your list put together, so no amount of small extras can cover for one you actually needed. The percentage is what a place earned out of everything possible for it, and any must-have left unchecked gets flagged on its own.</p>
+    <p class="note"><b data-t="killsLead">Deal-breakers aren't scored.</b> {{KILLS_NOTE}} <span data-t="killsTail">If one turns out to be true, the place is out no matter how well it scored, and the card says so.</span></p>
   </section>
 
   <section id="view-detail" hidden>
     <div class="head">
-      <button class="back" id="back">&larr; Stops</button>
+      <button class="back" id="back" data-th="backBtn">&larr; Stops</button>
       <div>
         <p class="snum" id="d-num"></p>
         <h2 class="d-addr" id="d-addr"></h2>
         <p class="sfacts" id="d-facts"></p>
-        <p class="navrow"><a id="nav-g" target="_blank" rel="noopener">Directions</a><a id="nav-w" target="_blank" rel="noopener">Waze</a></p>
+        <p class="navrow"><a id="nav-g" target="_blank" rel="noopener" data-t="navDirections">Directions</a><a id="nav-w" target="_blank" rel="noopener">Waze</a></p>
       </div>
     </div>
     <div id="groups"></div>
     <div class="gut">
-      <p>Gut feel, each of you, before you talk each other into or out of it. Not scored, just written down.</p>
+      <p data-t="gutIntro">Gut feel, each of you, before you talk each other into or out of it. Not scored, just written down.</p>
       <div class="gutp"><span class="pinit b" data-solo-hide>{{P1_INITIAL}}</span><div class="gutrow" id="gut-b"></div></div>
       <div class="gutp" data-solo-hide><span class="pinit l">{{P2_INITIAL}}</span><div class="gutrow" id="gut-l"></div></div>
     </div>
     <div class="notes">
-      <label for="notes">What either of you would remember about this one</label>
-      <textarea id="notes" placeholder="The thing you'll have forgotten by the next stop."></textarea>
+      <label for="notes" data-t="notesLabel">What either of you would remember about this one</label>
+      <textarea id="notes" data-tp="notesPh" placeholder="The thing you'll have forgotten by the next stop."></textarea>
     </div>
   </section>
 
@@ -625,38 +632,38 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
     <div id="splitbox" hidden></div>
     <div id="gridbox" hidden></div>
     <div class="btnrow">
-      <a class="btn primary" id="sendsms" role="button" href="sms:{{AGENT_PHONE_RAW}}">Text it to {{AGENT_FIRST_NAME}}</a>
-      <a class="btn" id="sendmail" role="button" href="mailto:{{AGENT_SEND_EMAIL}}">Email it to {{AGENT_FIRST_NAME}}</a>
-      <button class="btn" id="send">Copy instead</button>
-      <button class="btn" id="copy">Copy full detail</button>
-      <button class="btn" id="reset">Clear this tour</button>
+      <a class="btn primary" id="sendsms" data-t="btnSms" role="button" href="sms:{{AGENT_PHONE_RAW}}">Text it to {{AGENT_FIRST_NAME}}</a>
+      <a class="btn" id="sendmail" data-t="btnMail" role="button" href="mailto:{{AGENT_SEND_EMAIL}}">Email it to {{AGENT_FIRST_NAME}}</a>
+      <button class="btn" id="send" data-t="btnSend">Copy for {{AGENT_FIRST_NAME}}</button>
+      <button class="btn" id="copy" data-t="btnCopy">Copy full detail</button>
+      <button class="btn" id="reset" data-t="btnReset">Clear this tour</button>
     </div>
-    <p class="sendempty" id="sendempty" hidden>Nothing is scored on <em>this</em> phone yet. Your ticks live on whichever phone you tap them into, so if you scored on a different one, send it from there. Otherwise open a house above and start ticking.</p>
+    <p class="sendempty" id="sendempty" data-th="sendEmpty" hidden>Nothing is scored on <em>this</em> phone yet. Your ticks live on whichever phone you tap them into, so if you scored on a different one, send it from there. Otherwise open a house above and start ticking.</p>
     <p class="sendhint" id="sendhint" hidden></p>
-    <textarea id="sendbox" hidden readonly aria-label="Summary to send"></textarea>
+    <textarea id="sendbox" data-ta="sendboxAria" hidden readonly aria-label="Summary to send"></textarea>
 
     <section id="backupbox" class="backup">
       <h2 class="sechead" data-t="backupHeading">If You Lose This Phone</h2>
-      <p class="note"><b>Everything you tap is saved on this phone and nowhere else.</b> A new phone, a cleared browser or a private window wipes it, and there is no way to get it back on our own. So the summary you send {{AGENT_FIRST_NAME}} ends with a short backup code. {{AGENT_FIRST_NAME}} keeps it. If anything happens to this phone, ask for it back, paste it below, and every home you have scored returns.</p>
+      <p class="note" data-th="backupNote"><b>Everything you tap is saved on this phone and nowhere else.</b> A new phone, a cleared browser or a private window wipes it, and there is no way to get it back on our own. So the summary you send {{AGENT_FIRST_NAME}} ends with a short backup code. {{AGENT_FIRST_NAME}} keeps it. If anything happens to this phone, ask for it back, paste it below, and every home you have scored returns.</p>
       <div class="btnrow">
-        <button class="btn" id="copycode">Copy my backup code</button>
-        <button class="btn" id="showrestore">I have a code to restore</button>
+        <button class="btn" id="copycode" data-t="btnCopyCode">Copy my backup code</button>
+        <button class="btn" id="showrestore" data-t="btnShowRestore">I have a code to restore</button>
       </div>
       <div id="restorewrap" hidden>
-        <label class="restorelab" for="restorein">Paste the code {{AGENT_FIRST_NAME}} sent you</label>
-        <textarea id="restorein" rows="3" placeholder="RH1...." aria-label="Backup code to restore"></textarea>
-        <div class="btnrow"><button class="btn primary" id="dorestore">Restore</button></div>
+        <label class="restorelab" for="restorein" data-t="restoreLab">Paste the code {{AGENT_FIRST_NAME}} sent you</label>
+        <textarea id="restorein" data-ta="restoreAria" rows="3" placeholder="RH1...." aria-label="Backup code to restore"></textarea>
+        <div class="btnrow"><button class="btn primary" id="dorestore" data-t="btnRestore">Restore</button></div>
         <p class="restoremsg" id="restoremsg" hidden></p>
       </div>
     </section>
-    <p class="note"><b>No home is going to score 100%.</b> The number isn't there to find a perfect one. It's to show you in writing which trade-offs you're actually making, so the decision is a clear one instead of a feeling on a Saturday afternoon.</p>
-    <p class="note"><b>Your answers stay on this phone.</b> Nobody else can see them and nothing is uploaded. (The page does load its fonts from Google, like most websites.) When you're done, tap <b>Copy for {{AGENT_FIRST_NAME}}</b> and then paste it into a text or an email yourself. This page cannot send anything on its own, so it is not with {{AGENT_FIRST_NAME}} until you press send in your own app.</p>
+    <p class="note" data-th="note100"><b>No home is going to score 100%.</b> The number isn't there to find a perfect one. It's to show you in writing which trade-offs you're actually making, so the decision is a clear one instead of a feeling in the moment.</p>
+    <p class="note" data-th="noteStay"><b>Your answers stay on this phone.</b> Nobody else can see them and nothing is uploaded. (The page does load its fonts from Google, like most websites.) When you're done, tap <b>Copy for {{AGENT_FIRST_NAME}}</b> and then paste it into a text or an email yourself. This page cannot send anything on its own, so it is not with {{AGENT_FIRST_NAME}} until you press send in your own app.</p>
   </section>
 </main>
 
 <section class="closing" id="closing">
-  <h2 class="sechead" style="margin-top:0">What happens next</h2>
-  <p class="closenote">You will never be clearer about today than you are right now, standing outside the last house, before the details start running together. Take a minute with it. Then tell {{AGENT_FIRST_NAME}} where you have landed and she will take it from there.</p>
+  <h2 class="sechead" style="margin-top:0" data-t="closingHead">What happens next</h2>
+  <p class="closenote" data-t="closeNote">You will never be clearer about today than you are right now, standing outside the last house, before the details start running together. Take a minute with it. Then tell {{AGENT_FIRST_NAME}} where you have landed and you can both take it from there.</p>
   <div class="closerow" id="closerow"></div>
   <p class="closehint" id="closehint" hidden></p>
 </section>
@@ -674,13 +681,13 @@ table.grid tr:last-child th,table.grid tr:last-child td{border-bottom:0}
   </div>
 </div>
 
-<p class="foot"><span>{{AGENT_FOOTER}}</span><span>Built from your buyer consultation</span></p>
+<p class="foot"><span>{{AGENT_FOOTER}}</span><span data-t="footBuilt">Built from your buyer consultation</span></p>
 </div>
 
 <div class="dock" id="dock" hidden><div class="inner">
   <span id="dock-scores"></span>
   <span class="dockmeta"><b id="dock-pts">nothing scored yet</b><span id="dock-must">nothing checked yet</span></span>
-  <button class="btn primary" id="dock-done" style="margin-left:auto">Done here</button>
+  <button class="btn primary" id="dock-done" data-t="dockDone" style="margin-left:auto">Done here</button>
 </div></div>
 
 <script>
@@ -693,7 +700,11 @@ function person(k){
 var P={b:{key:"b",initial:person("b-initial"),name:person("b-name")},
        l:{key:"l",initial:person("l-initial"),name:person("l-name")}};
 var SUBHEAD=person("subhead"), AGENT=person("agent"), TDATE=person("date");
+var PHONE_RAW=person("phone-raw"), PHONE=person("phone"), EMAIL=person("email");
+// The same values for HTML. P and AGENT stay plain, because they also go into text messages.
+var PE={b:{name:"",initial:""},l:{name:"",initial:""}};
 var SOLO = !P.l.name;
+["b","l"].forEach(function(k){ PE[k].name=esc(P[k].name); PE[k].initial=esc(P[k].initial); });
 if(SOLO) document.documentElement.setAttribute("data-solo","1");
 else { var op=document.getElementById("onephone"); if(op) op.hidden=false; }
 
@@ -710,7 +721,6 @@ var SYS_STATES=[["up","Updated","g"],["orig","Original","m"],["issue","Issue","l
 var WORK_STATES=[["yes","Yes","g"],["part","Partly","m"],["no","No","l"],["ask","Ask","n"]];
 
 var COND_SYS=readList("cond_sys");
-var COND_DISCLAIMER = "These are your own impressions on the day, not an inspection, and not anything your agent is telling you about the property. Only a licensed inspector can tell you the condition of a home.";
 
 var COND_WORK=readList("cond_work");
 
@@ -724,23 +734,23 @@ function condCount(p){
 }
 function condLine(p){
   var c=condCount(p);
-  if(!c.touched) return '<span class="cond n">condition not checked</span>';
+  if(!c.touched) return '<span class="cond n">'+t("condNone")+'</span>';
   var bits=[];
-  if(c.good) bits.push('<span class="cond g">'+c.good+' updated</span>');
-  if(c.mid) bits.push('<span class="cond m">'+c.mid+' original</span>');
-  if(c.bad) bits.push('<span class="cond l">'+c.bad+' needs work</span>');
-  if(c.asked) bits.push('<span class="cond n">'+c.asked+' to ask</span>');
-  if(c.unset) bits.push('<span class="cond n">'+c.unset+' blank</span>');
+  if(c.good) bits.push('<span class="cond g">'+t("condUp",{n:c.good})+'</span>');
+  if(c.mid) bits.push('<span class="cond m">'+t("condOrig",{n:c.mid})+'</span>');
+  if(c.bad) bits.push('<span class="cond l">'+t("condBad",{n:c.bad})+'</span>');
+  if(c.asked) bits.push('<span class="cond n">'+t("condAsk",{n:c.asked})+'</span>');
+  if(c.unset) bits.push('<span class="cond n">'+t("condBlank",{n:c.unset})+'</span>');
   return bits.join('<span class="dot">&middot;</span>');
 }
 
-var TOUR=readList("tour");
+var TOUR=readTour();
 
 // Flip to true only when every word a buyer can see is in the table below and both
 // languages have been read end to end on a phone. The key check underneath catches a
 // missing twin; it cannot catch a string that was never lifted out of the page in the
 // first place, which is why this is a human switch and not a computed one.
-var ES_COMPLETE = false;
+var ES_COMPLETE = true;
 
 var STRINGS = {
   en: {
@@ -754,7 +764,129 @@ var STRINGS = {
     groupShort:      "Short on something you needed",
     groupOut:        "Out",
     groupCold:       "Not scored yet",
-    backupHeading:   "If You Lose This Phone"
+    backupHeading:   "If You Lose This Phone",
+    codeBad: "That does not look like a backup code. It starts with RH1.",
+    codeOld: "That code was made from a different version of this list, so the answers would land against the wrong questions. Ask your agent to send the matching one.",
+    codeIncomplete: "That code is incomplete. Ask your agent to send the whole thing, including the end.",
+    photoAdd: "Add a photo of {n}",
+    photoChange: "Change or remove the photo of {n}",
+    photoTitleAdd: "Add a photo",
+    photoTitleChange: "Change or remove this photo",
+    photoConfirm: "Remove this photo? You can add a different one after.",
+    photoNotImage: "That file is not an image.",
+    photoRead: "That photo could not be read.",
+    photoOpen: "That photo could not be opened.",
+    photoSave: "That photo could not be saved.",
+    photoRoom: "No room left on this phone to save the photo.",
+    flagOut: "out &middot; {x}",
+    notesOnly: "notes only, nobody scored it yet",
+    notScoredYet: "not scored yet",
+    disOne: "1 disagreement",
+    disMany: "{n} disagreements",
+    agreeAll: "you agree on everything",
+    allMusts: "every must-have met",
+    routeOne: "Drive to this one",
+    routeMany: "Drive today’s route",
+    noteRouteOne: "Opens in your maps app, ready to navigate.",
+    noteRouteMany: "Opens in your maps app with today’s {n} stops loaded in order, ready to navigate.",
+    noteRouteEarlier: "Homes you have already seen are not in the route.",
+    noStops: "No stops on this tour yet. Ask {agent} to add the addresses you are seeing today.",
+    yourAgent: "your agent",
+    earlier: "Earlier",
+    stopN: "Stop {n}",
+    stopSkipped: "Stop {n} &middot; skipped",
+    stopLine: "Stop {n}",
+    skip: "Skip",
+    putBack: "Put back",
+    skipAria: "Skip {n}",
+    putBackAria: "Put back {n}",
+    grpKillT: "Deal-breakers",
+    grpKillS: "Check one only if it's true of the place. Any check here takes it out of the running for both of you.",
+    grpNot: "not scored",
+    grpPts: "{n} pts each",
+    grpMustT: "Must-haves",
+    grpMustS: "From your consultation. Each of you taps your own initial, so you can see where you don't agree.",
+    grpNiceT: "Nice to have",
+    grpConT: "Easy to forget",
+    grpConS: "Facts about the place rather than opinions, so one check covers you both.",
+    grpSysT: "The big systems",
+    condDisclaimer: "These are your own impressions on the day, not an inspection, and not anything your agent is telling you about the property. Only a licensed inspector can tell you the condition of a home.",
+    grpSysS: "None of this changes the score above. It changes what the house costs you after you own it, which is a separate question and usually the more expensive one.",
+    grpWorkT: "Work already done",
+    st_up: "Updated",
+    st_orig: "Original",
+    st_issue: "Issue",
+    st_ask: "Ask",
+    st_yes: "Yes",
+    st_part: "Partly",
+    st_no: "No",
+    gutAria: "{name} gut feel {v} of 5",
+    dockNobody: "nobody has scored this one yet",
+    dockTap: "tap your initial on the items that are true",
+    dockOut: "OUT",
+    dockBefore: "scored {b}% / {l}% before this",
+    dockPoints: "{got} of {poss} points",
+    dockKill: "deal-breaker: {x}",
+    dockMissOne: "{n} must-have not met",
+    dockMissMany: "{n} must-haves not met",
+    dockSplitOne: "{n} thing you see differently",
+    dockSplitMany: "{n} things you see differently",
+    dockBothMiss: "{a} / {b} must-haves not met",
+    dockBothHave: "you both have every must-have",
+    condNone: "condition not checked",
+    condUp: "{n} updated",
+    condOrig: "{n} original",
+    condBad: "{n} needs work",
+    condAsk: "{n} to ask",
+    condBlank: "{n} blank",
+    cmpEmpty: "Nothing to compare yet. Once your agent adds the homes you are seeing, every one you score shows up here.",
+    missingOne: "Missing {n} of your must-haves",
+    missingMany: "Missing {n} of your must-haves",
+    missingDisagree: "You two do not agree on what this one is missing",
+    nothingMissing: "nothing missing",
+    gutSolo: "Gut feel {a} out of 5.",
+    gutTwo: "Gut feel, {b} {x} and {l} {y} out of 5.",
+    outOne: "Out on a deal-breaker",
+    outMany: "Out on deal-breakers",
+    outLineOne: "You said that was an instant no, so where it landed on points does not come into it.",
+    outLineMany: "You said those were an instant no, so where it landed on points does not come into it.",
+    coldQuiet: "Not scored yet.",
+    goodAll: "Every must-have met.",
+    splitOneLine: "You two scored {n} thing differently. It is listed below.",
+    splitManyLine: "You two scored {n} things differently. They are listed below.",
+    groupLiveOne: "This one met every single thing you said you needed.",
+    groupLiveMany: "These met every single thing you said you needed. The percentage is the extras on top.",
+    groupShortSub: "A high percentage here still means a home that misses something you said you needed.",
+    splitHead: "Where You Two Don't Agree",
+    splitNote: "<b>This is the useful part.</b> These are the things one of you counted and the other didn't. None of them are wrong. They're just worth saying out loud before you decide anything.",
+    counted: "{a} counted it, {b} didn't",
+    gridHome: "Home",
+    gridOut: "out",
+    gridScore: "Score",
+    gridHead: "Every Home, Every Line",
+    gridSubSolo: "A solid mark means you counted it in that home.",
+    gridSubTwo: "A solid mark means you both counted it. A letter means only one of you did.",
+    gridScroll: "Scroll sideways to see the rest. The names stay put.",
+    scoreFirst: "Score a home first",
+    copiedHint: "Copied. Now paste it into a text to {agent} at {telH} or an email to {mailH}. Nothing leaves this phone until you do.",
+    copyFail: "Copy did not work on this phone. Select the text below, copy it, and send it to {agent} at {phone}.",
+    copiedBtn: "Copied, now paste it",
+    useBox: "Use the box below",
+    copied: "Copied",
+    copyFailShort: "Copy did not work, use the box below",
+    tapClear: "Tap again to clear",
+    cleared: "Cleared",
+    nothingYet: "Nothing scored yet",
+    neverMind: "Never mind",
+    tapReplace: "Tap again to replace",
+    replaceOne: "You already have {n} home scored on this phone. Restoring replaces it with the {m} in the code. Tap Restore again if that is what you want.",
+    replaceMany: "You already have {n} homes scored on this phone. Restoring replaces them with the {m} in the code. Tap Restore again if that is what you want.",
+    restoredOne: "Restored. {N} home is back exactly as you left it.",
+    restoredMany: "Restored. {N} homes are back exactly as you left them.",
+    partialOne: "Restored {n} home. One of them is not on this list any more, so it is held but not shown.",
+    partialMany1: "Restored {n} homes. One of them is not on this list any more, so it is held but not shown.",
+    partialMany: "Restored {n} homes. {k} of them are not on this list any more, so they are held but not shown.",
+    dockBefore_1: "scored {b}% before this"
   },
   es: {
     langName:        "EN",
@@ -763,11 +895,224 @@ var STRINGS = {
     tabCompare:      "Comparar",
     onePhone:        "<b>Usen un solo teléfono entre los dos.</b> Cada uno tiene su propia columna, así que pásenselo y toquen su propia inicial. Todo se guarda en el teléfono donde lo tocaron, así que con dos teléfonos cada uno se quedaría con la mitad.",
     compareHeading:  "Cómo van las cosas",
-    groupLive:       "Siguen en la carrera",
+    groupLive:       "Siguen en la lista",
     groupShort:      "Les falta algo que ustedes pidieron",
-    groupOut:        "Descartada",
+    groupOut:        "Descartadas",
     groupCold:       "Sin calificar todavía",
-    backupHeading:   "Si pierden este teléfono"
+    backupHeading:   "Si pierden este teléfono",
+    kicker:          "Hoja de calificación del día de visitas",
+    backBtn:         "&larr; Casas",
+    navDirections:   "Cómo llegar",
+    gutIntro:        "Su primera impresión, de cada uno, antes de convencerse el uno al otro de que sí o de que no. No suma puntos, solo se anota.",
+    gutIntro_1:      "Su primera impresión, antes de empezar a darle vueltas. No suma puntos, solo se anota.",
+    notesLabel:      "Lo que cualquiera de los dos recordaría de esta casa",
+    notesLabel_1:    "Lo que usted recordaría de esta casa",
+    notesPh:         "Lo que ya se les habrá olvidado en la siguiente casa.",
+    notesPh_1:       "Lo que ya se le habrá olvidado en la siguiente casa.",
+    btnSms:          "Enviar texto a {agent}",
+    btnMail:         "Enviar correo a {agent}",
+    btnSend:         "Copiar para {agent}",
+    btnCopy:         "Copiar todo el detalle",
+    btnReset:        "Borrar esta visita",
+    sendEmpty:       "Todavía no hay nada calificado en <em>este</em> teléfono. Sus marcas viven en el teléfono donde las toquen, así que si calificaron en otro, envíenlo desde ese. Si no, abran una casa arriba y empiecen a marcar.",
+    sendEmpty_1:     "Todavía no hay nada calificado en <em>este</em> teléfono. Sus marcas viven en el teléfono donde las toque, así que si calificó en otro, envíelo desde ese. Si no, abra una casa arriba y empiece a marcar.",
+    sendboxAria:     "Resumen para enviar",
+    backupNote:      "<b>Todo lo que tocan se guarda en este teléfono y en ningún otro lado.</b> Un teléfono nuevo, un navegador borrado o una ventana privada lo borra, y no hay forma de recuperarlo por su cuenta. Por eso el resumen que le envían a {agent} termina con un código de respaldo corto. {agent} lo guarda. Si algo le pasa a este teléfono, pídanselo, péguenlo abajo y regresan todas las casas que calificaron.",
+    backupNote_1:    "<b>Todo lo que toca se guarda en este teléfono y en ningún otro lado.</b> Un teléfono nuevo, un navegador borrado o una ventana privada lo borra, y no hay forma de recuperarlo por su cuenta. Por eso el resumen que le envía a {agent} termina con un código de respaldo corto. {agent} lo guarda. Si algo le pasa a este teléfono, pídaselo, péguelo abajo y regresan todas las casas que calificó.",
+    btnCopyCode:     "Copiar el código de respaldo",
+    btnShowRestore:  "Tengo un código para restaurar",
+    restoreLab:      "Peguen el código que les mandó {agent}",
+    restoreLab_1:    "Pegue el código que le mandó {agent}",
+    restoreAria:     "Código de respaldo para restaurar",
+    btnRestore:      "Restaurar",
+    note100:         "<b>Ninguna casa va a sacar 100%.</b> El número no está para encontrar la casa perfecta. Está para mostrarles por escrito qué concesiones están haciendo de verdad, para que la decisión sea clara y no una corazonada del momento.",
+    note100_1:       "<b>Ninguna casa va a sacar 100%.</b> El número no está para encontrar la casa perfecta. Está para mostrarle por escrito qué concesiones está haciendo de verdad, para que la decisión sea clara y no una corazonada del momento.",
+    noteStay:        "<b>Sus respuestas se quedan en este teléfono.</b> Nadie más puede verlas y no se sube nada. (La página sí carga sus fuentes desde Google, como la mayoría de los sitios web.) Cuando terminen, toquen <b>Copiar para {agent}</b> y péguenlo ustedes mismos en un mensaje de texto o un correo. Esta página no puede enviar nada por sí sola, así que no le llega a {agent} hasta que ustedes toquen Enviar en su propia app.",
+    noteStay_1:      "<b>Sus respuestas se quedan en este teléfono.</b> Nadie más puede verlas y no se sube nada. (La página sí carga sus fuentes desde Google, como la mayoría de los sitios web.) Cuando termine, toque <b>Copiar para {agent}</b> y péguelo usted mismo en un mensaje de texto o un correo. Esta página no puede enviar nada por sí sola, así que no le llega a {agent} hasta que usted toque Enviar en su propia app.",
+    noteScores:      "<b>Cómo se califica.</b> Un deseable vale 4 puntos y un dato fácil de olvidar vale 2. Un requisito indispensable pesa más que todos los deseables de su lista juntos, así que ningún montón de extras puede compensar algo que de verdad necesitaban. El porcentaje es lo que la casa ganó de todo lo posible, y cualquier requisito indispensable sin marcar aparece señalado por separado.",
+    noteScores_1:    "<b>Cómo se califica.</b> Un deseable vale 4 puntos y un dato fácil de olvidar vale 2. Un requisito indispensable pesa más que todos los deseables de su lista juntos, así que ningún montón de extras puede compensar algo que de verdad necesitaba. El porcentaje es lo que la casa ganó de todo lo posible, y cualquier requisito indispensable sin marcar aparece señalado por separado.",
+    storeWarn:       "Este teléfono no está guardando sus respuestas, así que se perderán si cierran o recargan la página. Casi siempre es por navegar en modo privado. Copien sus resultados antes de salir de cada casa.",
+    storeWarn_1:     "Este teléfono no está guardando sus respuestas, así que se perderán si cierra o recarga la página. Casi siempre es por navegar en modo privado. Copie sus resultados antes de salir de cada casa.",
+    killsLead:       "Los motivos para descartar no suman ni restan puntos.",
+    killsTail:       "Si alguno resulta cierto, la casa queda fuera sin importar qué tan bien haya calificado, y la tarjeta lo dice.",
+    closingHead:     "Qué sigue",
+    closeNote:       "Nunca van a tener más claro cómo les fue hoy que ahora mismo, afuera de la última casa, antes de que los detalles se empiecen a mezclar. Tómense un minuto. Luego díganle a {agent} dónde quedaron y desde ahí siguen juntos.",
+    closeNote_1:     "Nunca va a tener más claro cómo le fue hoy que ahora mismo, afuera de la última casa, antes de que los detalles se empiecen a mezclar. Tómese un minuto. Luego dígale a {agent} dónde quedó y desde ahí siguen juntos.",
+    footBuilt:       "Hecho a partir de su reunión inicial",
+    dockDone:        "Listo aquí",
+    codeBad: "Eso no parece un código de respaldo. Empieza con RH1.",
+    codeOld: "Ese código se hizo con otra versión de esta lista, así que las respuestas caerían en las preguntas equivocadas. Pídanle a su agente que mande el que corresponde.",
+    codeOld_1: "Ese código se hizo con otra versión de esta lista, así que las respuestas caerían en las preguntas equivocadas. Pídale a su agente que mande el que corresponde.",
+    codeIncomplete: "Ese código está incompleto. Pídanle a su agente que lo mande completo, hasta el final.",
+    codeIncomplete_1: "Ese código está incompleto. Pídale a su agente que lo mande completo, hasta el final.",
+    photoAdd: "Agregar una foto de {n}",
+    photoChange: "Cambiar o quitar la foto de {n}",
+    photoTitleAdd: "Agregar una foto",
+    photoTitleChange: "Cambiar o quitar esta foto",
+    photoConfirm: "¿Quitar esta foto? Después pueden agregar otra.",
+    photoConfirm_1: "¿Quitar esta foto? Después puede agregar otra.",
+    photoNotImage: "Ese archivo no es una imagen.",
+    photoRead: "No se pudo leer esa foto.",
+    photoOpen: "No se pudo abrir esa foto.",
+    photoSave: "No se pudo guardar esa foto.",
+    photoRoom: "Ya no hay espacio en este teléfono para guardar la foto.",
+    flagOut: "descartada &middot; {x}",
+    notesOnly: "solo notas, nadie la ha calificado",
+    notScoredYet: "sin calificar todavía",
+    disOne: "1 desacuerdo",
+    disMany: "{n} desacuerdos",
+    agreeAll: "están de acuerdo en todo",
+    allMusts: "cumple todos los indispensables",
+    routeOne: "Ir a esta casa",
+    routeMany: "Recorrer la ruta de hoy",
+    noteRouteOne: "Se abre en su app de mapas, lista para navegar.",
+    noteRouteMany: "Se abre en su app de mapas con las {n} casas de hoy en orden, lista para navegar.",
+    noteRouteEarlier: "Las casas que ya vieron no están en la ruta.",
+    noteRouteEarlier_1: "Las casas que ya vio no están en la ruta.",
+    noStops: "Todavía no hay casas en esta visita. Pídanle a {agent} que agregue las direcciones que van a ver hoy.",
+    noStops_1: "Todavía no hay casas en esta visita. Pídale a {agent} que agregue las direcciones que va a ver hoy.",
+    yourAgent: "su agente",
+    earlier: "Antes",
+    stopN: "Casa {n}",
+    stopSkipped: "Casa {n} &middot; omitida",
+    stopLine: "Casa {n}",
+    skip: "Omitir",
+    putBack: "Volver a incluir",
+    skipAria: "Omitir {n}",
+    putBackAria: "Volver a incluir {n}",
+    grpKillT: "Motivos para descartar",
+    grpKillS: "Marquen uno solo si es cierto de la casa. Cualquier marca aquí la saca de la competencia para los dos.",
+    grpKillS_1: "Marque uno solo si es cierto de la casa. Cualquier marca aquí la saca de la competencia.",
+    grpNot: "sin puntos",
+    grpPts: "{n} pts c/u",
+    grpMustT: "Requisitos indispensables",
+    grpMustS: "De su reunión inicial. Cada uno toca su propia inicial, para ver en qué no coinciden.",
+    grpMustS_1: "De su reunión inicial.",
+    grpNiceT: "Deseables",
+    grpConT: "Fáciles de olvidar",
+    grpConS: "Datos de la casa, no opiniones, así que una sola marca vale por los dos.",
+    grpConS_1: "Datos de la casa, no opiniones.",
+    grpSysT: "Los sistemas principales",
+    condDisclaimer: "Estas son sus propias impresiones del día, no una inspección, y no es algo que su agente les esté diciendo sobre la propiedad. Solo un inspector con licencia puede decirles el estado de una casa.",
+    condDisclaimer_1: "Estas son sus propias impresiones del día, no una inspección, y no es algo que su agente le esté diciendo sobre la propiedad. Solo un inspector con licencia puede decirle el estado de una casa.",
+    grpSysS: "Nada de esto cambia la calificación de arriba. Cambia lo que les cuesta la casa una vez que es suya, que es otra pregunta y casi siempre la más cara.",
+    grpSysS_1: "Nada de esto cambia la calificación de arriba. Cambia lo que le cuesta la casa una vez que es suya, que es otra pregunta y casi siempre la más cara.",
+    grpWorkT: "Trabajos ya hechos",
+    st_up: "Renovado",
+    st_orig: "Original",
+    st_issue: "Problema",
+    st_ask: "Preguntar",
+    st_yes: "Sí",
+    st_part: "En parte",
+    st_no: "No",
+    gutAria: "Impresión de {name}: {v} de 5",
+    dockNobody: "nadie ha calificado esta casa todavía",
+    dockTap: "toquen su inicial en lo que sea cierto",
+    dockTap_1: "toque lo que sea cierto",
+    dockOut: "FUERA",
+    dockBefore: "antes sacaba {b}% / {l}%",
+    dockPoints: "{got} de {poss} puntos",
+    dockKill: "motivo para descartar: {x}",
+    dockMissOne: "no cumple {n} indispensable",
+    dockMissMany: "no cumple {n} indispensables",
+    dockSplitOne: "{n} cosa en la que no coinciden",
+    dockSplitMany: "{n} cosas en las que no coinciden",
+    dockBothMiss: "{a} / {b} indispensables sin cumplir",
+    dockBothHave: "los dos cumplen todos los indispensables",
+    condNone: "condición sin revisar",
+    condUp: "renovado: {n}",
+    condOrig: "original: {n}",
+    condBad: "con problemas: {n}",
+    condAsk: "por preguntar: {n}",
+    condBlank: "en blanco: {n}",
+    cmpEmpty: "Todavía no hay nada que comparar. Cuando su agente agregue las casas que están viendo, cada una que califiquen aparece aquí.",
+    cmpEmpty_1: "Todavía no hay nada que comparar. Cuando su agente agregue las casas que está viendo, cada una que califique aparece aquí.",
+    missingOne: "Les falta {n} de sus indispensables",
+    missingMany: "Les faltan {n} de sus indispensables",
+    missingOne_1: "Le falta {n} de sus indispensables",
+    missingMany_1: "Le faltan {n} de sus indispensables",
+    missingDisagree: "Ustedes dos no coinciden en lo que le falta a esta casa",
+    nothingMissing: "no falta nada",
+    gutSolo: "Impresión: {a} de 5.",
+    gutTwo: "Impresión: {b} {x} y {l} {y} de 5.",
+    outOne: "Descartada por un motivo eliminatorio",
+    outMany: "Descartada por motivos eliminatorios",
+    outLineOne: "Dijeron que eso era un no rotundo, así que los puntos que sacó no cuentan.",
+    outLineMany: "Dijeron que esas cosas eran un no rotundo, así que los puntos que sacó no cuentan.",
+    outLineOne_1: "Dijo que eso era un no rotundo, así que los puntos que sacó no cuentan.",
+    outLineMany_1: "Dijo que esas cosas eran un no rotundo, así que los puntos que sacó no cuentan.",
+    coldQuiet: "Sin calificar todavía.",
+    goodAll: "Cumple todos los indispensables.",
+    splitOneLine: "Ustedes calificaron {n} cosa de forma distinta. Aparece abajo.",
+    splitManyLine: "Ustedes calificaron {n} cosas de forma distinta. Aparecen abajo.",
+    groupLiveOne: "Esta cumplió absolutamente todo lo que dijeron que necesitaban.",
+    groupLiveOne_1: "Esta cumplió absolutamente todo lo que dijo que necesitaba.",
+    groupLiveMany: "Estas cumplieron absolutamente todo lo que dijeron que necesitaban. El porcentaje son los extras encima de eso.",
+    groupLiveMany_1: "Estas cumplieron absolutamente todo lo que dijo que necesitaba. El porcentaje son los extras encima de eso.",
+    groupShortSub: "Un porcentaje alto aquí sigue siendo una casa a la que le falta algo que dijeron que necesitaban.",
+    groupShortSub_1: "Un porcentaje alto aquí sigue siendo una casa a la que le falta algo que dijo que necesitaba.",
+    splitHead: "En qué no coinciden ustedes dos",
+    splitNote: "<b>Esta es la parte útil.</b> Son las cosas que uno de ustedes contó y el otro no. Ninguna está mal. Solo vale la pena decirlas en voz alta antes de decidir cualquier cosa.",
+    counted: "{a} lo marcó, {b} no",
+    gridHome: "Casa",
+    gridOut: "fuera",
+    gridScore: "Puntos",
+    gridHead: "Cada casa, cada fila",
+    gridSubSolo: "Una marca llena significa que lo marcaron en esa casa.",
+    gridSubSolo_1: "Una marca llena significa que lo marcó en esa casa.",
+    gridSubTwo: "Una marca llena significa que los dos lo marcaron. Una letra significa que solo uno lo hizo.",
+    gridScroll: "Deslicen de lado para ver el resto. Los nombres se quedan fijos.",
+    gridScroll_1: "Deslice de lado para ver el resto. Los nombres se quedan fijos.",
+    scoreFirst: "Primero califiquen una casa",
+    scoreFirst_1: "Primero califique una casa",
+    copiedHint: "Copiado. Ahora péguenlo en un mensaje de texto a {agent} al {telH} o en un correo a {mailH}. Nada sale de este teléfono hasta que ustedes lo envíen.",
+    copiedHint_1: "Copiado. Ahora péguelo en un mensaje de texto a {agent} al {telH} o en un correo a {mailH}. Nada sale de este teléfono hasta que usted lo envíe.",
+    copyFail: "No funcionó copiar en este teléfono. Seleccionen el texto de abajo, cópienlo y envíenselo a {agent} al {phone}.",
+    copyFail_1: "No funcionó copiar en este teléfono. Seleccione el texto de abajo, cópielo y envíeselo a {agent} al {phone}.",
+    copiedBtn: "Copiado, ahora péguenlo",
+    copiedBtn_1: "Copiado, ahora péguelo",
+    useBox: "Usen el cuadro de abajo",
+    useBox_1: "Use el cuadro de abajo",
+    copied: "Copiado",
+    copyFailShort: "No funcionó, usen el cuadro de abajo",
+    copyFailShort_1: "No funcionó, use el cuadro de abajo",
+    tapClear: "Toquen otra vez para borrar",
+    tapClear_1: "Toque otra vez para borrar",
+    cleared: "Borrado",
+    nothingYet: "Todavía no hay nada calificado",
+    neverMind: "Cancelar",
+    tapReplace: "Toquen otra vez para reemplazar",
+    tapReplace_1: "Toque otra vez para reemplazar",
+    replaceOne: "Ya tienen {n} casa calificada en este teléfono. Restaurar la reemplaza con lo que trae el código. Toquen Restaurar otra vez si eso es lo que quieren.",
+    replaceOne_1: "Ya tiene {n} casa calificada en este teléfono. Restaurar la reemplaza con lo que trae el código. Toque Restaurar otra vez si eso es lo que quiere.",
+    replaceMany: "Ya tienen {n} casas calificadas en este teléfono. Restaurar las reemplaza con lo que trae el código. Toquen Restaurar otra vez si eso es lo que quieren.",
+    replaceMany_1: "Ya tiene {n} casas calificadas en este teléfono. Restaurar las reemplaza con lo que trae el código. Toque Restaurar otra vez si eso es lo que quiere.",
+    restoredOne: "Restaurado. {N} casa quedó como la dejaron.",
+    restoredOne_1: "Restaurado. {N} casa quedó como la dejó.",
+    restoredMany: "Restaurado. {N} casas quedaron como las dejaron.",
+    restoredMany_1: "Restaurado. {N} casas quedaron como las dejó.",
+    partialOne: "Restaurada {n} casa. Ya no está en esta lista, así que queda guardada pero no se muestra.",
+    partialMany1: "Restauradas {n} casas. 1 ya no está en esta lista, así que queda guardada pero no se muestra.",
+    partialMany: "Restauradas {n} casas. {k} ya no están en esta lista, así que quedan guardadas pero no se muestran.",
+    close_offer_t: "Una de estas es la indicada",
+    close_offer_b: "Entonces vamos por ella. {agent} va a juntar las ventas comparables y todo lo que marcaron hoy, y les va a poner números reales enfrente. Envíenle esto ahora para que el trabajo parta de lo que de verdad vieron y no de lo que cada uno recuerde.",
+    close_offer_b_1: "Entonces vamos por ella. {agent} va a juntar las ventas comparables y todo lo que marcó hoy, y le va a poner números reales enfrente. Envíele esto ahora para que el trabajo parta de lo que de verdad vio y no de lo que recuerde.",
+    close_second_t: "Queremos ver otra vez una de ellas",
+    close_second_b: "Tiene sentido, y la mayoría debería hacerlo. Díganle cuál y {agent} lo organiza, y les consigue respuestas a todo lo que marcaron para preguntar.",
+    close_second_b_1: "Tiene sentido, y la mayoría debería hacerlo. Dígale cuál y {agent} lo organiza, y le consigue respuestas a todo lo que marcó para preguntar.",
+    close_keep_t: "Ninguna. Sigamos buscando",
+    close_keep_b: "Es un resultado real y no un día perdido. Ahora saben, por escrito, qué no funciona y por qué, y eso es lo que afina la próxima lista. Envíenlo y {agent} va a cambiar lo que les muestre a continuación.",
+    close_keep_b_1: "Es un resultado real y no un día perdido. Ahora sabe, por escrito, qué no funciona y por qué, y eso es lo que afina la próxima lista. Envíelo y {agent} va a cambiar lo que le muestre a continuación.",
+    close_think_t: "Necesitamos pensarlo",
+    close_think_b: "Tómense el tiempo. Envíenle esto a {agent} de todos modos, porque en una semana esta página va a ser el registro honesto de lo que pensaron hoy y no de lo que recuerden haber pensado. No hay ninguna presión por enviarlo.",
+    close_think_b_1: "Tómese el tiempo. Envíele esto a {agent} de todos modos, porque en una semana esta página va a ser el registro honesto de lo que pensó hoy y no de lo que recuerde haber pensado. No hay ninguna presión por enviarlo.",
+    groupShort_1: "Le falta algo que usted pidió",
+    backupHeading_1: "Si pierde este teléfono",
+    dockBefore_1: "antes sacaba {b}%",
+    close_second_t_1: "Quiero ver otra vez una de ellas",
+    close_think_t_1: "Necesito pensarlo",
+    esCorrect: "Esta página está traducida al español con ayuda de una herramienta, y puede que algo suene raro o esté mal. Si lo nota, díganselo a {agent} y se corrige.",
+    esCorrect_1: "Esta página está traducida al español con ayuda de una herramienta, y puede que algo suene raro o esté mal. Si lo nota, dígaselo a {agent} y se corrige."
   }
 };
 
@@ -779,35 +1124,46 @@ var STRINGS = {
    stylesheet text on screen. It failed quietly, because the top of the page still looked
    finished. In HTML those characters are just characters.
 
-   The text is read back decoded and parsed, so the token format did not change: the same
-   comma-separated rows, trailing comma or not.
+   One list item per element, the label as its text and the hint as an attribute, one
+   element per stop with an attribute per field. There is no second format layered on HTML,
+   so HTML escaping is the only rule and a quote or a backslash is just a character. (The
+   lists used to be JSON inside the element. HTML escaping and JSON escaping are not the
+   same rule, and a double quote or a backslash in a criterion emptied every list.)
    ------------------------------------------------------------------ */
 function readList(k){
   var el=document.querySelector('#lists [data-k="'+k+'"]');
   if(!el) return [];
-  var raw=(el.textContent||"").trim().replace(/,\s*$/,"");
-  if(!raw) return [];
-  // The tour rows are written the way a person writes them, with bare keys. Quote the
-  // known key names, and only where a key can actually sit, so a comma inside a sentence
-  // is left alone.
-  raw = raw.replace(/([{,][ \t\n]*)(id|n|facts|area|type|date|photo)[ \t]*:/g, '$1"$2":');
-  try{ return JSON.parse("["+raw+"]"); }
-  catch(e){ listBroken(k); return []; }
+  var out=[], li=el.children, i;
+  for(i=0;i<li.length;i++){
+    var label=(li[i].textContent||"").trim();
+    if(label) out.push([label, li[i].getAttribute("data-hint")||""]);
+  }
+  return out;
 }
-// A list that will not parse is said out loud. Silently scoring against an empty list
-// would look like a working page and give the buyer a meaningless result.
-function listBroken(k){
-  if(document.getElementById("listerr")) return;
-  var p=document.createElement("p");
-  p.id="listerr"; p.className="note"; p.style.borderLeftColor="var(--red)";
-  p.innerHTML="<b>One of your lists did not load.</b> Tell "+
-    (typeof AGENT!=="undefined"&&AGENT?esc(AGENT):"your agent")+
-    " that the <b>"+esc(k)+"</b> list needs rebuilding. Everything else on this page still works.";
-  var host=document.getElementById("view-stops")||document.body;
-  host.insertBefore(p, host.firstChild);
+// The tour is the same idea with one attribute per field. A missing id would collide
+// every stop's saved answers, so an id is derived from the position when it is absent.
+function readTour(){
+  var el=document.querySelector('#lists [data-k="tour"]');
+  if(!el) return [];
+  var out=[], li=el.children, i, seen={}, f=["id","n","facts","area","type","date","photo"];
+  for(i=0;i<li.length;i++){
+    var o={}, j;
+    for(j=0;j<f.length;j++){ var v=li[i].getAttribute("data-"+f[j]); if(v!=null) o[f[j]]=v; }
+    if(!o.n) continue;
+    // An id is a storage key and sits inside the backup code, so it is held to letters,
+    // digits, underscores and hyphens. Anything else (a space, a colon, a quote, a tilde) would either
+    // break the code or the page. A missing id comes from the address, not the position,
+    // so adding a stop at the top never shifts every saved answer onto the wrong house.
+    var id=(o.id||o.n).replace(/[^A-Za-z0-9_-]+/g,"-").replace(/^-+|-+$/g,"")||("stop-"+(i+1));
+    if(/^(__proto__|constructor|prototype)$/i.test(id)) id="stop-"+id;
+    var base=id, c=2; while(seen[id]) id=base+"-"+(c++);
+    seen[id]=1; o.id=id;
+    out.push(o);
+  }
+  return out;
 }
-
-var KEY="{{STORAGE_KEY}}", state=load(), current=null;
+var MSG={send:null,restore:null};   // the last message shown, kept so a language switch can redraw it
+var KEY=person("key"), state=load(), current=null;
 
 /* ------------------------------------------------------------------
    Language. Every word the buyer reads lives in STRINGS, keyed, with one entry per
@@ -826,7 +1182,9 @@ var KEY="{{STORAGE_KEY}}", state=load(), current=null;
 var LANGS = ["en","es"];
 var LANG = (function(){
   try{ var v=localStorage.getItem(KEY+"-lang"); if(LANGS.indexOf(v)>-1) return v; }catch(e){}
-  // An unset page follows the phone, so a Spanish-speaking buyer sees Spanish on open.
+  // Nothing chosen yet: the agent's setting wins (en or es), otherwise the phone decides, so
+  // a Spanish-speaking buyer on an English phone still gets the Spanish page the agent built.
+  var d=person("lang"); if(LANGS.indexOf(d)>-1) return d;
   return (navigator.language||"").toLowerCase().indexOf("es")===0 ? "es" : "en";
 })();
 function setLang(v){
@@ -836,24 +1194,49 @@ function setLang(v){
   document.documentElement.setAttribute("lang", v);
   paintText(); repaintAll();
 }
-// t("key") is the word. A key with no translation falls back to English rather than
-// showing a blank, so a half-filled table degrades instead of breaking.
-function t(k){
-  var L=STRINGS[LANG]||{};
-  return (L[k]!=null ? L[k] : (STRINGS.en[k]!=null ? STRINGS.en[k] : ""));
+// The English for everything marked in the HTML is read off the page itself, once, before
+// anything is painted. That means the English text lives in exactly one place, the markup,
+// and switching back to English restores it byte for byte instead of from a second copy.
+var STATIC_EN={};
+(function(){
+  var i, els, m=[["data-t","textContent"],["data-th","innerHTML"],["data-tp","placeholder"],["data-ta","aria-label"]];
+  m.forEach(function(p){
+    els=document.querySelectorAll("["+p[0]+"]");
+    for(i=0;i<els.length;i++){
+      var k=els[i].getAttribute(p[0]);
+      if(STATIC_EN[k]!=null) continue;
+      STATIC_EN[k]= p[1]==="placeholder"||p[1]==="aria-label" ? els[i].getAttribute(p[1]===  "placeholder" ? "placeholder" : "aria-label") : els[i][p[1]];
+    }
+  });
+})();
+// t("key", {vars}, asHtml) is the word. {name} is replaced from vars, and {agent} is the
+// agent's first name without being passed. In HTML mode every value is escaped, so a name
+// with a quote in it is text and nothing else. A single buyer is addressed as usted and a
+// couple as ustedes: where a "key_1" exists it is used when there is only one buyer. A key
+// with no translation falls back to English rather than showing a blank.
+function t(k,v,html){
+  var L=STRINGS[LANG]||{}, E=STRINGS.en, s=null, ks=SOLO?[k+"_1",k]:[k], i;
+  for(i=0;i<ks.length&&s==null;i++) if(L[ks[i]]!=null) s=L[ks[i]];
+  for(i=0;i<ks.length&&s==null;i++) if(E[ks[i]]!=null) s=E[ks[i]];
+  if(s==null){ s=STATIC_EN[k]; return s==null ? "" : s; }
+  return s.replace(/\{(\w+)\}/g,function(m,name){
+    var val = v && v[name]!=null ? v[name] : (name==="agent" ? AGENT : null);
+    if(val==null) return m;
+    val=String(val);
+    return html && !/H$/.test(name) ? esc(val) : val;
+  });
 }
-// Static text is marked in the HTML with data-t (plain words) or data-th (words with
-// tags inside), so one pass refills the whole page.
+// Static text is marked in the HTML with data-t (plain words), data-th (words with tags
+// inside), data-tp (a placeholder) or data-ta (an aria-label), so one pass refills the page.
 function paintText(){
   var i, els=document.querySelectorAll("[data-t]");
   for(i=0;i<els.length;i++){ var v=t(els[i].getAttribute("data-t")); if(v) els[i].textContent=v; }
   els=document.querySelectorAll("[data-th]");
-  for(i=0;i<els.length;i++){ var h=t(els[i].getAttribute("data-th")); if(h) els[i].innerHTML=h; }
-}
-// A criterion the agent supplied in both languages. Falls back to the English label.
-function cl(list, listEs, i){
-  if(LANG!=="en" && listEs && listEs[i] && listEs[i][0]) return listEs[i];
-  return list[i];
+  for(i=0;i<els.length;i++){ var h=t(els[i].getAttribute("data-th"),null,true); if(h) els[i].innerHTML=h; }
+  els=document.querySelectorAll("[data-tp]");
+  for(i=0;i<els.length;i++){ var p=t(els[i].getAttribute("data-tp")); if(p) els[i].setAttribute("placeholder",p); }
+  els=document.querySelectorAll("[data-ta]");
+  for(i=0;i<els.length;i++){ var a=t(els[i].getAttribute("data-ta")); if(a) els[i].setAttribute("aria-label",a); }
 }
 // Everything the script drew has to be drawn again in the new words. Scoring is untouched
 // because it lives in storage against ids, not against labels.
@@ -866,7 +1249,10 @@ function repaintAll(){
   if(typeof renderCompare==="function") renderCompare();
   if(typeof wireSendLinks==="function") wireSendLinks();
   if(current && typeof renderDetail==="function") renderDetail();
+  if(typeof repaintMsgs==="function") repaintMsgs();
+  syncEsNote();
 }
+function syncEsNote(){ var n=document.getElementById("escorrect"); if(n) n.hidden = LANG!=="es"; }
 
 function load(){
   try{
@@ -894,7 +1280,12 @@ function st(id){
   if(typeof s.notes!=="string") s.notes="";
   return s;
 }
-function esc(s){ var d=document.createElement("div"); d.textContent=s; return d.innerHTML; }
+// Safe in text and inside a double- or single-quoted attribute. The browser's own
+// serializer leaves quotes alone, and a label containing one would end an aria-label early.
+function esc(s){
+  var d=document.createElement("div"); d.textContent=s;
+  return d.innerHTML.replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
 
 /* ------------------------------------------------------------------
    The backup code. Everything a buyer taps lives in this one phone's storage, which a
@@ -907,7 +1298,7 @@ function esc(s){ var d=document.createElement("div"); d.textContent=s; return d.
    than silently restoring the wrong ticks against the wrong questions.
    ------------------------------------------------------------------ */
 var WORDS=["no","one","two","three","four","five","six","seven","eight","nine","ten"];
-function count(n){ return WORDS[n] || String(n); }
+function count(n){ return LANG==="es" ? String(n) : (WORDS[n] || String(n)); }
 function Count(n){ var w=count(n); return w.charAt(0).toUpperCase()+w.slice(1); }
 
 function bitsOut(get, n){
@@ -962,10 +1353,10 @@ function backupCode(){
 }
 function readCode(txt){
   var m=String(txt||"").trim().match(/RH1\.[a-z0-9]+\.[^\s]+/i);
-  if(!m) return {err:"That does not look like a backup code. It starts with RH1."};
+  if(!m) return {err:"codeBad"};
   var parts=m[0].split(".");
   if(parts[1]!==listFingerprint())
-    return {err:"That code was made from a different version of this list, so the answers would land against the wrong questions. Ask your agent to send the matching one."};
+    return {err:"codeOld"};
   var nM=MUSTS.length, nN=NICES.length, next={}, houses=0;
   var ok=parts.slice(2).join(".").split("~").every(function(rec){
     var f=rec.split(":"); if(f.length<10) return false;
@@ -984,7 +1375,7 @@ function readCode(txt){
     next[id]=o; houses++;
     return true;
   });
-  if(!ok || !houses) return {err:"That code is incomplete. Ask your agent to send the whole thing, including the end."};
+  if(!ok || !houses) return {err:"codeIncomplete"};
   var known=0;
   TOUR.forEach(function(p){ if(next[p.id]) known++; });
   return {state:next, houses:houses, known:known};
@@ -996,8 +1387,8 @@ function photoControl(p, i){
   var has = !!st(p.id).photo;
   var b=document.createElement("button");
   b.type="button"; b.className="photobtn";
-  b.setAttribute("aria-label",(has?"Change or remove the photo of ":"Add a photo of ")+p.n);
-  b.title = has ? "Change or remove this photo" : "Add a photo";
+  b.setAttribute("aria-label",t(has?"photoChange":"photoAdd",{n:p.n}));
+  b.title = t(has?"photoTitleChange":"photoTitleAdd");
   b.innerHTML = has
     ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h3l1.5-2h7L17 7h3v12H4z"/><circle cx="12" cy="13" r="3.2"/></svg>'
     : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h3l1.5-2h7L17 7h3v12H4z"/><path d="M12 10v6M9 13h6" stroke-linecap="round"/></svg>';
@@ -1019,7 +1410,7 @@ function photoControl(p, i){
   b.addEventListener("click",function(ev){
     ev.stopPropagation();
     if(!st(p.id).photo) return inp.click();
-    if(confirm("Remove this photo? You can add a different one after.")){
+    if(confirm(t("photoConfirm"))){
       delete st(p.id).photo; save(); renderStops();
     } else { inp.click(); }
   });
@@ -1106,7 +1497,7 @@ function shapeFor(t){
 
 function glyph(p, i){
   var saved = st(p.id).photo;
-  if(saved || p.photo) return '<img class="tile-photo" src="'+(saved||p.photo)+'" alt="">';
+  if(saved || p.photo) return '<img class="tile-photo" src="'+esc(saved||p.photo)+'" alt="">';
   var num = (String(p.n).match(/^\s*([0-9]+)/) || [,""])[1] || String(i+1);
   var rest = String(p.n).replace(/^\s*[0-9]+\s*/, "");
   var suffix = rest.split(/\s+/).slice(-1)[0] || "";
@@ -1130,23 +1521,23 @@ function glyph(p, i){
 // Tap the tile to put a real photo there. Resized hard before it is stored, because
 // localStorage is small and a phone camera file is not.
 function attachPhoto(stopId, file, done){
-  if(!file || !/^image\//.test(file.type)) return done("That file is not an image.");
+  if(!file || !/^image\//.test(file.type)) return done(t("photoNotImage"));
   var rd = new FileReader();
-  rd.onerror = function(){ done("That photo could not be read."); };
+  rd.onerror = function(){ done(t("photoRead")); };
   rd.onload = function(){
     var img = new Image();
-    img.onerror = function(){ done("That photo could not be opened."); };
+    img.onerror = function(){ done(t("photoOpen")); };
     img.onload = function(){
       var W = 420, sc = Math.min(1, W / img.width);
       var c = document.createElement("canvas");
       c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
       c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
       var data;
-      try { data = c.toDataURL("image/jpeg", 0.72); } catch(e){ return done("That photo could not be saved."); }
+      try { data = c.toDataURL("image/jpeg", 0.72); } catch(e){ return done(t("photoSave")); }
       var sp = st(stopId), prev = sp.photo;
       sp.photo = data;
       try { localStorage.setItem(KEY, JSON.stringify(state)); }
-      catch(e){ sp.photo = prev; return done("No room left on this phone to save the photo."); }
+      catch(e){ sp.photo = prev; return done(t("photoRoom")); }
       done(null);
     };
     img.src = rd.result;
@@ -1155,16 +1546,16 @@ function attachPhoto(stopId, file, done){
 }
 
 function twoScore(sc){
-  if(sc.killed.length) return '<span class="flag">out &middot; '+esc(sc.killed[0])+'</span>';
-  if(!sc.touched) return '<span class="pct n">&mdash;</span><span class="pl">'+(sc.hasData?'notes only, nobody scored it yet':'not scored yet')+'</span>';
+  if(sc.killed.length) return '<span class="flag">'+t("flagOut",{x:sc.killed[0]},true)+'</span>';
+  if(!sc.touched) return '<span class="pct n">&mdash;</span><span class="pl">'+t(sc.hasData?"notesOnly":"notScoredYet")+'</span>';
   var h='';
   (SOLO?["b"]:["b","l"]).forEach(function(k){
-    h+='<span class="ps">'+(SOLO?'':'<span class="pinit '+k+'">'+P[k].initial+'</span>')+'<span class="pct '+band(sc,k)+'">'+sc[k].pct+'%</span></span>';
+    h+='<span class="ps">'+(SOLO?'':'<span class="pinit '+k+'">'+PE[k].initial+'</span>')+'<span class="pct '+band(sc,k)+'">'+sc[k].pct+'%</span></span>';
   });
   if(!SOLO) h+= sc.split.length
-    ? '<span class="flag split">'+sc.split.length+' disagreement'+(sc.split.length>1?"s":"")+'</span>'
-    : '<span class="flag ok">you agree on everything</span>';
-  else if(!sc.b.missed.length) h+='<span class="flag ok">every must-have met</span>';
+    ? '<span class="flag split">'+t(sc.split.length>1?"disMany":"disOne",{n:sc.split.length})+'</span>'
+    : '<span class="flag ok">'+t("agreeAll")+'</span>';
+  else if(!sc.b.missed.length) h+='<span class="flag ok">'+t("allMusts")+'</span>';
   return h;
 }
 
@@ -1183,7 +1574,7 @@ function wireRoute(){
          (mid.length?"&waypoints="+mid.join("%7C"):"");
   a.target="_blank"; a.rel="noopener";
   var lbl=document.getElementById("routelabel");
-  if(lbl) lbl.textContent = live.length===1 ? "Drive to this one" : "Drive today\u2019s route";
+  if(lbl) lbl.textContent = t(live.length===1 ? "routeOne" : "routeMany");
 
   // Apple's multi-stop form, daddr=A+to:B+to:C, is honored only by the Maps app on an
   // iPhone or iPad. Apple's web Maps rewrites the whole chain into one destination and
@@ -1204,10 +1595,8 @@ function wireRoute(){
   }
   var note=document.getElementById("routenote");
   var earlier=TOUR.length-live.length;
-  if(note) note.textContent = (live.length===1
-    ? "Opens in your maps app, ready to navigate."
-    : "Opens in your maps app with today\u2019s "+live.length+" stops loaded in order, ready to navigate.")
-    + (earlier>0 ? " Homes you have already seen are not in the route." : "");
+  if(note) note.textContent = (live.length===1 ? t("noteRouteOne") : t("noteRouteMany",{n:live.length}))
+    + (earlier>0 ? " "+t("noteRouteEarlier") : "");
 }
 
 function tourDates(){
@@ -1218,7 +1607,7 @@ function tourDates(){
 function renderStops(){
   var el=document.getElementById("stoplist"); el.innerHTML="";
   if(!TOUR.length){
-    el.innerHTML='<p class="note">No stops on this tour yet. Ask '+esc(AGENT||"your agent")+' to add the addresses you are seeing today.</p>';
+    el.innerHTML='<p class="note">'+t("noStops",{agent:AGENT||t("yourAgent")},true)+'</p>';
     return;
   }
   var dates=tourDates(), multi=dates.length>1, lastDate=null;
@@ -1227,7 +1616,7 @@ function renderStops(){
       lastDate=p.date||"";
       var h=document.createElement("p");
       h.className="daygroup";
-      h.textContent = (i===0 ? "" : "") + (lastDate || "Earlier");
+      h.textContent = lastDate || t("earlier");
       el.appendChild(h);
     }
     var sc=score(p);
@@ -1236,9 +1625,9 @@ function renderStops(){
     btn.innerHTML=
       '<span class="shot">'+glyph(p,i)+'</span>'+
       '<span class="sbody">'+
-        '<span class="snum">Stop '+(i+1)+(st(p.id).skipped?' &middot; skipped':'')+'</span>'+
+        '<span class="snum">'+t(st(p.id).skipped?"stopSkipped":"stopN",{n:i+1},true)+'</span>'+
         '<span class="saddr">'+esc(p.n)+'</span>'+
-        '<span class="sfacts">'+p.facts+'</span>'+
+        '<span class="sfacts">'+esc(p.facts||"")+'</span>'+
         '<span class="sscore">'+twoScore(sc)+'</span>'+
         '<span class="condline">'+condLine(p)+'</span>'+
       '</span>';
@@ -1249,8 +1638,8 @@ function renderStops(){
     wrap.appendChild(photoControl(p, i));
     var sk=document.createElement("button");
     sk.type="button"; sk.className="skipbtn";
-    sk.textContent=st(p.id).skipped?"Put back":"Skip";
-    sk.setAttribute("aria-label",(st(p.id).skipped?"Put back ":"Skip ")+p.n);
+    sk.textContent=t(st(p.id).skipped?"putBack":"skip");
+    sk.setAttribute("aria-label",t(st(p.id).skipped?"putBackAria":"skipAria",{n:p.n}));
     sk.addEventListener("click",function(ev){
       ev.stopPropagation();
       var sp=st(p.id); sp.skipped=!sp.skipped; save(); renderStops(); wireRoute();
@@ -1263,20 +1652,20 @@ function renderStops(){
 function renderDetail(){
   var p=TOUR.filter(function(x){ return x.id===current; })[0]; if(!p) return;
   var s=st(p.id);
-  document.getElementById("d-num").textContent="Stop "+(TOUR.indexOf(p)+1);
+  document.getElementById("d-num").textContent=t("stopLine",{n:TOUR.indexOf(p)+1});
   document.getElementById("d-addr").textContent=p.n;
-  document.getElementById("d-facts").innerHTML=p.facts;
+  document.getElementById("d-facts").textContent=p.facts||"";
   var q=encodeURIComponent(p.n+", "+(p.area||""));
   document.getElementById("nav-g").href="https://www.google.com/maps/dir/?api=1&destination="+q+"&travelmode=driving";
   document.getElementById("nav-w").href="https://waze.com/ul?q="+q+"&navigate=yes";
 
   var groups=[
-    {key:"k", store:"shared", two:false, title:"Deal-breakers", sub:"Check one only if it's true of the place. Any check here takes it out of the running for both of you.", w:"not scored", items:KILLS, cls:" kill", gcls:" kill"},
-    {key:"m", store:null, two:true, title:"Must-haves", sub:"From your consultation. Each of you taps your own initial, so you can see where you don't agree.", w:MUST+" pts each", items:MUSTS, cls:" must", gcls:""},
-    {key:"n", store:null, two:true, title:"Nice to have", sub:"", w:NICE+" pts each", items:NICES, cls:"", gcls:""},
-    {key:"c", store:"shared", two:false, title:"Easy to forget", sub:"Facts about the place rather than opinions, so one check covers you both.", w:CONS+" pts each", items:CONSIDER, cls:"", gcls:""},
-    {key:"s", cond:SYS_STATES, title:"The big systems", sub:COND_DISCLAIMER+" None of this changes the score above. It changes what the house costs you after you own it, which is a separate question and usually the more expensive one.", w:"not scored", items:COND_SYS},
-    {key:"w", cond:WORK_STATES, title:"Work already done", sub:"", w:"not scored", items:COND_WORK}
+    {key:"k", store:"shared", two:false, title:t("grpKillT"), sub:t("grpKillS"), w:t("grpNot"), items:KILLS, cls:" kill", gcls:" kill"},
+    {key:"m", store:null, two:true, title:t("grpMustT"), sub:t("grpMustS"), w:t("grpPts",{n:MUST}), items:MUSTS, cls:" must", gcls:""},
+    {key:"n", store:null, two:true, title:t("grpNiceT"), sub:"", w:t("grpPts",{n:NICE}), items:NICES, cls:"", gcls:""},
+    {key:"c", store:"shared", two:false, title:t("grpConT"), sub:t("grpConS"), w:t("grpPts",{n:CONS}), items:CONSIDER, cls:"", gcls:""},
+    {key:"s", cond:SYS_STATES, title:t("grpSysT"), sub:t("condDisclaimer")+" "+t("grpSysS"), w:t("grpNot"), items:COND_SYS},
+    {key:"w", cond:WORK_STATES, title:t("grpWorkT"), sub:"", w:t("grpNot"), items:COND_WORK}
   ];
 
   var g=document.getElementById("groups"); g.innerHTML="";
@@ -1291,7 +1680,7 @@ function renderDetail(){
         h+='<div class="condrow"><span class="condlab">'+esc(it[0])+(it[1]?'<span class="hint">'+esc(it[1])+'</span>':"")+'</span><span class="states">'+
            grp.cond.map(function(stt){
              var on=cur===stt[0];
-             return '<button type="button" class="stbtn '+stt[2]+'" aria-pressed="'+on+'" data-cond="'+k+'" data-v="'+stt[0]+'">'+stt[1]+'</button>';
+             return '<button type="button" class="stbtn '+stt[2]+'" aria-pressed="'+on+'" data-cond="'+k+'" data-v="'+stt[0]+'">'+t("st_"+stt[0])+'</button>';
            }).join('')+'</span></div>';
       } else if(grp.two){
         var split = (!!s.b[k]!==!!s.l[k]);
@@ -1299,7 +1688,7 @@ function renderDetail(){
            '<span class="pair">'+
              (SOLO?['b']:['b','l']).map(function(pk){
                var on=!!s[pk][k];
-               return '<button type="button" class="ck2'+grp.cls+' '+pk+'" aria-pressed="'+on+'" data-p="'+pk+'" data-k="'+k+'" aria-label="'+(SOLO?'':P[pk].name+': ')+esc(it[0])+'">'+(SOLO?'':P[pk].initial)+'</button>';
+               return '<button type="button" class="ck2'+grp.cls+' '+pk+'" aria-pressed="'+on+'" data-p="'+pk+'" data-k="'+k+'" aria-label="'+(SOLO?'':PE[pk].name+': ')+esc(it[0])+'">'+(SOLO?'':PE[pk].initial)+'</button>';
              }).join('')+
            '</span>'+label+'</div>';
       } else {
@@ -1343,7 +1732,7 @@ function renderDetail(){
       var cur = pk==="b" ? s.gutB : s.gutL;
       var btn=document.createElement("button"); btn.type="button"; btn.textContent=v;
       btn.setAttribute("aria-pressed",String(cur===+v));
-      btn.setAttribute("aria-label",P[pk].name+" gut feel "+v+" of 5");
+      btn.setAttribute("aria-label",t("gutAria",{name:P[pk].name,v:v}));
       btn.addEventListener("click",function(){
         var now = pk==="b" ? s.gutB : s.gutL;
         var nv = now===+v ? 0 : +v;
@@ -1366,27 +1755,28 @@ function dock(){
   var box=document.getElementById("dock-scores"); box.innerHTML="";
   if(!sc.touched && !sc.killed.length){
     box.innerHTML='<span class="pct n">&mdash;</span>';
-    document.getElementById("dock-pts").textContent="nobody has scored this one yet";
-    document.getElementById("dock-must").textContent="tap your initial on the items that are true";
+    document.getElementById("dock-pts").textContent=t("dockNobody");
+    document.getElementById("dock-must").textContent=t("dockTap");
     return;
   }
   if(sc.killed.length){
-    box.innerHTML='<span class="pct l">OUT</span>';
-    document.getElementById("dock-pts").textContent="scored "+sc.b.pct+"% / "+sc.l.pct+"% before this";
+    box.innerHTML='<span class="pct l">'+t("dockOut")+'</span>';
+    document.getElementById("dock-pts").textContent=t("dockBefore",{b:sc.b.pct,l:sc.l.pct});
   } else {
     (SOLO?["b"]:["b","l"]).forEach(function(k){
       var sp=document.createElement("span"); sp.className="ps";
-      sp.innerHTML=(SOLO?'':'<span class="pinit '+k+'">'+P[k].initial+'</span>')+'<span class="pct '+band(sc,k)+'">'+sc[k].pct+'%</span>';
+      sp.innerHTML=(SOLO?'':'<span class="pinit '+k+'">'+PE[k].initial+'</span>')+'<span class="pct '+band(sc,k)+'">'+sc[k].pct+'%</span>';
       box.appendChild(sp);
     });
-    document.getElementById("dock-pts").textContent=(SOLO?sc.b.got:sc.b.got+" / "+sc.l.got)+" of "+sc.poss+" points";
+    document.getElementById("dock-pts").textContent=t("dockPoints",{got:(SOLO?sc.b.got:sc.b.got+" / "+sc.l.got),poss:sc.poss});
   }
+  var nB=sc.b.missed.length, nL=sc.l.missed.length;
   document.getElementById("dock-must").textContent = sc.killed.length
-    ? "deal-breaker: "+sc.killed.join(", ")
+    ? t("dockKill",{x:sc.killed.join(", ")})
     : (SOLO
-        ? (sc.b.missed.length ? sc.b.missed.length+" must-have"+(sc.b.missed.length>1?"s":"")+" not met" : "every must-have met")
-        : (sc.split.length ? sc.split.length+" thing"+(sc.split.length>1?"s":"")+" you see differently"
-           : (sc.b.missed.length||sc.l.missed.length ? sc.b.missed.length+" / "+sc.l.missed.length+" must-haves not met" : "you both have every must-have")));
+        ? (nB ? t(nB>1?"dockMissMany":"dockMissOne",{n:nB}) : t("allMusts"))
+        : (sc.split.length ? t(sc.split.length>1?"dockSplitMany":"dockSplitOne",{n:sc.split.length})
+           : (nB||nL ? t("dockBothMiss",{a:nB,b:nL}) : t("dockBothHave"))));
 }
 
 function ranked(){
@@ -1405,10 +1795,10 @@ function ranked(){
 }
 
 function renderCompare(){
-  var t=document.getElementById("cmp"); t.innerHTML="";
+  var cmpEl=document.getElementById("cmp"); cmpEl.innerHTML="";
   var sp=document.getElementById("splitbox");
   if(!TOUR.length){
-    t.innerHTML='<p class="cmpempty">Nothing to compare yet. Once your agent adds the homes you are seeing, every one you score shows up here.</p>';
+    cmpEl.innerHTML='<p class="cmpempty">'+t("cmpEmpty")+'</p>';
     sp.hidden=true; document.getElementById("gridbox").hidden=true; return;
   }
 
@@ -1424,9 +1814,9 @@ function renderCompare(){
 
   function scoreBlock(sc){
     if(SOLO) return '<span class="pct '+band(sc,"b")+'">'+sc.b.pct+'%</span>';
-    return '<span class="ps"><span class="pinit b">'+P.b.initial+'</span>'+
+    return '<span class="ps"><span class="pinit b">'+PE.b.initial+'</span>'+
            '<span class="pct '+band(sc,"b")+'">'+sc.b.pct+'%</span></span>'+
-           '<span class="ps"><span class="pinit l">'+P.l.initial+'</span>'+
+           '<span class="ps"><span class="pinit l">'+PE.l.initial+'</span>'+
            '<span class="pct '+band(sc,"l")+'">'+sc.l.pct+'%</span></span>';
   }
   // The criteria are noun phrases a buyer wrote ("A garage", "In Los Feliz"). Pushed into
@@ -1441,22 +1831,21 @@ function renderCompare(){
     if(same){
       var list=SOLO?mine:mine;
       if(!list.length) return "";
-      return '<p class="cmpwhy short">Missing '+count(list.length)+
-             (list.length===1?" of your must-haves":" of your must-haves")+'</p>'+missList(list);
+      return '<p class="cmpwhy short">'+t(list.length===1?"missingOne":"missingMany",{n:count(list.length)},true)+'</p>'+missList(list);
     }
-    var out='<p class="cmpwhy short">You two do not agree on what this one is missing</p>';
+    var out='<p class="cmpwhy short">'+t("missingDisagree")+'</p>';
     if(mine.length) out+='<p class="cmpmiss"><b>'+esc(P.b.name)+'</b>'+
       '<span class="dot">&middot;</span>'+mine.map(esc).join('<span class="dot">&middot;</span>')+'</p>';
-    else out+='<p class="cmpmiss"><b>'+esc(P.b.name)+'</b><span class="dot">&middot;</span>nothing missing</p>';
+    else out+='<p class="cmpmiss"><b>'+esc(P.b.name)+'</b><span class="dot">&middot;</span>'+t("nothingMissing")+'</p>';
     if(theirs.length) out+='<p class="cmpmiss"><b>'+esc(P.l.name)+'</b>'+
       '<span class="dot">&middot;</span>'+theirs.map(esc).join('<span class="dot">&middot;</span>')+'</p>';
-    else out+='<p class="cmpmiss"><b>'+esc(P.l.name)+'</b><span class="dot">&middot;</span>nothing missing</p>';
+    else out+='<p class="cmpmiss"><b>'+esc(P.l.name)+'</b><span class="dot">&middot;</span>'+t("nothingMissing")+'</p>';
     return out;
   }
   function gutLine(sc){
-    if(SOLO) return sc.b.gut ? "Gut feel "+sc.b.gut+" out of 5." : "";
+    if(SOLO) return sc.b.gut ? t("gutSolo",{a:sc.b.gut},true) : "";
     if(!sc.b.gut && !sc.l.gut) return "";
-    return "Gut feel, "+P.b.name+" "+(sc.b.gut||"&mdash;")+" and "+P.l.name+" "+(sc.l.gut||"&mdash;")+" out of 5.";
+    return t("gutTwo",{b:P.b.name,x:(sc.b.gut||"\u2014"),l:P.l.name,y:(sc.l.gut||"\u2014")},true);
   }
 
   function card(r, rank, kind){
@@ -1464,21 +1853,18 @@ function renderCompare(){
     el.className="cmpcard"+(kind==="out"?" out":"")+(kind==="cold"?" cold":"")+(rank===1?" win":"");
     var lines=[];
     if(kind==="out"){
-      lines.push('<p class="cmpwhy out">Out on '+(sc.killed.length>1?"deal-breakers":"a deal-breaker")+'</p>'+
+      lines.push('<p class="cmpwhy out">'+t(sc.killed.length>1?"outMany":"outOne")+'</p>'+
                  '<p class="cmpmiss">'+sc.killed.map(esc).join('<span class="dot">&middot;</span>')+'</p>'+
-                 '<p class="cmpline">You said '+(sc.killed.length>1?"those were":"that was")+
-                 ' an instant no, so where it landed on points does not come into it.</p>');
+                 '<p class="cmpline">'+t(sc.killed.length>1?"outLineMany":"outLineOne")+'</p>');
     } else if(kind==="cold"){
-      lines.push('<p class="cmpwhy quiet">Not scored yet.</p>');
+      lines.push('<p class="cmpwhy quiet">'+t("coldQuiet")+'</p>');
     } else if(kind==="short"){
       lines.push(missedBlock(sc));
     } else {
-      lines.push('<p class="cmpwhy good">Every must-have met.</p>');
+      lines.push('<p class="cmpwhy good">'+t("goodAll")+'</p>');
     }
     if(kind!=="cold" && !SOLO && sc.split.length){
-      lines.push('<p class="cmpline">You two scored '+count(sc.split.length)+
-                 (sc.split.length===1?" thing differently. It is":" things differently. They are")+
-                 ' listed below.</p>');
+      lines.push('<p class="cmpline">'+t(sc.split.length===1?"splitOneLine":"splitManyLine",{n:count(sc.split.length)},true)+'</p>');
     }
     var g = kind==="cold" ? "" : gutLine(sc);
     if(g) lines.push('<p class="cmpline">'+g+'</p>');
@@ -1492,7 +1878,7 @@ function renderCompare(){
           '<span class="cmpaddr">'+esc(r.p.n)+'</span>'+
           (kind==="cold" ? '' : '<span class="cmpscore">'+scoreBlock(sc)+'</span>')+
         '</span>'+
-        '<span class="cmpmeta">Stop '+(r.i+1)+(r.p.date?' &middot; '+esc(r.p.date):'')+'</span>'+
+        '<span class="cmpmeta">'+t("stopN",{n:r.i+1},true)+(r.p.date?' &middot; '+esc(r.p.date):'')+'</span>'+
         lines.join("")+
       '</span>';
     return el;
@@ -1505,28 +1891,26 @@ function renderCompare(){
     if(sub) h+='<p class="cmpsub">'+sub+'</p>';
     g.innerHTML=h;
     rows.forEach(function(r,i){ g.appendChild(card(r, ranked_?i+1:0, kind)); });
-    t.appendChild(g);
+    cmpEl.appendChild(g);
   }
 
-  group("Still in the running",
-        live.length===1
-          ? "This one met every single thing you said you needed."
-          : "These met every single thing you said you needed. The percentage is the extras on top.",
+  group(t("groupLive"),
+        live.length===1 ? t("groupLiveOne") : t("groupLiveMany"),
         live, "live", true);
-  group("Short on something you needed",
-        "A high percentage here still means a home that misses something you said you needed.",
+  group(t("groupShort"),
+        t("groupShortSub"),
         short, "short", false);
-  group("Out",
+  group(t("groupOut"),
         "", out, "out", false);
-  group("Not scored yet", "", cold, "cold", false);
+  group(t("groupCold"), "", cold, "cold", false);
   renderGrid();
 
   if(SOLO){ sp.hidden=true; return; }
   var rows=ranked().filter(function(r){ return r.sc.touched && r.sc.split.length; });
   if(!rows.length){ sp.hidden=true; return; }
   sp.hidden=false;
-  var h='<h2 class="sechead" style="margin-top:34px">Where You Two Don\'t Agree</h2>'+
-        '<p class="note" style="border-left-color:var(--red)"><b>This is the useful part.</b> These are the things one of you counted and the other didn\'t. None of them are wrong. They\'re just worth saying out loud before you decide anything.</p>';
+  var h='<h2 class="sechead" style="margin-top:34px">'+t("splitHead")+'</h2>'+
+        '<p class="note" style="border-left-color:var(--red)">'+t("splitNote")+'</p>';
   rows.forEach(function(r){
     var s=st(r.p.id);
     h+='<p class="splitaddr">'+esc(r.p.n)+'</p><ul class="splitlist">';
@@ -1535,7 +1919,7 @@ function renderCompare(){
       MUSTS.concat(NICES).forEach(function(tt,idx){
         if(tt[0]!==label) return;
         var k=(idx<MUSTS.length?"m"+idx:"n"+(idx-MUSTS.length));
-        who = s.b[k] ? P.b.name+" counted it, "+P.l.name+" didn\'t" : P.l.name+" counted it, "+P.b.name+" didn\'t";
+        who = s.b[k] ? t("counted",{a:P.b.name,b:P.l.name},true) : t("counted",{a:P.l.name,b:P.b.name},true);
       });
       h+='<li>'+esc(label)+'<span>'+who+'</span></li>';
     });
@@ -1557,7 +1941,7 @@ function renderGrid(){
     if(SOLO) return yesB ? '<span class="'+cls+'"></span>' : '<span class="gn">&middot;</span>';
     if(yesB && yesL) return '<span class="'+cls+'"></span>';
     if(!yesB && !yesL) return '<span class="gn">&middot;</span>';
-    return '<span class="gs">'+(yesB?P.b.initial:P.l.initial)+'</span>';
+    return '<span class="gs">'+(yesB?PE.b.initial:PE.l.initial)+'</span>';
   }
   function section(title, items, prefix, store, bad){
     if(!items.length) return "";
@@ -1576,16 +1960,16 @@ function renderGrid(){
     return h;
   }
 
-  var head='<tr><th scope="col" class="gcorner">Home</th>';
+  var head='<tr><th scope="col" class="gcorner">'+t("gridHome")+'</th>';
   rows.forEach(function(r){
     var num=(String(r.p.n).match(/^\s*([0-9]+)/)||[,""])[1] || ("#"+(r.i+1));
     head+='<th scope="col"'+(r.sc.killed.length?' class="gout"':'')+'>'+
           '<span class="gnum">'+esc(num)+'</span>'+
-          '<span class="gstop">'+(r.sc.killed.length?"out":"Stop "+(r.i+1))+'</span></th>';
+          '<span class="gstop">'+(r.sc.killed.length?t("gridOut"):t("stopN",{n:r.i+1},true))+'</span></th>';
   });
   head+='</tr>';
 
-  var score='<tr class="gscore"><th scope="row">Score</th>';
+  var score='<tr class="gscore"><th scope="row">'+t("gridScore")+'</th>';
   rows.forEach(function(r){
     score += '<td>'+(r.sc.killed.length ? '<span class="gn">&mdash;</span>'
       : (SOLO ? r.sc.b.pct+'%'
@@ -1594,17 +1978,17 @@ function renderGrid(){
   score+='</tr>';
 
   host.innerHTML =
-    '<h2 class="sechead" style="margin-top:38px">Every Home, Every Line</h2>'+
+    '<h2 class="sechead" style="margin-top:38px">'+t("gridHead")+'</h2>'+
     '<p class="cmpsub">'+(SOLO
-      ? 'A solid mark means you counted it in that home.'
-      : 'A solid mark means you both counted it. A letter means only one of you did.')+
-      ' Scroll sideways to see the rest. The names stay put.</p>'+
+      ? t("gridSubSolo")
+      : t("gridSubTwo"))+
+      ' '+t("gridScroll")+'</p>'+
     '<div class="scroll gridwrap"><table class="grid">'+
       '<thead>'+head+'</thead><tbody>'+score+
-      section("Deal-breakers", KILLS, "k", "shared", true)+
-      section("Must-haves", MUSTS, "m", null, false)+
-      section("Nice to have", NICES, "n", null, false)+
-      section("Easy to forget", CONSIDER, "c", "shared", false)+
+      section(t("grpKillT"), KILLS, "k", "shared", true)+
+      section(t("grpMustT"), MUSTS, "m", null, false)+
+      section(t("grpNiceT"), NICES, "n", null, false)+
+      section(t("grpConT"), CONSIDER, "c", "shared", false)+
     '</tbody></table></div>';
 }
 
@@ -1669,13 +2053,13 @@ function copyText(text, done){
 
 var CLOSERS=[
   ["offer","One of these is the one",
-   "Then let\u2019s move. {{AGENT_FIRST_NAME}} will pull the comparable sales and everything you flagged today, and have real numbers in front of you before the day is out. Send this across now so she is working from what you actually saw rather than what either of you remembers."],
+   "Then let\u2019s move. {agent} will pull the comparable sales and everything you flagged today, and put real numbers in front of you. Send this across now so the work starts from what you actually saw rather than what either of you remembers."],
   ["second","We want a second look at one",
-   "Sensible, and most people should. Say which one and {{AGENT_FIRST_NAME}} will arrange it, and she will have answers to everything you marked to ask before you walk back through the door."],
+   "Sensible, and most people should. Say which one and {agent} will arrange it, and get you answers to everything you marked to ask."],
   ["keep","Not these. Keep looking",
-   "That is a real result and not a wasted Saturday. You now know, in writing, what does not work and why, and that is the thing that sharpens the next list. Send it over and {{AGENT_FIRST_NAME}} will change what you are shown next."],
+   "That is a real result and not a wasted day. You now know, in writing, what does not work and why, and that is the thing that sharpens the next list. Send it over and {agent} will change what you are shown next."],
   ["think","We need to think about it",
-   "Take the time. Send it to {{AGENT_FIRST_NAME}} anyway, because in a week this page will be the honest record of what you thought today rather than what you remember thinking. There is no pressure attached to sending it."]
+   "Take the time. Send it to {agent} anyway, because in a week this page will be the honest record of what you thought today rather than what you remember thinking. There is no pressure attached to sending it."]
 ];
 function renderClosing(){
   var row=document.getElementById("closerow"); if(!row) return;
@@ -1685,19 +2069,24 @@ function renderClosing(){
   CLOSERS.forEach(function(c){
     var b=document.createElement("button");
     b.type="button"; b.className="closebtn";
-    b.textContent=c[1];
+    b.textContent=t("close_"+c[0]+"_t");
     b.setAttribute("aria-pressed",String(DECISION===c[0]));
     b.addEventListener("click",function(){
       DECISION = DECISION===c[0] ? "" : c[0];
       try{ localStorage.setItem(KEY+"-decision",DECISION); }catch(e){}
       renderClosing();
       var h=document.getElementById("closehint");
-      h.hidden=!DECISION; h.textContent=DECISION?c[2]:"";
+      h.hidden=!DECISION; h.textContent=DECISION?t("close_"+c[0]+"_b"):"";
       wireSendLinks();
     });
     row.appendChild(b);
   });
+  // The explanation under the buttons is drawn here too, so a language switch redraws it.
+  var hh=document.getElementById("closehint");
+  if(hh){ hh.hidden=!DECISION; hh.textContent=DECISION?t("close_"+DECISION+"_b"):""; }
 }
+CLOSERS.forEach(function(c){ STRINGS.en["close_"+c[0]+"_t"]=c[1]; STRINGS.en["close_"+c[0]+"_b"]=c[2]; });
+STRINGS.en["close_second_t_1"]="I want a second look at one"; STRINGS.en["close_think_t_1"]="I need to think about it";
 var DECISION=(function(){ try{ return localStorage.getItem(KEY+"-decision")||""; }catch(e){ return ""; } })();
 
 function summary(){
@@ -1711,7 +2100,7 @@ function summary(){
     if(r.sc.touched && P.l.name) out.push("  "+P.l.name+" "+r.sc.l.pct+"% ("+r.sc.l.got+" of "+r.sc.poss+")"+(r.sc.l.gut?", gut "+r.sc.l.gut+"/5 on feel":""));
     if(r.sc.touched) out.push("  "+P.b.name+" missing: "+(r.sc.b.missed.length?r.sc.b.missed.join("; "):"nothing"));
     if(r.sc.touched && P.l.name) out.push("  "+P.l.name+" missing: "+(r.sc.l.missed.length?r.sc.l.missed.join("; "):"nothing"));
-    out.push(r.sc.split.length ? "  Don't agree on: "+r.sc.split.join("; ") : "  Agreed on everything");
+    if(!SOLO && r.sc.touched) out.push(r.sc.split.length ? "  Don't agree on: "+r.sc.split.join("; ") : "  Agreed on everything");
     var cs=st(r.p.id).cond, cl=[];
     COND_SYS.forEach(function(t,i){ var v=cs["s"+i]; if(v) cl.push("    "+t[0]+": "+({up:"updated",orig:"original",issue:"needs work",ask:"still to ask"}[v])); });
     COND_WORK.forEach(function(t,i){ var v=cs["w"+i]; if(v) cl.push("    "+t[0]+": "+({yes:"yes",part:"partly",no:"no",ask:"still to ask"}[v])); });
@@ -1766,25 +2155,25 @@ function wireSendLinks(){
   if(note) note.hidden=!empty;
   var enc=encodeURIComponent(body);
   // iOS wants sms:number&body=, Android wants sms:number?body=. This form works on both.
-  if(sms) sms.href="sms:{{AGENT_PHONE_RAW}}"+(/(iPhone|iPad|Macintosh)/.test(navigator.userAgent)?"&":"?")+"body="+enc;
-  if(mail) mail.href="mailto:{{AGENT_SEND_EMAIL}}?subject="+encodeURIComponent("Showing scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:""))+"&body="+enc;
+  if(sms) sms.href="sms:"+PHONE_RAW+(/(iPhone|iPad|Macintosh)/.test(navigator.userAgent)?"&":"?")+"body="+enc;
+  if(mail) mail.href="mailto:"+EMAIL+"?subject="+encodeURIComponent("Showing scorecard - "+P.b.name+(P.l.name?" & "+P.l.name:""))+"&body="+enc;
 }
 
 document.getElementById("send").addEventListener("click",function(){
   var btn=this, body=shortSummary();
   var box=document.getElementById("sendbox"), hint=document.getElementById("sendhint");
-  if(!body){ btn.textContent="Score a home first"; setTimeout(function(){ btn.textContent="Copy for "+AGENT; },2200); return; }
+  if(!body){ btn.textContent=t("scoreFirst"); setTimeout(function(){ btn.textContent=t("btnSend"); },2200); return; }
   if(box){ box.hidden=false; box.value=body; }
   copyText(body,function(copied){
     if(hint){
-      hint.hidden=false;
-      hint.innerHTML = copied
-        ? "Copied. Now paste it into a text to "+AGENT+" at <a href=\"tel:{{AGENT_PHONE_RAW}}\">{{AGENT_PHONE}}</a> or an email to <a href=\"mailto:{{AGENT_SEND_EMAIL}}\">{{AGENT_SEND_EMAIL}}</a>. Nothing leaves this phone until you do."
-        : "Copy did not work on this phone. Select the text below, copy it, and send it to {{AGENT_FIRST_NAME}} at {{AGENT_PHONE}}.";
+      MSG.send=function(){ return copied
+        ? t("copiedHint",{agent:AGENT,telH:'<a href="tel:'+esc(PHONE_RAW)+'">'+esc(PHONE)+'</a>',mailH:'<a href="mailto:'+esc(EMAIL)+'">'+esc(EMAIL)+'</a>'},true)
+        : t("copyFail",{agent:AGENT,phone:PHONE},true); };
+      repaintMsgs();
     }
     wireSendLinks();
-    btn.textContent = copied ? "Copied, now paste it" : "Use the box below";
-    setTimeout(function(){ btn.textContent="Copy for "+AGENT; },5000);
+    btn.textContent = t(copied ? "copiedBtn" : "useBox");
+    setTimeout(function(){ btn.textContent=t("btnSend"); },5000);
   });
 });
 
@@ -1792,35 +2181,44 @@ document.getElementById("copy").addEventListener("click",function(){
   var btn=this, text=summary(), box=document.getElementById("sendbox");
   copyText(text,function(ok){
     if(box){ box.hidden=false; box.value=text; }
-    btn.textContent = ok ? "Copied" : "Copy did not work, use the box below";
-    setTimeout(function(){ btn.textContent="Copy full detail"; },2800);
+    btn.textContent = t(ok ? "copied" : "copyFailShort");
+    setTimeout(function(){ btn.textContent=t("btnCopy"); },2800);
   });
 });
 
 document.getElementById("reset").addEventListener("click",function(){
   var btn=this;
   if(btn.dataset.armed!=="1"){
-    btn.dataset.armed="1"; btn.textContent="Tap again to clear";
-    setTimeout(function(){ btn.dataset.armed="0"; btn.textContent="Clear this tour"; },3500);
+    btn.dataset.armed="1"; btn.textContent=t("tapClear");
+    setTimeout(function(){ btn.dataset.armed="0"; btn.textContent=t("btnReset"); },3500);
     return;
   }
-  state={}; save(); btn.dataset.armed="0"; btn.textContent="Cleared";
-  renderCompare(); renderStops();
-  setTimeout(function(){ btn.textContent="Clear this tour"; },2000);
+  state={}; save(); MSG.send=null; MSG.restore=null; DECISION="";
+  try{ localStorage.removeItem(KEY+"-decision"); }catch(e){}
+  btn.dataset.armed="0"; btn.textContent=t("cleared");
+  renderCompare(); renderStops(); renderClosing(); wireSendLinks();
+  setTimeout(function(){ btn.textContent=t("btnReset"); },2000);
 });
 
-function copyText(txt, btn, done){
-  var fin=function(){ var o=btn.textContent; btn.textContent=done; setTimeout(function(){ btn.textContent=o; },1800); };
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(txt).then(fin, function(){ legacyCopy(txt); fin(); });
-  } else { legacyCopy(txt); fin(); }
+// Redraws what the buyer was last told, and the buttons whose label depends on what is open
+// or armed, in the current language. paintText resets those labels to their plain form, so
+// this runs right after it.
+function repaintMsgs(){
+  var h=document.getElementById("sendhint");
+  if(h){ if(MSG.send){ h.hidden=false; h.innerHTML=MSG.send(); } else { h.hidden=true; h.innerHTML=""; } }
+  var m=document.getElementById("restoremsg");
+  if(m){ if(MSG.restore){ m.hidden=false; m.textContent=MSG.restore.fn(); m.classList.toggle("bad", MSG.restore.bad); } else { m.hidden=true; m.textContent=""; } }
+  var w=document.getElementById("restorewrap"), sr=document.getElementById("showrestore");
+  if(w&&sr) sr.textContent=t(w.hidden?"btnShowRestore":"neverMind");
+  var dr=document.getElementById("dorestore"); if(dr) dr.textContent=t(dr.dataset.armed==="1"?"tapReplace":"btnRestore");
+  var rs=document.getElementById("reset"); if(rs) rs.textContent=t(rs.dataset.armed==="1"?"tapClear":"btnReset");
 }
-function legacyCopy(txt){
-  var t=document.createElement("textarea");
-  t.value=txt; t.setAttribute("readonly",""); t.style.position="fixed"; t.style.left="-9999px";
-  document.body.appendChild(t); t.select();
-  try{ document.execCommand("copy"); }catch(e){}
-  document.body.removeChild(t);
+// Copy with a button label that flips for a moment. Named apart from copyText on purpose:
+// a second function of the same name silently replaced the first, so the main copy buttons
+// never ran their callbacks and the buyer got no sign anything had happened.
+function copyWithLabel(txt, btn, done, restoreKey){
+  var fin=function(){ btn.textContent=done; setTimeout(function(){ btn.textContent=t(restoreKey); },1800); };
+  copyText(txt, fin);
 }
 (function(){
   var b=document.getElementById("langtoggle");
@@ -1841,45 +2239,43 @@ function legacyCopy(txt){
   b.setAttribute("aria-label", t("langLabel"));
   b.title=t("langLabel");
   paintText();
+  syncEsNote();
 })();
 
 document.getElementById("copycode").addEventListener("click",function(){
   var c=backupCode();
-  if(!c){ this.textContent="Nothing scored yet"; var b=this;
-    setTimeout(function(){ b.textContent="Copy my backup code"; },2000); return; }
-  copyText(c, this, "Copied");
+  if(!c){ this.textContent=t("nothingYet"); var b=this;
+    setTimeout(function(){ b.textContent=t("btnCopyCode"); },2000); return; }
+  copyWithLabel(c, this, t("copied"), "btnCopyCode");
 });
 document.getElementById("showrestore").addEventListener("click",function(){
   var w=document.getElementById("restorewrap");
   w.hidden=!w.hidden;
-  this.textContent = w.hidden ? "I have a code to restore" : "Never mind";
+  this.textContent = t(w.hidden ? "btnShowRestore" : "neverMind");
   if(!w.hidden) document.getElementById("restorein").focus();
 });
 document.getElementById("dorestore").addEventListener("click",function(){
   var msg=document.getElementById("restoremsg");
   var res=readCode(document.getElementById("restorein").value);
-  var say=function(t, bad){ msg.hidden=false; msg.textContent=t; msg.classList.toggle("bad", !!bad); };
-  if(res.err) return say(res.err, true);
+  var say=function(fn, bad){ MSG.restore={fn:fn,bad:!!bad}; repaintMsgs(); };
+  if(res.err) return say(function(){ return t(res.err); }, true);
 
   var scored=0;
   TOUR.forEach(function(p){ if(state[p.id] && score(p).hasData) scored++; });
   var btn=this;
   if(scored && btn.dataset.armed!=="1"){
-    btn.dataset.armed="1"; btn.textContent="Tap again to replace";
-    say("You already have "+count(scored)+(scored===1?" home":" homes")+" scored on this phone. "+
-        "Restoring replaces "+(scored===1?"it":"them")+" with the "+count(res.houses)+
-        " in the code. Tap Restore again if that is what you want.", true);
-    setTimeout(function(){ btn.dataset.armed="0"; btn.textContent="Restore"; },6000);
+    btn.dataset.armed="1"; btn.textContent=t("tapReplace");
+    say(function(){ return t(scored===1?"replaceOne":"replaceMany",{n:count(scored)}); }, true);
+    setTimeout(function(){ btn.dataset.armed="0"; btn.textContent=t("btnRestore"); },6000);
     return;
   }
-  btn.dataset.armed="0"; btn.textContent="Restore";
+  btn.dataset.armed="0"; btn.textContent=t("btnRestore");
   state=res.state; save();
   renderStops(); renderCompare(); wireSendLinks(); wireRoute();
-  say(res.known===res.houses
-    ? "Restored. "+Count(res.houses)+(res.houses===1?" home is":" homes are")+" back exactly as you left "+(res.houses===1?"it":"them")+"."
-    : "Restored "+count(res.houses)+(res.houses===1?" home":" homes")+". "+Count(res.houses-res.known)+
-      " of them "+(res.houses-res.known===1?"is":"are")+" not on this list any more, so "+
-      (res.houses-res.known===1?"it is":"they are")+" held but not shown.");
+  var gone=res.houses-res.known;
+  say(function(){ return res.known===res.houses
+    ? t(res.houses===1?"restoredOne":"restoredMany",{N:Count(res.houses)})
+    : t(res.houses===1 ? "partialOne" : (gone===1 ? "partialMany1" : "partialMany"),{n:count(res.houses),k:Count(gone)}); });
   document.getElementById("restorein").value="";
 });
 

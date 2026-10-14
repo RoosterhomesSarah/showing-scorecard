@@ -13,7 +13,7 @@ Built by Sarah Arlington, Rooster Homes.
 ## What to do when someone opens this folder
 
 **If `your-brand.json` does not exist, they are new.** Greet them and run the setup in
-`START-HERE.md`. Do not wait to be asked and do not make them read anything first. Seven
+`START-HERE.md`. Do not wait to be asked and do not make them read anything first. Eight
 questions, then build their first scorecard with them.
 
 **If `your-brand.json` exists, they have been here before.** Say hello, say what is in
