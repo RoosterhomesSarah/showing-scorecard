@@ -34,7 +34,7 @@ It does four things a paper checklist cannot:
 - `Build the scorecard for [address]`
 - `Add [address] to [client]'s tour`
 - `Set me up` / `Set up my showing scorecard` (first run only, the brand questions)
-- `Update my showing scorecard` (pull the newest version, leaving brand and clients alone)
+- `Update my showing scorecard` or `Update the scorecard skill` (pull the newest version, leaving brand and clients alone)
 
 ---
 
@@ -743,10 +743,37 @@ build your first one.
 original moving does not move it, and there is no phoning home, on purpose: this skill
 makes no network request of its own and never reports that it is being used.
 
-On **update my showing scorecard**: clone the repo fresh to a temporary folder, copy
-`SKILL.md` and `assets/` over the installed ones, and delete the temporary folder. Never
-touch `your-brand.json` or `clients/`. Say in one line what changed, reading the repo's
-own recent history rather than guessing.
+The original is `https://github.com/RoosterhomesSarah/showing-scorecard`. It is public, so no
+sign-in is needed.
+
+On **update my showing scorecard** (also **update the scorecard skill**; if all they said was
+**update my scorecard**, ask once: "The scorecard tool itself, or a client's scorecard?"):
+
+1. **If this folder is the original** (`git remote get-url origin` ends in
+   `RoosterhomesSarah/showing-scorecard`), there is nothing to install. Run `git pull` and stop.
+2. Otherwise download the newest copy **into this folder, never into a system temp folder**,
+   into a file called `showing-scorecard-update.tar.gz` beside `your-brand.json`:
+   `curl -fsSL https://github.com/RoosterhomesSarah/showing-scorecard/archive/refs/heads/main.tar.gz -o showing-scorecard-update.tar.gz`
+   Check it is whole with `tar -tzf showing-scorecard-update.tar.gz`. If either fails, change
+   nothing.
+3. Extract only the skill over the installed one:
+   `tar -xzf showing-scorecard-update.tar.gz --strip-components=4 -C .claude/skills/showing-scorecard showing-scorecard-main/.claude/skills/showing-scorecard`
+   (use the skill's own folder if it is somewhere else). This replaces `SKILL.md` and `assets/`
+   and touches nothing else. **Never touch `your-brand.json` or `clients/`.**
+4. Leave `showing-scorecard-update.tar.gz` where it is. The next update overwrites it. There is
+   no delete step, because a delete is the command most setups refuse, and a half-finished
+   update is worse than a leftover file.
+5. Say in one line what changed, reading the newest commit messages at
+   `https://github.com/RoosterhomesSarah/showing-scorecard/commits/main` or from the download.
+
+**If a command is refused**, stop, change nothing, and say so in plain words: which step
+(the download, or putting the files in place), that nothing of theirs was touched, and what to
+approve to let it continue. Offer the manual way: they download the zip from the address above,
+tell you where it is, and you copy `.claude/skills/showing-scorecard` out of it over the
+installed one. Never switch to a different meaning of "update" to get around a refusal.
+
+The checks in `tests/` live in the original repository only. An installed copy does not
+have them.
 
 Scorecards already built and already sent are finished files and do not change either. An
 update reaches a client only the next time their scorecard is rebuilt, which is what a new

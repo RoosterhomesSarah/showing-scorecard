@@ -698,3 +698,36 @@ from an old file. The "update my showing scorecard" command itself (clone, copy,
 not run.
 
 **Status: DONE for the data path; the update command and an AI-led rebuild are UNTESTED.**
+
+---
+
+## Slice: the update command
+
+**Why.** The update was never run. A fresh AI was given an install at the old version, a brand
+file and one finished client scorecard, and told only "update my showing scorecard". Separately,
+Sarah's own AI, told "update my scorecard", was blocked on the download and asked whether she
+meant the tool or a client's scorecard.
+
+**Found.**
+1. The old instructions download to a system temp folder and then delete it. Some setups refuse
+   exactly that, and Sarah's did, which stalls the update half way.
+2. They never named the repository address.
+3. "update my scorecard" is ambiguous (the tool, or a client's scorecard).
+4. Nothing said what to do in the original repo, or what to tell the agent when a command is refused.
+5. An installed copy has no `tests/`, though SKILL.md mentions them.
+
+**Fixed.** The update now downloads into the agent's own folder as one file, checks it is whole,
+extracts only the skill over the installed one, and has no delete step. It names the address,
+handles "update my scorecard" with one question, runs `git pull` in the original, and says what
+to do when a command is refused (stop, change nothing, say which step, offer a manual route).
+
+**Verified.** The old-instructions run by a fresh AI: brand file and client scorecard unchanged
+(fingerprints), skill files identical to GitHub afterwards, nothing left behind. The new
+commands run literally on a fresh old-version install: download whole, extract, brand and
+client unchanged, template identical to GitHub, only the one tarball left.
+
+**Not covered.** A fresh AI following the NEW wording (the new text is not on GitHub until
+pushed, and the first update on any existing install runs on the old text). Whether Vanessa's
+permission settings allow `curl` and `tar`. The refusal path is documented, not exercised.
+
+**Status: DONE for the commands; the AI-led run of the new text is UNTESTED.**

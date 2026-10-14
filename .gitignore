@@ -6,3 +6,6 @@ clients/*
 !clients/README.md
 
 .DS_Store
+
+# Left beside an installed copy by "update my showing scorecard"; replaced on the next update.
+showing-scorecard-update.tar.gz
