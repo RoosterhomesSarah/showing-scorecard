@@ -13,11 +13,13 @@ their words.
 **Paste this one line into the Claude Code chat you already have open.** The whole line,
 link included.
 
+**1. Paste this into the Claude chat where you want to run scorecards** (your BOSS chat works):
+
 ```
 Install the Showing Scorecard for me from https://github.com/RoosterhomesSarah/showing-scorecard
 ```
 
-Then say:
+**2. Then say:**
 
 ```
 set up my showing scorecard
@@ -26,19 +28,19 @@ set up my showing scorecard
 Eight questions, about three minutes, and it builds your first scorecard with you in your
 own colors and your own name. You never touch GitHub again and you never leave your chat.
 
-After that, for any buyer:
+**3. For any buyer, say:**
 
 ```
 build a tour scorecard for the Hendersons
 ```
 
+**To update later**, say **update my showing scorecard**. Your settings and your clients are
+left alone. Nothing updates on its own.
+
 **Forgot the words?** You do not need them exactly. Once it is installed, say what you are
 actually doing, like *"I'm showing houses to the Hendersons on Saturday, make them a
 scorecard"*, and it will know. If you are stuck, ask *"how do I use my showing
 scorecard?"* and it will tell you.
-
-**Already installed and want the newest version?** Say **update my showing scorecard**.
-Your settings and your clients are left alone. Nothing updates on its own.
 
 **Prefer it as its own folder?** Clone this repo, open that folder in Claude Code, and say
 **set up my showing scorecard**. Both doors are in [INSTALL.md](INSTALL.md).

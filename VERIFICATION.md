@@ -779,3 +779,27 @@ want"); the "Copy full detail" box does not refresh if the decision changes afte
 Not edited: the real Jane 10-12 scorecard still has its open header.
 
 **Status: DONE, independently reviewed.**
+
+---
+
+## Slice: install steps as 1, 2, 3, and the install no longer deletes anything
+
+**Asked for by Sarah** so a stranger, or her Krista and mastermind groups, can see the whole path
+at a glance. README and INSTALL now read: 1) paste the install line into the Claude chat where
+scorecards will run, 2) say "set up my showing scorecard", 3) say "build a tour scorecard for
+[client]"; to update later, "update my showing scorecard".
+
+**Found.** Door 1 told the AI to download to a temp folder and delete it, the same step that
+Sarah's setup refused for the update. Rewritten to download the archive into the agent's own
+folder, check it, extract only the skill plus LICENSE, and leave the download in place.
+
+**Verified.** The commands, run literally in an empty scratch install: download whole, skill
+and LICENSE extracted, nothing deleted, one download file left. The first attempt was also
+refused by the build gate (the scratch path looked like a new skill folder); the scan and
+app-blueprint were run first, not worked around.
+
+**Not covered.** A fresh AI following the new INSTALL wording (it is not on GitHub until pushed).
+"Set me up" is documented as working only in a standalone install; inside a larger setup the
+safe phrase is "set up my showing scorecard", which is what every document now says.
+
+**Status: DONE for the commands and the wording; AI-led install of the new text UNTESTED.**

@@ -9,32 +9,38 @@ Two ways in. Pick by how you work, not by how technical you are.
 **For anyone who already has Claude Code open on a folder and does not want to think
 about GitHub.** This is most people.
 
-Paste this one line into your chat:
+1. **Paste this into the Claude chat where you want to run scorecards:**
 
 > Install the Showing Scorecard for me from
 > https://github.com/RoosterhomesSarah/showing-scorecard
 
-Your AI does the rest: it fetches the repo, puts the skill where your setup keeps skills,
-and cleans up after itself. Takes about twenty seconds.
+   Your AI fetches it and puts the skill where your setup keeps skills. About twenty seconds.
 
-Then say:
+2. **Then say:**
 
 > set up my showing scorecard
 
-Eight questions, about three minutes, and it builds your first one with you. It never
-asks again.
+   Eight questions, about three minutes, and it builds your first one with you. It never
+   asks again.
 
-After that, for every buyer:
+3. **For every buyer, say:**
 
 > build a tour scorecard for the Hendersons
+
+**To update later**, say **update my showing scorecard**.
 
 ### What your AI should actually do, if it asks
 
 Describe the outcome, not the commands, so your AI uses whatever it is allowed to use:
 
-> Shallow-clone the repository to a temporary folder. Copy the contents of
-> `.claude/skills/showing-scorecard/` into `.claude/skills/showing-scorecard/` in my
-> setup, plus the `LICENSE` file beside it. Delete the temporary folder.
+> Download the repository as a zip into my setup folder, check it opens, and extract only
+> `.claude/skills/showing-scorecard/` over `.claude/skills/showing-scorecard/` in my setup,
+> plus the `LICENSE` file beside it. Do not use a system temp folder and do not delete
+> anything; leave the zip where it is.
+
+(The download is `https://github.com/RoosterhomesSarah/showing-scorecard/archive/refs/heads/main.tar.gz`.
+Some setups refuse to delete files or to write outside your folder, which is why nothing here
+needs either.)
 
 Your brand answers and your client folders are then created next to the skill, inside
 your own setup, and stay on your computer.
