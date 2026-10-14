@@ -182,7 +182,7 @@ per tour.
 
 When the agent books another showing day with a client who already has one:
 
-1. Open their existing scorecard and read its tour list (the `<ol data-k="tour">` block) and its storage key (the `<span data-k="key">` value). A scorecard built before the list format changed holds these as comma-separated rows inside `<b data-k=...>` elements. Read the ids and keep them, then write the stops out in the `<li>` form below.
+1. Open their existing scorecard and read its tour list (the `<ol data-k="tour">` block) and its storage key (the `<span data-k="key">` value). A scorecard built before the list format changed holds them either as comma-separated rows inside `<b data-k=...>` elements, or as `var TOUR=[ ... ];` and `var KEY="..."` inside the script. Read the ids and the key from whichever it is, keep them exactly, and write the stops out in the `<li>` form below. Write `&middot;` once in `data-facts`; do not escape it again.
 2. **Keep that storage key exactly.** It belongs to the client, not the tour. Everything
    scored over weeks is stored against it, and a changed key erases all of it.
 3. **Keep every existing stop, with its existing `id`.** Scores are stored against those

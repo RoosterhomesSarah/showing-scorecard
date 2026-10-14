@@ -671,3 +671,30 @@ sheet for that). The reviewer read the Spanish for English leaks, not for qualit
 reviewer did the quality pass. A real PDF print was read from the CSS, not rendered.
 
 **Status: DONE and LIVE** for jobs 1 to 3, with the correction line as the standing safeguard.
+
+---
+
+## Slice: rebuilding an old client scorecard with the new template
+
+**Question.** An agent who updates the skill still has scorecards built in the older formats.
+When she rebuilds one, does the client's progress survive?
+
+**Ran** `tests/rebuild_old.py` on the three real scorecards for one client, covering both older
+formats (lists as script arrays; lists as JSON-style text). Each old page was loaded so its own
+code read its lists; answers were seeded; the page was rebuilt from the current template.
+**All three pass:** same list counts, same stop ids, same storage key, identical scores computed
+from the buyer's stored answers, an identical backup code, and a backup code made by the old
+page was restored by the new page with every house recognised.
+
+**Differences found, all intended.** The summary no longer says "Agreed on everything" for a
+solo buyer or an unscored stop. The old subhead carried a literal `&middot;`.
+
+**Gap closed.** SKILL.md's rebuild step described only one of the two older formats. It now
+covers both and says to write `&middot;` once.
+
+**Not covered.** The rebuild was done by a script standing in for the AI, not by an AI
+following SKILL.md. The earlier fresh-eyes review built from SKILL.md for a new client, not
+from an old file. The "update my showing scorecard" command itself (clone, copy, delete) was
+not run.
+
+**Status: DONE for the data path; the update command and an AI-led rebuild are UNTESTED.**
