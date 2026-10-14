@@ -803,3 +803,10 @@ app-blueprint were run first, not worked around.
 safe phrase is "set up my showing scorecard", which is what every document now says.
 
 **Status: DONE for the commands and the wording; AI-led install of the new text UNTESTED.**
+
+**Follow-up: a fresh AI followed the live install wording.** Given only the one-line install
+request in an empty setup folder, it read INSTALL.md, downloaded the archive into its own
+folder, checked it by listing it, extracted only the skill, placed LICENSE inside it, deleted
+nothing and was refused nothing. It flagged three wording gaps (says "zip" for a .tar.gz, did not
+say how to check the download, "beside" for LICENSE was ambiguous), now fixed. Not yet tested:
+an install into a setup whose skills folder already holds other skills (the usual case).

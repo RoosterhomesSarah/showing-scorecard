@@ -33,10 +33,11 @@ about GitHub.** This is most people.
 
 Describe the outcome, not the commands, so your AI uses whatever it is allowed to use:
 
-> Download the repository as a zip into my setup folder, check it opens, and extract only
-> `.claude/skills/showing-scorecard/` over `.claude/skills/showing-scorecard/` in my setup,
-> plus the `LICENSE` file beside it. Do not use a system temp folder and do not delete
-> anything; leave the zip where it is.
+> Download the repository archive (a `.tar.gz` file) into my setup folder and check it by
+> listing what is inside it. Then extract only `.claude/skills/showing-scorecard/` into
+> `.claude/skills/showing-scorecard/` in my setup (creating it if it is not there yet), and put
+> the `LICENSE` file inside that same skill folder. Do not use a system temp folder and do not
+> delete anything; leave the download where it is.
 
 (The download is `https://github.com/RoosterhomesSarah/showing-scorecard/archive/refs/heads/main.tar.gz`.
 Some setups refuse to delete files or to write outside your folder, which is why nothing here
