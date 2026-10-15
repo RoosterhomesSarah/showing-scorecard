@@ -1,0 +1,56 @@
+# Runs the scorecard's own tests on every push. When a version tag (v...) is pushed and the tests
+# pass, it packages the skill and publishes it as a release. Agents' installs and updates download
+# only that published release, so nothing reaches them until it has passed.
+name: tests and release
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Find Chrome
+        run: |
+          C="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          test -n "$C" || { echo "No Chrome on this runner"; exit 1; }
+          echo "CHROME=$C" >> "$GITHUB_ENV"
+      - name: Hostile-input test (every field, malformed values, injection)
+        run: python3 tests/hostile.py
+      - name: Spanish test (no English left, both forms, round trip)
+        run: python3 tests/spanish.py
+
+  release:
+    needs: test
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch the tag with its message (the release notes)
+        run: git fetch --force origin "refs/tags/$GITHUB_REF_NAME:refs/tags/$GITHUB_REF_NAME"
+      - name: Stamp the version and package the skill
+        run: |
+          V="${GITHUB_REF_NAME#v}"
+          cd .claude/skills/showing-scorecard
+          sed -i "s/^version: .*/version: \"$V\"/" SKILL.md
+          grep -q "^version: \"$V\"" SKILL.md
+          cp ../../../LICENSE LICENSE
+          # Plain names, no "./" prefix, so an update can leave the agent's own .gitignore alone.
+          tar -czf "$GITHUB_WORKSPACE/showing-scorecard-skill.tar.gz" SKILL.md assets .gitignore LICENSE
+          tar -tzf "$GITHUB_WORKSPACE/showing-scorecard-skill.tar.gz"
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" showing-scorecard-skill.tar.gz \
+            --title "Showing Scorecard $GITHUB_REF_NAME" --notes-from-tag

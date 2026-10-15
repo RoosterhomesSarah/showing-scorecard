@@ -17,7 +17,14 @@ not on the list."""
 import html, json, os, re, subprocess, sys, tempfile
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TPL=os.environ.get("TPL") or os.path.join(ROOT,".claude/skills/showing-scorecard/assets/template.html")
-CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+def _find_chrome():
+    import shutil
+    for c in (os.environ.get("CHROME"), "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+              shutil.which("google-chrome"), shutil.which("google-chrome-stable"), shutil.which("chromium"),
+              shutil.which("chromium-browser")):
+        if c and os.path.exists(c): return c
+    sys.exit("Chrome was not found. Set CHROME to its path.")
+CHROME=_find_chrome()
 EN_WORDS=set("""the you your and is are to of this that for with it not one scored home homes stop stops
 must have haves nice tap taps phone nothing nobody agree agreed everything missing deal breakers
 breaker saved copy copied restore code ask send text email score points each from before after

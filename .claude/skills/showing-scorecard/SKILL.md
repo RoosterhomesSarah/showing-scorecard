@@ -1,7 +1,7 @@
 ---
 name: showing-scorecard
-description: Build a buyer a phone scorecard for a showing day, scored against what that buyer actually told you they want. Two people score independently on one phone so disagreements surface while they are still standing in the house, deal-breakers take a home out regardless of score, and the big systems get logged separately because condition is a different question from fit. No login for the buyer; the agent shares it with a free link in their own name. Use when the agent says "build a tour scorecard for [client]", "showing scorecard for [client]", "we're seeing homes with [client] on [date]", "build the scorecard for [address]", "add [address] to [client]'s tour", "set up my showing scorecard", "update my showing scorecard", "show me the example scorecard", "how do I use my showing scorecard", "send feedback on my showing scorecard", "stop asking about feedback", or (for its author) "check my scorecard feedback".
-version: "2026-10-15"
+description: Build a buyer a phone scorecard for a showing day, scored against what that buyer actually told you they want. Two people score independently on one phone so disagreements surface while they are still standing in the house, deal-breakers take a home out regardless of score, and the big systems get logged separately because condition is a different question from fit. No login for the buyer; the agent shares it with a free link in their own name. Use when the agent says "build a tour scorecard for [client]", "showing scorecard for [client]", "we're seeing homes with [client] on [date]", "build the scorecard for [address]", "add [address] to [client]'s tour", "set up my showing scorecard", "update my showing scorecard", "show me the example scorecard", "how do I use my showing scorecard", "send feedback on my showing scorecard", "stop asking about feedback", "go back to the previous version of my showing scorecard", or (for its author) "check my scorecard feedback".
+version: "dev"
 author: Sarah Arlington, Rooster Homes
 license: See LICENSE. Use freely in your business; do not redistribute or resell the skill.
 ---
@@ -54,6 +54,7 @@ It does four things a paper checklist cannot:
 - `Add [address] to [client]'s tour`
 - `Set me up` / `Set up my showing scorecard` (first run only, the brand questions)
 - `Send feedback on my showing scorecard` / `Stop asking about feedback` (see **Feedback to Sarah**)
+- `Go back to the previous version of my showing scorecard` (see **Updating an installed copy**)
 - `Update my showing scorecard` or `Update the scorecard skill` (pull the newest version, leaving brand and clients alone)
 
 ---
@@ -857,7 +858,7 @@ scorecard"** whenever they like.
 **Share, with their eyes on it.** On a yes, or on **"send feedback on my showing scorecard"**:
 
 1. Write the report: the cleaned notes, the version from the `version:` line at the top of this
-   file, Mac or Windows, and whether it is its own project or installed into another setup (the same
+   file (`dev` means a copy taken straight from the repository), Mac or Windows, and whether it is its own project or installed into another setup (the same
 check as in **First run**).
 2. Show them the whole report and say, in these words: *"This goes on a public page that
    anyone online can read, and it shows your GitHub name. There is nothing about your clients
@@ -899,30 +900,45 @@ sign-in is needed.
 On **update my showing scorecard** (also **update the scorecard skill**; if all they said was
 **update my scorecard**, ask once: "The scorecard tool itself, or a client's scorecard?"):
 
-1. **If this folder is the original** (`git remote get-url origin` ends in
-   `RoosterhomesSarah/showing-scorecard`), there is nothing to install. Run `git pull` and stop.
-2. Otherwise, **working inside this skill's own folder** (the one holding this SKILL.md),
-   download the newest copy there, never into a system temp folder:
-   `curl -fsSL https://github.com/RoosterhomesSarah/showing-scorecard/archive/refs/heads/main.tar.gz -o showing-scorecard-update.tar.gz`
-   Check it is whole with `tar -tzf showing-scorecard-update.tar.gz`. If either fails, change
-   nothing.
-3. Still inside that folder, extract only the skill over itself:
-   `tar -xzf showing-scorecard-update.tar.gz --strip-components=4 -C . --exclude showing-scorecard-main/.claude/skills/showing-scorecard/.gitignore showing-scorecard-main/.claude/skills/showing-scorecard`
-   This replaces `SKILL.md` and `assets/` and touches nothing else. It deliberately leaves this
-   folder's `.gitignore` alone, because the agent may have edited it. **Never touch
-   `your-brand.json`, `clients/` or `LOCAL.md`.**
-4. Leave `showing-scorecard-update.tar.gz` where it is. The next update overwrites it. There is
+Updates come only from a **published release**: a version Sarah has released, which GitHub
+publishes only after the scorecard's tests pass. Work in progress never reaches an agent.
+
+1. **If this folder is a clone of the repository** (`git remote get-url origin` ends in
+   `RoosterhomesSarah/showing-scorecard`): if it is Sarah's own (`gh api
+   repos/RoosterhomesSarah/showing-scorecard --jq .permissions.push` prints `true`), run
+   `git pull` and stop. Anyone else's clone follows releases too: `git fetch --tags`, then
+   `git checkout` the newest `v` tag, and stop.
+2. Find the newest release: `curl -fsSL https://api.github.com/repos/RoosterhomesSarah/showing-scorecard/releases/latest`. Read its `tag_name` and its `body` (what
+   changed). If its version (the tag without the leading `v`) matches the `version:` line at the
+   top of this file, say it is already the newest version and stop. **If this step fails for any
+   reason, stop and change nothing**: say plainly that the update could not reach GitHub and to
+   try again later. Never fall back to any other download.
+3. **Working inside this skill's own folder** (the one holding this SKILL.md), download exactly
+   that release there, never into a system temp folder:
+   `curl -fsSL https://github.com/RoosterhomesSarah/showing-scorecard/releases/download/<tag_name>/showing-scorecard-skill.tar.gz -o showing-scorecard-update.tar.gz`
+4. Check it with `tar -tzf showing-scorecard-update.tar.gz`: it must list `SKILL.md`. If anything
+   fails, change nothing.
+5. Still inside that folder, put it in place: `tar -xzf showing-scorecard-update.tar.gz -C . --exclude .gitignore`
+   This replaces `SKILL.md`, `assets/` and `LICENSE` and touches nothing else. It deliberately
+   leaves this folder's `.gitignore` alone, because the agent may have edited it. **Never touch
+   `your-brand.json`, `clients/`, `LOCAL.md` or `feedback-notes.md`.**
+6. Leave `showing-scorecard-update.tar.gz` where it is. The next update overwrites it. There is
    no delete step, because a delete is the command most setups refuse, and a half-finished
    update is worse than a leftover file.
-5. Say in one line what changed if you can read the newest commit messages at
-   `https://github.com/RoosterhomesSarah/showing-scorecard/commits/main`; the download itself
-   has no history, so otherwise just say it is now the newest version.
+7. Tell them in one or two plain lines what changed, from the release's notes.
+
+**On "go back to the previous version of my showing scorecard":** list releases with
+`curl -fsSL "https://api.github.com/repos/RoosterhomesSarah/showing-scorecard/releases?per_page=20"`, skip any marked prerelease, and pick the newest one whose
+version is **lower** than the `version:` line in this file, comparing the numbers part by part.
+If there is none, say so and change nothing. Otherwise download
+`https://github.com/RoosterhomesSarah/showing-scorecard/releases/download/<that tag_name>/showing-scorecard-skill.tar.gz` to `showing-scorecard-update.tar.gz`
+and do steps 4 to 6. Tell them which version they are on now, that the next "update my showing
+scorecard" will bring the newer one back, and offer to send Sarah feedback about what went wrong.
 
 **If a command is refused**, stop, change nothing, and say so in plain words: that the update
 was paused, that nothing of theirs was touched, and the one thing to approve to let it
-continue. Offer the manual way: they download the zip from the address above,
-tell you where it is, and you copy `.claude/skills/showing-scorecard` out of it over the
-installed one. Never switch to a different meaning of "update" to get around a refusal.
+continue. Offer the manual way: they download `showing-scorecard-skill.tar.gz` from
+https://github.com/RoosterhomesSarah/showing-scorecard/releases/latest, tell you where it is, and you put its files in this folder as in step 5. Never switch to a different meaning of "update" to get around a refusal.
 
 Scorecards already built and already sent are finished files and do not change either. An
 update reaches a client only the next time their scorecard is rebuilt, which is what a new

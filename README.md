@@ -16,7 +16,7 @@ link included.
 **1. Paste this into the Claude chat where you want to run scorecards** (your BOSS chat works):
 
 ```
-Install the Showing Scorecard for me from https://github.com/RoosterhomesSarah/showing-scorecard
+Install the Showing Scorecard for me from https://github.com/RoosterhomesSarah/showing-scorecard (its INSTALL.md says how)
 ```
 
 **2. Then say:**

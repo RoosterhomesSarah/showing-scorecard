@@ -7,7 +7,14 @@ answers, then rebuilds with the current template and checks: same list counts, s
 same storage key, identical scores from the buyer's stored answers, an identical backup code,
 and a backup code made by the OLD page restored by the NEW page. Needs no network."""
 import html, json, re, subprocess, sys, tempfile, os
-CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+def _find_chrome():
+    import shutil
+    for c in (os.environ.get("CHROME"), "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+              shutil.which("google-chrome"), shutil.which("google-chrome-stable"), shutil.which("chromium"),
+              shutil.which("chromium-browser")):
+        if c and os.path.exists(c): return c
+    sys.exit("Chrome was not found. Set CHROME to its path.")
+CHROME=_find_chrome()
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TPL=os.path.join(ROOT,".claude/skills/showing-scorecard/assets/template.html")
 OLD_DIR=(sys.argv[1] if len(sys.argv)>1 else sys.exit("give the folder holding the old scorecards")).rstrip("/")+"/"

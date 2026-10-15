@@ -34,12 +34,15 @@ about GitHub.** This is most people.
 Describe the outcome, not the commands, so your AI uses whatever it is allowed to use:
 
 > Create `.claude/skills/showing-scorecard/` in my setup. Working inside that folder, download
-> the repository archive (a `.tar.gz` file) there as `showing-scorecard-install.tar.gz`, check
-> it by listing what is inside it, then extract only the archive's
-> `.claude/skills/showing-scorecard/` contents into that folder, plus the `LICENSE` file. Do
-> not use a system temp folder and do not delete anything; leave the download where it is.
+> the latest release, https://github.com/RoosterhomesSarah/showing-scorecard/releases/latest/download/showing-scorecard-skill.tar.gz, there as
+> `showing-scorecard-install.tar.gz`, check it by listing what is inside it (it must list
+> `SKILL.md`), then extract it into that folder. Do not use a system temp folder and do not
+> delete anything; leave the download where it is.
 
-(The download is `https://github.com/RoosterhomesSarah/showing-scorecard/archive/refs/heads/main.tar.gz`.
+(Releases are versions that have passed the scorecard's tests. If the download fails, stop and
+try again later; never install from anywhere else.)
+
+(The download is `https://github.com/RoosterhomesSarah/showing-scorecard/releases/latest/download/showing-scorecard-skill.tar.gz`.
 Some setups refuse to delete files or to write outside your folder, which is why nothing here
 needs either.)
 

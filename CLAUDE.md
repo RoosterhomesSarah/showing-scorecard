@@ -67,6 +67,11 @@ hand-off describes.
 - **Never invent a criterion, a number, or a buyer's own words.** If the consultation is
   thin, say it is thin.
 
+## Releasing
+
+Agents only ever get published releases. When Sarah says **release my showing scorecard**, follow
+`RELEASING.md`.
+
 ## Sarah's own install
 
 If this folder sits inside another operating system that has its own rules, those rules

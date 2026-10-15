@@ -930,3 +930,34 @@ intact; GitHub sends a signed-out visitor to sign in, then back to the form.
 shows filled; no real agent has sent feedback.
 
 **Status: DONE, independently reviewed.**
+
+---
+
+## Slice: stable releases, and tests that run on every push (2026-10-15)
+
+**Why.** Every push to main reached every agent on their next update, work in progress included.
+Now installs and updates download only a published release, and GitHub publishes a release only
+when the tests pass on the tagged commit. The tests also run on every push to main.
+
+**Built.** `.github/workflows/tests-and-release.yml` (tests on push; on a `v...` tag, tests, then a
+packaged `showing-scorecard-skill.tar.gz` with the version stamped, published with the tag's own
+message as its notes). SKILL.md's update reads the latest release, stops cleanly if GitHub cannot
+be reached (no fallback to unreleased code), downloads that exact release, keeps the agent's
+files and `.gitignore`, and says what changed; "go back to the previous version" picks the newest
+older release. INSTALL installs from the latest release. RELEASING.md is Sarah's release routine.
+Tests find Chrome on Mac or Linux.
+
+**Verified locally.** Packaging with the version stamp; a fresh install from the package; an
+update that left the agent's brand file, clients, rules, feedback notes and edited `.gitignore`
+byte-identical. Both tests pass. The workflow parses.
+
+**Fresh-eyes review.** A separate reviewer found: the push needs GitHub's `workflow` permission
+on this Mac; rollback re-downloaded the newest; any failure fell back to unreleased main; release
+notes would be empty with `--generate-notes`; the release routine could tag the wrong commit or
+confirm a release that never happened; clones by other agents still followed main; permissions
+were wider than needed. All fixed. Transition note: agents installed earlier take main once more
+on their next update, so main stays release-ready for now (RELEASING.md says so).
+
+**Not covered.** GitHub Actions itself has not run yet; it runs on the first push.
+
+**Status: DONE locally; the first GitHub run is the remaining check.**

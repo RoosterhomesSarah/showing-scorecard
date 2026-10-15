@@ -12,7 +12,14 @@ import html, os, re, subprocess, sys, tempfile, json
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TPL=os.environ.get("TPL") or os.path.join(ROOT,".claude/skills/showing-scorecard/assets/template.html")
 BAD='A" \\ </script> <b>x</b> & café 🏠 \'q\' " onmouseover="window.PWNED=1" x="'
-CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+def _find_chrome():
+    import shutil
+    for c in (os.environ.get("CHROME"), "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+              shutil.which("google-chrome"), shutil.which("google-chrome-stable"), shutil.which("chromium"),
+              shutil.which("chromium-browser")):
+        if c and os.path.exists(c): return c
+    sys.exit("Chrome was not found. Set CHROME to its path.")
+CHROME=_find_chrome()
 
 IDS=["a b:c~d\"e","a b:c~d\"e"]  # same hostile id twice: must be cleaned and de-duplicated
 
