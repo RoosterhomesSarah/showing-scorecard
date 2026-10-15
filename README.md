@@ -25,8 +25,8 @@ Install the Showing Scorecard for me from https://github.com/RoosterhomesSarah/s
 set up my showing scorecard
 ```
 
-Eight questions, about three minutes, and it builds your first scorecard with you in your
-own colors and your own name. You never touch GitHub again and you never leave your chat.
+Eight questions, about three minutes. Then, when you have a tour coming up, it builds your
+first scorecard with you in your own colors and your own name. You never touch GitHub again and you never leave your chat.
 
 **3. For any buyer, say:**
 
@@ -50,7 +50,7 @@ scorecard?"* and it will tell you.
 ## Questions people ask
 
 **How do my buyers get it?** Your AI walks you through it, one step at a time: a free Netlify
-account in your name, dragging one folder onto a web page, and making the link public so your
+account in your name, dragging one zip file it makes for you onto a web page, renaming the site, and making the link public so your
 buyer does not hit a login screen. You get back a link to text your buyer. Each buyer keeps the
 same link for their whole search.
 
@@ -156,7 +156,7 @@ material. The license is clear that this comes with no warranty and that part is
 
 ## It stands on its own
 
-A self-contained project folder. No account, no server, no subscription, nothing to host,
+A self-contained project folder. No server, no subscription, and the only host is a free Netlify site in your name,
 and no dependency on any other system. Your clients and your brand answers stay on your
 machine.
 

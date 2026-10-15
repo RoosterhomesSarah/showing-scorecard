@@ -6,8 +6,8 @@ Say this and it will take it from there:
 
 > set up my showing scorecard
 
-It asks eight questions about your business, takes about three minutes, and then builds
-your first scorecard with you. You will not need to open another file.
+It asks eight questions about your business, takes about three minutes, and then, when you
+have a tour coming up, builds your first scorecard with you. You will not need to open another file.
 
 ---
 
@@ -73,8 +73,9 @@ You will not be left holding a file. At the end of every build it walks you thro
 turning the scorecard into a link, which takes about two minutes the first time:
 
 1. It opens the finished scorecard so you can see your own colors and your own name.
-2. It tells you to make a free account at **netlify.com**, then drag the client's folder
-   onto **netlify.com/drop**. That hands you back a link.
+2. It makes a zip file for you with only the scorecard in it, never your notes. You make a
+   free account at **netlify.com**, drag that zip onto **netlify.com/drop**, rename the site to the
+   name it gives you, and press **Make public** so your buyer does not get a login screen. That hands you back a link.
 3. You paste the link back, and it writes the text message to your buyer for you, ready
    to send.
 
@@ -82,8 +83,9 @@ turning the scorecard into a link, which takes about two minutes the first time:
 only. One link per client, and if you keep dropping updates onto the same site, it is the
 same link for their whole search. They bookmark it once.
 
-If you would rather not set up hosting at all, it will tell you how to email the file
-instead. That works too, it is just a new attachment every tour.
+If you would rather not set up hosting at all, emailing the file is a last resort: your buyer
+has to save it and open it in Safari or Chrome every time, because a mail app's preview does
+not save their taps.
 
 ---
 

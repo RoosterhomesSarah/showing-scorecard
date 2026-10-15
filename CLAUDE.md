@@ -12,9 +12,10 @@ Built by Sarah Arlington, Rooster Homes.
 
 ## What to do when someone opens this folder
 
-**If `your-brand.json` does not exist, they are new.** Greet them and run the setup in
-`START-HERE.md`. Do not wait to be asked and do not make them read anything first. Eight
-questions, then build their first scorecard with them.
+**If `your-brand.json` does not exist, they are new.** Greet them and run the first-run setup
+in the skill (its "First run only" section). Do not wait to be asked and do not make them read anything first. Eight
+questions, a few at a time; then build their first scorecard if they have a tour coming up,
+or show them the example.
 
 **If `your-brand.json` exists, they have been here before.** Say hello, say what is in
 `clients/` already, and ask who they are touring with. Do not re-run setup and do not
@@ -46,12 +47,13 @@ second tour with the same buyer does not overwrite the first.
 
 ## How to talk to them
 
-They are an agent, not a developer. Plain words. Never mention tokens, templates, the
-file structure or what you are about to do. Do the thing, then say what they have in one
-line.
+They are an agent, not a developer. Plain words. Never mention tokens, templates or the
+file structure, and do not narrate what you are about to do. Do the thing, then say what
+they have in one line. The one exception is the hand-off: there, name the single file they
+drag and open its folder for them.
 
-Never say a scorecard is ready until you have opened the finished file yourself and
-looked at it on a phone-width screen.
+Never say a scorecard is ready until the live link has been checked the way the skill's
+hand-off describes.
 
 ## The things that are never allowed
 

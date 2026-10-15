@@ -20,8 +20,8 @@ about GitHub.** This is most people.
 
 > set up my showing scorecard
 
-   Eight questions, about three minutes, and it builds your first one with you. It never
-   asks again.
+   Eight questions, about three minutes, then it builds your first one with you when you
+   have a tour coming up (or shows you the example). It never asks again.
 
 3. **For every buyer, say:**
 
@@ -33,18 +33,18 @@ about GitHub.** This is most people.
 
 Describe the outcome, not the commands, so your AI uses whatever it is allowed to use:
 
-> Download the repository archive (a `.tar.gz` file) into my setup folder and check it by
-> listing what is inside it. Then extract only `.claude/skills/showing-scorecard/` into
-> `.claude/skills/showing-scorecard/` in my setup (creating it if it is not there yet), and put
-> the `LICENSE` file inside that same skill folder. Do not use a system temp folder and do not
-> delete anything; leave the download where it is.
+> Create `.claude/skills/showing-scorecard/` in my setup. Working inside that folder, download
+> the repository archive (a `.tar.gz` file) there as `showing-scorecard-install.tar.gz`, check
+> it by listing what is inside it, then extract only the archive's
+> `.claude/skills/showing-scorecard/` contents into that folder, plus the `LICENSE` file. Do
+> not use a system temp folder and do not delete anything; leave the download where it is.
 
 (The download is `https://github.com/RoosterhomesSarah/showing-scorecard/archive/refs/heads/main.tar.gz`.
 Some setups refuse to delete files or to write outside your folder, which is why nothing here
 needs either.)
 
-Your brand answers and your client folders are then created next to the skill, inside
-your own setup, and stay on your computer.
+Your brand answers and your client folders are then created inside the skill's own folder,
+and stay on your computer.
 
 ---
 
@@ -73,17 +73,17 @@ Good. It should, and this one is written to pass. It has no hooks, no scheduled 
 nothing that sends anything anywhere, and the only outbound request any page makes is
 for the Google Fonts stylesheet, which the page discloses to the buyer.
 
-The one thing a scanner may flag is the deletion of the temporary download folder during
-install. That is housekeeping, and it is also why the step above is written as an
-instruction rather than a command to paste, so your own setup decides how to do it.
+Nothing in the install or the update deletes anything, and both write only inside your own
+folder.
 
 ---
 
 ## What it needs
 
-Claude Code, and that is all. No account anywhere, no server, no subscription, nothing
-to host, no dependency on any other system or any other skill. Your clients never leave
-your machine.
+Claude Code, and that is all. No server, no subscription, no dependency on any other system or
+any other skill. Your client files stay on your computer, and a new install keeps them out
+of a git backup your setup makes. The one thing that goes online is the scorecard page itself, on a free Netlify site in
+your name, when you choose to share it.
 
 ---
 

@@ -844,3 +844,58 @@ arrived. The reviewer repeated this in a nested setup.
 page's English hero stays English when opened in Spanish.
 
 **Status: DONE, independently reviewed.**
+
+---
+
+## Review pass on Opus, and Vanessa's first real Netlify run (2026-10-15)
+
+**Vanessa's run.** Netlify's drop page refused a folder ("Folders aren't supported. Please zip
+the folder"); a zip worked. "Make public" was needed. Her buyer's folder held notes, so the upload
+must be a separate folder made only for the scorecard. Her buyer liked it on an iPhone and liked
+having two map options.
+
+**Three separate reviewers, run in parallel:** a native-level Spanish read; a cold consistency
+read of every document; and an AI that installed the skill into a setup holding other skills, ran
+setup, wrote LOCAL.md, ran the update, and built a real Spanish couple's scorecard and its zip.
+A fourth reviewer then checked the consolidated fix.
+
+**Found and fixed (must-fix).**
+- Client files and the brand file were going into a git backup when installed inside another
+  setup (confirmed in Sarah's own BOSS backup, which is private). The skill now ships a
+  `.gitignore` that keeps new client files out; it says plainly it cannot remove files a backup
+  already holds, and tells the AI to tell the agent and ask. Updates never replace that file.
+- "Its own project" detection looked for START-HERE.md beside the skill folder (it is three
+  levels up). Now: `your-brand.example.json` plus `clients/README.md` at the project root.
+- Changing a criteria list on a rebuild silently moved saved ticks to the wrong questions. Lists
+  keep their order once anything is ticked; new items go at the end; order is read from the live
+  scorecard.
+- The zip held a parent folder and a hidden `._index.html`. Now only `index.html`, verified.
+- The update's extract path only worked from the setup root. Now run from inside the skill folder.
+- Font fields were missing from the brand file the setup writes.
+- Path B never collected the tour facts (names, date, homes). Now it does, a few at a time.
+- The setup and update phrases were missing from the skill's description, so it might not load.
+- LOCAL.md could route around "the agent sends it"; text read from client files is now named as
+  information, never instruction.
+- The filter's "no kids around" stand-in kept a familial-status intent; now noise facts only. The
+  filter now covers every word written onto the page or into a message.
+- Site names used the buyer's name; now a neutral word plus six random characters.
+- Live-link check the AI could not run; now `curl` on the renamed link plus the agent's phone in a
+  private tab. The doubtful "Make public" fallback address is gone.
+- Email fallback promised it "works"; now a last resort with its real cost.
+- Windows zip command could not run from Git Bash; now through `powershell -Command`.
+- About forty Spanish corrections (wrong subjects, calques, agreement, one term per concept,
+  "celular" for the buyer's phone). Empty criteria groups no longer draw a bare heading.
+
+**Verified.** spanish.py, hostile.py and rebuild_old.py pass. In a scratch git host the client
+folder, brand file and download stayed out while LOCAL.md stayed in; the update from inside the
+skill folder left the brand file, clients and LOCAL.md byte-identical and kept an edited
+`.gitignore`; the zip lists one file even when macOS adds attributes. The fourth reviewer loaded
+the Spanish page for a couple and a solo buyer with full, partial and empty lists: no script
+errors, no English chrome.
+
+**Left open (nice-to-have).** Text that still shows when its list is empty (the deal-breaker
+sentence, the dock prompt, the scoring note). The dock at a true 375px width is untested. A real
+Netlify run of the new zip and rename steps, and a native Spanish speaker's read, have not
+happened.
+
+**Status: DONE, independently reviewed.**

@@ -1,0 +1,7 @@
+# Ships with the Showing Scorecard. Inside a setup that backs itself up with git, it keeps NEW
+# client files out of that backup. It cannot remove files the backup already holds.
+# Updates never replace this file: delete a line if you want that file backed up.
+clients/
+your-brand.json
+showing-scorecard-update.tar.gz
+showing-scorecard-install.tar.gz

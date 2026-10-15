@@ -12,3 +12,4 @@ showing-scorecard-update.tar.gz
 
 # An agent's own rules for this skill. Never overwritten by an update; kept out of this repository (if your setup is its own git repo, it is yours to back up or not).
 .claude/skills/showing-scorecard/LOCAL.md
+
