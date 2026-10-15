@@ -70,6 +70,11 @@ made-up homes, so you can tap anything.
 buyer's own messaging app with the summary filled in; the buyer is the one who presses send. The
 page cannot send anything on its own.
 
+**How do I tell Sarah what's working and what isn't?** Say **send feedback on my showing
+scorecard**. Your AI writes up what it noticed, with nothing about your clients, shows it to you,
+and opens a form on GitHub for you to send. It goes on a public page, so it never carries anything about your clients. It also offers, at most once a week, if it noticed
+something worth sending. Say **stop asking about feedback** and it won't.
+
 **If I update it, do I lose my settings?** No. Your brand answers and your client files stay. If
 you want your own rules for how it works, put them in a file called `LOCAL.md` in the skill folder:
 it is read first, wins where it disagrees (it cannot weaken the safety rules), and an update never touches it.

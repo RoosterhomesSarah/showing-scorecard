@@ -899,3 +899,34 @@ Netlify run of the new zip and rename steps, and a native Spanish speaker's read
 happened.
 
 **Status: DONE, independently reviewed.**
+
+---
+
+## Slice: feedback to Sarah, and her weekly check (2026-10-15)
+
+**Asked for by Sarah:** a way for agents' AIs to suggest sending feedback each week without
+anyone texting her, and a weekly reminder on her side to read it. No app, no background job: the
+skill only runs when used, so the ask is event-driven (at most once a week, at the end of a
+finished task) and the report goes to a pre-filled public GitHub form the agent reviews and
+submits. Agents without GitHub get the same report as text to paste to Sarah. Sarah's side: a
+weekly item in her Action Items and the "check my scorecard feedback" routine in her own
+`LOCAL.md` (reads open reports with `gh`, sorts them, proposes fixes, re-sets the reminder).
+
+**Two separate reviewers played the agent's AI through the whole flow** (eight moments: ask,
+show, send, confirm, a showing tomorrow, a failed task, stop asking, send anyway and cancel),
+with notes seeded on purpose with client names, an address, a price, a site name and a file path.
+First run found: "open the form" contradicted "never open anything"; notes were wiped before
+anyone knew they were sent; sending once undid "stop asking"; it could ask twice; it never said
+the agent's GitHub name shows; the cleaning rule was vague; the length limit was on the wrong
+thing. Second run, on the rewrite: no leaks (checked by decoding both links and searching them),
+no double asks, "Do not ask" held; found that sent and unsent notes could mix and that the
+encoder was unnamed (an apostrophe could break the Windows open command). All fixed.
+The issue template was removed so the pre-filled form is not replaced by a template chooser.
+
+**Verified.** A realistic report with quotes, accents and an emoji round-trips through the link
+intact; GitHub sends a signed-out visitor to sign in, then back to the form.
+
+**Not covered.** Sarah has not yet opened a pre-filled link while signed in to confirm the form
+shows filled; no real agent has sent feedback.
+
+**Status: DONE, independently reviewed.**

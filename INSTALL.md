@@ -70,7 +70,8 @@ Want your own rules for how it works? Put them in a file called `LOCAL.md` in th
 ## If your setup vets incoming skills
 
 Good. It should, and this one is written to pass. It has no hooks, no scheduled jobs,
-nothing that sends anything anywhere, and the only outbound request any page makes is
+nothing that sends anything anywhere on its own (feedback to Sarah is a form the agent reviews
+and submits themselves), and the only outbound request any page makes is
 for the Google Fonts stylesheet, which the page discloses to the buyer.
 
 Nothing in the install or the update deletes anything, and both write only inside your own

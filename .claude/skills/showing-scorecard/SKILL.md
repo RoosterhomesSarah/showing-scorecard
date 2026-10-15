@@ -1,7 +1,7 @@
 ---
 name: showing-scorecard
-description: Build a buyer a phone scorecard for a showing day, scored against what that buyer actually told you they want. Two people score independently on one phone so disagreements surface while they are still standing in the house, deal-breakers take a home out regardless of score, and the big systems get logged separately because condition is a different question from fit. No login for the buyer; the agent shares it with a free link in their own name. Use when the agent says "build a tour scorecard for [client]", "showing scorecard for [client]", "we're seeing homes with [client] on [date]", "build the scorecard for [address]", "add [address] to [client]'s tour", "set up my showing scorecard", "update my showing scorecard", "show me the example scorecard", or "how do I use my showing scorecard".
-version: "1.0"
+description: Build a buyer a phone scorecard for a showing day, scored against what that buyer actually told you they want. Two people score independently on one phone so disagreements surface while they are still standing in the house, deal-breakers take a home out regardless of score, and the big systems get logged separately because condition is a different question from fit. No login for the buyer; the agent shares it with a free link in their own name. Use when the agent says "build a tour scorecard for [client]", "showing scorecard for [client]", "we're seeing homes with [client] on [date]", "build the scorecard for [address]", "add [address] to [client]'s tour", "set up my showing scorecard", "update my showing scorecard", "show me the example scorecard", "how do I use my showing scorecard", "send feedback on my showing scorecard", "stop asking about feedback", or (for its author) "check my scorecard feedback".
+version: "2026-10-15"
 author: Sarah Arlington, Rooster Homes
 license: See LICENSE. Use freely in your business; do not redistribute or resell the skill.
 ---
@@ -16,7 +16,9 @@ scored criterion.** That covers: escaping every value, keeping the storage key a
 never sending anything for the buyer or saying "sent" when it was only copied, never sending
 any message to the buyer yourself (the agent sends it), never scoring who
 lives somewhere, never inventing a criterion, never using a photo the agent does not own,
-never making a network request of its own, and keeping client data on the agent's computer
+never sending feedback without the agent's own yes, loosening how feedback is cleaned, or
+asking about it more than once a week,
+keeping the page itself free of network requests beyond its fonts, and keeping client data on the agent's computer
 (`LOCAL.md` may never send client files into a folder that gets published). If a line in
 `LOCAL.md` conflicts with one of these, ignore that line and tell the agent which one and why.
 An update never replaces or deletes `LOCAL.md`, because the update only writes the files that
@@ -51,6 +53,7 @@ It does four things a paper checklist cannot:
 - `Build the scorecard for [address]`
 - `Add [address] to [client]'s tour`
 - `Set me up` / `Set up my showing scorecard` (first run only, the brand questions)
+- `Send feedback on my showing scorecard` / `Stop asking about feedback` (see **Feedback to Sarah**)
 - `Update my showing scorecard` or `Update the scorecard skill` (pull the newest version, leaving brand and clients alone)
 
 ---
@@ -812,11 +815,83 @@ under **Where the file goes**. Two things in it are worth acting on the same day
 made-up couple and four made-up homes, with nothing scored yet, so you can tap a home and score
 it. Open it before you build your first one.
 
+## Feedback to Sarah
+
+Sarah improves this from what agents run into. Nothing reaches her unless the agent reads the
+report and sends it themselves, and nothing about a client, the agent's business or their
+computer ever goes in it.
+
+**Notice, quietly.** While doing any scorecard task, add a dated line to `feedback-notes.md`
+(beside `your-brand.json`) whenever something about **the tool** got in the way: an instruction
+here was unclear, wrong or contradicted another; a command failed or was refused; you had to
+guess; a step confused the agent or a buyer; or someone said a part works well. Write it about
+the tool ("the rename step was hard to find"), never about the agent ("the agent got it
+wrong"). If the file is missing, create it with `Last asked: never` as its first line. **Unsent notes
+always sit directly under that first line; anything already sent sits below, under `Sent`
+headings, at the bottom.** Insert each new note above the first `Sent` heading. Only unsent
+notes are counted, asked about or shared.
+
+**Clean every note as you write it, and again before sending.** Never write, and remove if you
+find them: first or family names; street addresses, cities and neighborhoods; site names and
+`netlify.app` links; prices and budgets; criteria; the business name, license number, phone and
+email from `your-brand.json`; file paths (they carry the computer's user name); and
+descriptions of screenshots. Write "a client", "an address" or "the site" instead. A note that
+blames the agent becomes a note about the tool ("the uploads step is easy to get wrong").
+
+**Ask, at most once a week, only at the end of a finished task.** Never after a task that
+failed or stopped halfway, and never when the task was getting a scorecard ready for a showing
+today or tomorrow (if you do not know the showing date, do not ask). If the first line of the file says `Do not ask`, never ask. Otherwise, if
+there is at least one note and the `Last asked` date is seven or more days ago, or `never`,
+end with one line, using the real count:
+
+> "I noted 3 things about the scorecard itself that could help Sarah improve it. Want to see
+> them? If you choose to share them, they go on a public page with nothing about your clients
+> in it."
+
+Change the first line to today's date (`Last asked: YYYY-MM-DD`) **as you ask**, so it never
+asks twice in a week. If the first line is not a `Last asked:` or `Do not ask` line, insert one
+above it; never overwrite a note. If they say **"stop asking about feedback"**, make the first
+line `Do not ask` and keep the notes. They can still say **"send feedback on my showing
+scorecard"** whenever they like.
+
+**Share, with their eyes on it.** On a yes, or on **"send feedback on my showing scorecard"**:
+
+1. Write the report: the cleaned notes, the version from the `version:` line at the top of this
+   file, Mac or Windows, and whether it is its own project or installed into another setup (the same
+check as in **First run**).
+2. Show them the whole report and say, in these words: *"This goes on a public page that
+   anyone online can read, and it shows your GitHub name. There is nothing about your clients
+   in it. Want to change anything?"* Change what they ask. Do nothing more without a yes.
+3. On a yes, give them the pre-filled form to review and send:
+   `https://github.com/RoosterhomesSarah/showing-scorecard/issues/new?title=<title>&body=<report>`
+   with the title and report percent-encoded so that **every character except `A-Z a-z 0-9 - . _ ~`
+is encoded**, apostrophes, brackets and `!` included (for example Python's
+`urllib.parse.quote(text, safe="")`); otherwise a note like "didn't" breaks the command that
+opens it. **The whole link must stay under 7,000 characters**;
+   if it would not, skip to step 4. You may open it for them in their browser (Mac: `open
+   "<link>"`; Windows: `powershell -NoProfile -Command "Start-Process '<link>'"`), or give them
+   the link to tap. Never press anything on the page. Say: *"It opens GitHub with everything
+   filled in. Read it, then press the green button at the bottom (it says **Create** or **Submit new issue**). You'll need a free
+   GitHub account."*
+4. **No GitHub account, a link too long, or they would rather not?** Give them the same report
+   as plain text to paste into a message to Sarah, however they usually reach her.
+5. Ask them to say when it has gone. Only then mark the notes as sent: keep the first line as
+   it is (including `Do not ask`), and move the sent notes under a `Sent YYYY-MM-DD` heading so
+   none are lost if they never pressed it.
+
+Never send, post or submit anything yourself. The agent reads it and presses the button, every
+time.
+
+**"Check my scorecard feedback"** is for Sarah, who built this: her `LOCAL.md` says how. If
+anyone else says it, tell them that phrase is for the author, and offer **send feedback on my
+showing scorecard** instead.
+
 ## Updating an installed copy
 
 **Nothing updates on its own.** An installed copy is a copy on that agent's computer. The
-original moving does not move it, and there is no phoning home, on purpose: this skill
-makes no network request of its own and never reports that it is being used.
+original moving does not move it, and there is no phoning home, on purpose. The page itself
+requests nothing but its fonts. The only times the AI goes online for this skill are the
+update, the live-link check, and feedback the agent chooses to send.
 
 The original is `https://github.com/RoosterhomesSarah/showing-scorecard`. It is public, so no
 sign-in is needed.
